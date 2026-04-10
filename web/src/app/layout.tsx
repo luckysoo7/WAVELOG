@@ -23,7 +23,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <div className="flex min-h-screen">
           {/* 좌측 사이드바 — glassmorphism, 데스크톱 전용 */}
           <aside
-            className="hidden md:flex flex-col w-60 shrink-0 sticky top-0 h-screen overflow-y-auto"
+            className="hidden md:flex flex-col w-72 shrink-0 sticky top-0 h-screen overflow-y-auto"
             style={{
               background: "rgba(255, 255, 255, 0.025)",
               backdropFilter: "blur(24px)",

@@ -18,22 +18,58 @@ export default function Sidebar({ dates }: SidebarProps) {
 
   return (
     <nav className="flex flex-col h-full px-4 py-8">
-      {/* 브랜드마크 */}
+      {/* 대문 — 서비스 정체성 */}
       <div className="mb-8 px-2">
+        {/* 라디오 레이블 */}
         <p
-          className="text-xs tracking-[0.2em] uppercase font-semibold mb-1"
+          className="text-xs tracking-[0.22em] uppercase font-semibold mb-4"
           style={{ color: "var(--sunset-orange)" }}
         >
           Radio Station
         </p>
-        <p className="text-sm font-bold leading-snug" style={{ color: "var(--text-primary)" }}>
+
+        {/* 프로그램 타이틀 */}
+        <h2
+          className="font-black leading-none mb-1"
+          style={{ fontSize: "1.45rem", letterSpacing: "-0.02em", color: "var(--text-primary)" }}
+        >
           배철수의
           <br />
           음악캠프
+        </h2>
+        <p className="text-xs mt-1 mb-5 tracking-widest" style={{ color: "var(--text-muted)", opacity: 0.55 }}>
+          MBC FM4U 89.1 · 매일 저녁 6시
         </p>
-        <p className="text-xs mt-1 tracking-widest" style={{ color: "var(--text-muted)", opacity: 0.6 }}>
-          Playlist Archive
+
+        {/* 구분선 */}
+        <div style={{ borderTop: "1px solid rgba(255,255,255,0.07)", marginBottom: "1.25rem" }} />
+
+        {/* 서비스 소개 */}
+        <p
+          className="text-xs leading-relaxed mb-4"
+          style={{ color: "var(--text-muted)", lineHeight: "1.7" }}
+        >
+          1990년부터 이어진 라디오 선곡표를
+          <br />
+          매일 YouTube 플레이리스트로.
+          <br />
+          <span style={{ opacity: 0.55 }}>배철수가 고른 오늘의 음악들.</span>
         </p>
+
+        {/* unofficial 배지 */}
+        <span
+          className="inline-block text-xs px-2 py-0.5"
+          style={{
+            border: "1px solid rgba(138,155,176,0.2)",
+            color: "var(--text-muted)",
+            opacity: 0.55,
+            borderRadius: "2px",
+            fontSize: "0.65rem",
+            letterSpacing: "0.08em",
+          }}
+        >
+          unofficial fan site
+        </span>
       </div>
 
       {/* 날짜 목록 */}
