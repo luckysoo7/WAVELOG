@@ -1,9 +1,7 @@
-import Link from "next/link";
-import { loadLatest, loadAllDates } from "@/lib/data";
+import { loadLatest } from "@/lib/data";
 
 export default function Home() {
   const latest = loadLatest();
-  const allDates = loadAllDates();
 
   if (!latest) {
     return (
@@ -17,16 +15,16 @@ export default function Home() {
   }
 
   return (
-    <main className="min-h-screen px-4 py-12 max-w-2xl mx-auto">
+    <main className="px-6 py-12 max-w-xl mx-auto">
       {/* 헤더 */}
       <header className="mb-8">
-        <p className="text-sm mb-1" style={{ color: "var(--text-muted)" }}>
-          배철수의 음악캠프
+        <p className="text-xs tracking-widest uppercase mb-1" style={{ color: "var(--text-muted)" }}>
+          최신 방송
         </p>
         <h1 className="text-3xl font-bold tracking-tight" data-testid="date-heading">
           {latest.date}
         </h1>
-        <p className="mt-1" style={{ color: "var(--sunset-gold)" }}>
+        <p className="mt-1 text-sm" style={{ color: "var(--sunset-gold)" }}>
           {latest.dayOfWeek} · {latest.songs.length}곡
         </p>
       </header>
@@ -63,14 +61,17 @@ export default function Home() {
       )}
 
       {/* 선곡 목록 */}
-      <ol className="space-y-3 mb-14" data-testid="song-list">
+      <ol className="space-y-3" data-testid="song-list">
         {latest.songs.map((song) => (
           <li
             key={song.order}
             className="flex items-start gap-4 p-4 rounded-xl"
             style={{ background: "var(--card-bg)" }}
           >
-            <span className="text-xs font-mono w-5 shrink-0 mt-0.5" style={{ color: "var(--text-muted)" }}>
+            <span
+              className="text-xs font-mono w-5 shrink-0 mt-0.5"
+              style={{ color: "var(--text-muted)" }}
+            >
               {song.order}
             </span>
             <div className="flex-1 min-w-0">
@@ -93,47 +94,6 @@ export default function Home() {
           </li>
         ))}
       </ol>
-
-      {/* 지난 방송 */}
-      {allDates.length > 1 && (
-        <section>
-          <h2 className="text-sm font-semibold mb-4 tracking-wide uppercase" style={{ color: "var(--text-muted)" }}>
-            지난 방송
-          </h2>
-          <div className="space-y-2">
-            {allDates.slice(1).map((entry) => (
-              <Link
-                key={entry.date}
-                href={`/date/${entry.date}`}
-                className="flex items-center justify-between p-4 rounded-xl transition-opacity hover:opacity-70"
-                style={{ background: "var(--card-bg)" }}
-              >
-                <div>
-                  <span className="font-semibold text-sm">{entry.date}</span>
-                  <span className="text-xs ml-2" style={{ color: "var(--text-muted)" }}>
-                    {entry.dayOfWeek}
-                  </span>
-                </div>
-                <div className="flex items-center gap-3">
-                  <span className="text-xs" style={{ color: "var(--text-muted)" }}>
-                    {entry.songCount}곡
-                  </span>
-                  {entry.hasPlaylist && (
-                    <span className="text-xs px-2 py-0.5 rounded-full" style={{ background: "rgba(232,112,74,0.15)", color: "var(--sunset-orange)" }}>
-                      ▶
-                    </span>
-                  )}
-                </div>
-              </Link>
-            ))}
-          </div>
-        </section>
-      )}
-
-      <footer className="mt-12 text-xs text-center" style={{ color: "var(--text-muted)" }}>
-        <p>출처: MBC 배철수의 음악캠프</p>
-        <p className="mt-1">비공식 팬 서비스 · MBC와 무관합니다</p>
-      </footer>
     </main>
   );
 }

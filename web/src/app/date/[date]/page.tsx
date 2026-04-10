@@ -1,4 +1,3 @@
-import Link from "next/link";
 import { notFound } from "next/navigation";
 import { loadPlaylist, getAllDateParams } from "@/lib/data";
 
@@ -15,23 +14,14 @@ export default async function DatePage({ params }: { params: Promise<{ date: str
   }
 
   return (
-    <main className="min-h-screen px-4 py-12 max-w-2xl mx-auto">
-      {/* 뒤로가기 */}
-      <Link
-        href="/"
-        className="inline-flex items-center gap-1 text-sm mb-8 transition-opacity hover:opacity-70"
-        style={{ color: "var(--text-muted)" }}
-      >
-        ← 목록으로
-      </Link>
-
+    <main className="px-6 py-12 max-w-xl mx-auto">
       {/* 헤더 */}
       <header className="mb-8">
-        <p className="text-sm mb-1" style={{ color: "var(--text-muted)" }}>
-          배철수의 음악캠프
+        <p className="text-xs tracking-widest uppercase mb-1" style={{ color: "var(--text-muted)" }}>
+          지난 방송
         </p>
         <h1 className="text-3xl font-bold tracking-tight">{date}</h1>
-        <p className="mt-1" style={{ color: "var(--sunset-gold)" }}>
+        <p className="mt-1 text-sm" style={{ color: "var(--sunset-gold)" }}>
           {data.dayOfWeek} · {data.songs.length}곡
         </p>
       </header>
@@ -68,7 +58,7 @@ export default async function DatePage({ params }: { params: Promise<{ date: str
       )}
 
       {/* 선곡 목록 */}
-      <ol className="space-y-3 mb-14">
+      <ol className="space-y-3">
         {data.songs.map((song) => (
           <li
             key={song.order}
@@ -101,11 +91,6 @@ export default async function DatePage({ params }: { params: Promise<{ date: str
           </li>
         ))}
       </ol>
-
-      <footer className="mt-12 text-xs text-center" style={{ color: "var(--text-muted)" }}>
-        <p>출처: MBC 배철수의 음악캠프</p>
-        <p className="mt-1">비공식 팬 서비스 · MBC와 무관합니다</p>
-      </footer>
     </main>
   );
 }
