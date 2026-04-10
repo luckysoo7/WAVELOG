@@ -13,13 +13,16 @@ export default function Sidebar({ dates }: SidebarProps) {
 
   return (
     <nav className="flex flex-col h-full px-4 py-8">
-      {/* 브랜드 */}
+      {/* 브랜드 로고 */}
       <div className="mb-8 px-2">
+        <img
+          src="/logo.png"
+          alt="배철수의 음악캠프"
+          className="w-28 mb-1 opacity-90"
+          style={{ filter: "drop-shadow(0 1px 4px rgba(0,0,0,0.4))" }}
+        />
         <p className="text-xs tracking-widest uppercase" style={{ color: "var(--text-muted)" }}>
-          Bae Chulsoo
-        </p>
-        <p className="font-bold text-sm mt-0.5" style={{ color: "var(--text-primary)" }}>
-          음악캠프
+          playlist archive
         </p>
       </div>
 
@@ -74,12 +77,15 @@ export default function Sidebar({ dates }: SidebarProps) {
         })}
       </ul>
 
-      {/* 푸터 */}
-      <div className="mt-6 px-2">
-        <p className="text-xs leading-relaxed" style={{ color: "var(--text-muted)", opacity: 0.6 }}>
-          비공식 팬 서비스
+      {/* 저작권 고지 */}
+      <div className="mt-6 px-2 space-y-1">
+        <p className="text-xs leading-relaxed" style={{ color: "var(--text-muted)", opacity: 0.55 }}>
+          ⓒ MBC · 배철수의 음악캠프
           <br />
-          MBC와 무관합니다
+          방송 콘텐츠 저작권은 MBC에 있습니다
+        </p>
+        <p className="text-xs" style={{ color: "var(--text-muted)", opacity: 0.35 }}>
+          unofficial fan site — not affiliated with MBC
         </p>
       </div>
     </nav>
