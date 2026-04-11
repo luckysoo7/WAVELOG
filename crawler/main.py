@@ -207,7 +207,7 @@ def _save_json(
         "youtube": playlist_data,
         "songs": songs,
         "createdAt": dt.datetime.now(dt.timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
-        "matchRate": matched_count,
+        "matchCount": matched_count,
     }
 
     with open(output_path, "w", encoding="utf-8") as f:

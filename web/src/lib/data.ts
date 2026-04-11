@@ -25,7 +25,7 @@ export interface PlaylistData {
   } | null;
   songs: Song[];
   createdAt: string;
-  matchRate: number;
+  matchCount: number;
 }
 
 export interface DateEntry {
