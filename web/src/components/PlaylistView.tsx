@@ -20,7 +20,7 @@ export default function PlaylistView({ data, label = "지난 방송" }: Props) {
             className="text-xs tracking-[0.25em] uppercase font-medium"
             style={{ color: "var(--sunset-orange)" }}
           >
-            Radio Station · MBC FM4U 89.1
+            Radio Station · MBC FM4U 91.9
           </p>
           {data.seqID && (
             <p className="text-xs tracking-widest tabular-nums" style={{ color: "var(--text-muted)" }}>

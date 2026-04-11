@@ -38,7 +38,7 @@ export default function Sidebar({ dates }: SidebarProps) {
           음악캠프
         </h2>
         <p className="text-xs mt-1 mb-5 tracking-widest" style={{ color: "var(--text-muted)", opacity: 0.55 }}>
-          MBC FM4U 89.1 · 매일 저녁 6시
+          MBC FM4U 91.9 · 매일 저녁 6시
         </p>
 
         {/* 구분선 */}
