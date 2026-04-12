@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useEffect, useRef } from "react";
 import type { DateEntry } from "@/lib/data";
 
 interface SidebarProps {
@@ -15,6 +16,11 @@ function formatSidebarDate(dateStr: string, dayOfWeek: string): string {
 
 export default function Sidebar({ dates }: SidebarProps) {
   const pathname = usePathname();
+  const activeRef = useRef<HTMLLIElement>(null);
+
+  useEffect(() => {
+    activeRef.current?.scrollIntoView({ block: "nearest" });
+  }, [pathname]);
 
   return (
     <nav className="flex flex-col h-full px-4 py-8">
@@ -94,7 +100,7 @@ export default function Sidebar({ dates }: SidebarProps) {
               : pathname === `/bcamp/${entry.date}`;
 
           return (
-            <li key={entry.date}>
+            <li key={entry.date} ref={isActive ? activeRef : null}>
               <Link
                 href={href}
                 className="flex items-center justify-between px-3 py-2.5 rounded-lg text-sm transition-all"
