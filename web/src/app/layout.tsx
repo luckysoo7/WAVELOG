@@ -5,8 +5,19 @@ import MobileDrawer from "@/components/MobileDrawer";
 import { loadAllDates } from "@/lib/data";
 
 export const metadata: Metadata = {
-  title: "배철수의 음악캠프 플레이리스트",
-  description: "매일 방송되는 배철수의 음악캠프 선곡표를 YouTube 플레이리스트로.",
+  title: {
+    default: "K-Radio Archive — 한국 라디오 음악 아카이브",
+    template: "%s | K-Radio Archive",
+  },
+  description: "배철수의 음악캠프 등 한국 라디오 선곡표를 매일 YouTube 플레이리스트로 기록합니다. 1990년부터 이어진 라디오 음악 아카이브.",
+  openGraph: {
+    siteName: "K-Radio Archive",
+    locale: "ko_KR",
+    type: "website",
+  },
+  twitter: {
+    card: "summary",
+  },
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

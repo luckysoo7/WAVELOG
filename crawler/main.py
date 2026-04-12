@@ -19,8 +19,9 @@ from crawler.auth import get_youtube_client
 from crawler.mbc_crawler import find_seq_id, fetch_songs, get_source_url
 from crawler.youtube_client import search_videos, create_playlist, add_to_playlist, QuotaExceededError
 
-DATA_DIR = Path(__file__).resolve().parent.parent / "data"
-SONG_CACHE_PATH = DATA_DIR / "song_cache.json"
+_ROOT_DATA = Path(__file__).resolve().parent.parent / "data"
+DATA_DIR = _ROOT_DATA / "bcamp"           # 프로그램별 데이터 (에피소드 JSON, index.json)
+SONG_CACHE_PATH = _ROOT_DATA / "song_cache.json"  # 프로그램 공유 캐시
 
 
 # ── 캐시 ────────────────────────────────────────────────────────────────────

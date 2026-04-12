@@ -14,7 +14,7 @@ from pathlib import Path
 
 import requests
 
-DATA_DIR = Path(__file__).resolve().parent.parent / "data"
+DATA_DIR = Path(__file__).resolve().parent.parent / "data" / "bcamp"
 
 
 def _load_playlist_ids() -> list[tuple[str, str]]:
