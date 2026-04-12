@@ -18,6 +18,7 @@ function spectrumColor(order: number, total: number): string {
 
 export default function PlaylistView({ data, label = "지난 방송" }: Props) {
   const total = data.songs.length;
+  const matchedCount = data.songs.filter((s) => s.videoId).length;
 
   return (
     <main className="px-8 max-w-[760px] mx-auto">
@@ -76,9 +77,21 @@ export default function PlaylistView({ data, label = "지난 방송" }: Props) {
         />
 
         <div className="flex items-center justify-between gap-4 flex-wrap">
-          <p className="text-sm" style={{ color: "var(--text-muted)" }}>
-            {data.dayOfWeek} · {data.songs.length}곡 선곡
-          </p>
+          <div>
+            <p className="text-sm" style={{ color: "var(--text-muted)" }}>
+              {data.dayOfWeek} · {data.songs.length}곡 선곡
+            </p>
+            {/* Option B: YouTube 재생 가능 카운트 */}
+            {matchedCount > 0 && (
+              <p className="text-xs mt-1" style={{ color: "var(--text-muted)", opacity: 0.6 }}>
+                이 중{" "}
+                <span style={{ color: "var(--sunset-orange)", opacity: 1 }}>
+                  {matchedCount}곡
+                </span>
+                을 지금 들을 수 있어요
+              </p>
+            )}
+          </div>
           {data.youtube && (
             <div className="flex gap-2">
               <a
@@ -113,33 +126,72 @@ export default function PlaylistView({ data, label = "지난 방송" }: Props) {
         {data.songs.map((song) => (
           <li
             key={song.order}
-            className="track-row flex items-center gap-4 py-3.5 group cursor-default"
-            style={{ borderBottom: "1px solid var(--track-border)" }}
+            className="track-row flex items-center gap-4 py-3.5 group"
+            style={{
+              borderBottom: "1px solid var(--track-border)",
+              cursor: song.videoId ? "pointer" : "default",
+            }}
           >
-            <span
-              className="w-6 text-right text-xs tabular-nums shrink-0 font-mono"
-              style={{ color: spectrumColor(song.order, total), opacity: 0.85 }}
-            >
-              {song.order}
-            </span>
-            <div className="flex-1 min-w-0">
-              <p className="font-medium text-sm leading-snug truncate">{song.title}</p>
-              <p className="text-xs mt-0.5 truncate" style={{ color: "var(--text-muted)" }}>
-                {song.artist}
-              </p>
+            {/* Option A: 스펙트럼 점 — videoId 있는 곡만 */}
+            <div className="shrink-0 flex items-center justify-end gap-1.5 w-8">
+              {song.videoId && (
+                <span
+                  className="spectrum-dot"
+                  aria-hidden
+                  style={{
+                    display: "inline-block",
+                    width: "4px",
+                    height: "4px",
+                    borderRadius: "50%",
+                    background: spectrumColor(song.order, total),
+                    opacity: 0.65,
+                    transition: "transform 0.15s, opacity 0.15s",
+                    flexShrink: 0,
+                  }}
+                />
+              )}
+              <span
+                className="text-right text-xs tabular-nums font-mono"
+                style={{ color: spectrumColor(song.order, total), opacity: 0.85 }}
+              >
+                {song.order}
+              </span>
             </div>
+
             {song.videoId ? (
               <a
                 href={`https://www.youtube.com/watch?v=${song.videoId}`}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="shrink-0 w-6 h-6 flex items-center justify-center text-xs transition-all opacity-0 group-hover:opacity-100"
-                style={{ color: "var(--sunset-orange)" }}
+                className="flex-1 min-w-0"
               >
-                ▶
+                <p className="font-medium text-sm leading-snug truncate group-hover:underline"
+                   style={{ textUnderlineOffset: "3px", textDecorationColor: spectrumColor(song.order, total) }}>
+                  {song.title}
+                </p>
+                <p className="text-xs mt-0.5 truncate" style={{ color: "var(--text-muted)" }}>
+                  {song.artist}
+                </p>
               </a>
             ) : (
-              <div className="w-6 shrink-0" />
+              <div className="flex-1 min-w-0">
+                <p className="font-medium text-sm leading-snug truncate">{song.title}</p>
+                <p className="text-xs mt-0.5 truncate" style={{ color: "var(--text-muted)" }}>
+                  {song.artist}
+                </p>
+              </div>
+            )}
+
+            {song.videoId ? (
+              <span
+                className="shrink-0 w-5 h-5 flex items-center justify-center text-xs transition-all opacity-0 group-hover:opacity-100"
+                aria-hidden
+                style={{ color: spectrumColor(song.order, total) }}
+              >
+                ▶
+              </span>
+            ) : (
+              <div className="w-5 shrink-0" />
             )}
           </li>
         ))}
