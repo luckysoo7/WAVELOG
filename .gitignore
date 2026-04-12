@@ -14,3 +14,7 @@ web/.next/
 
 # Data (Git에 올릴 때는 포함할 것이므로 주석 처리)
 # data/
+
+# 임시 파일
+tmp/
+web/tsconfig.tsbuildinfo
