@@ -16,12 +16,14 @@ from pathlib import Path
 import requests as req
 
 from crawler.auth import get_youtube_client
+from crawler.db import DB_PATH, connect, init_db, insert_episode, get_episode
 from crawler.mbc_crawler import find_seq_id, fetch_songs, get_source_url
 from crawler.youtube_client import search_videos, create_playlist, add_to_playlist, QuotaExceededError
 
 _ROOT_DATA = Path(__file__).resolve().parent.parent / "data"
-DATA_DIR = _ROOT_DATA / "bcamp"           # 프로그램별 데이터 (에피소드 JSON, index.json)
+_DB_PATH = _ROOT_DATA / "archive.db"
 SONG_CACHE_PATH = _ROOT_DATA / "song_cache.json"  # 프로그램 공유 캐시
+_PROGRAM_ID = "bcamp"
 
 
 # ── 캐시 ────────────────────────────────────────────────────────────────────
@@ -42,36 +44,11 @@ def _load_cache() -> dict[str, str]:
 
 
 def _save_cache(cache: dict[str, str]) -> None:
-    DATA_DIR.mkdir(parents=True, exist_ok=True)
+    _ROOT_DATA.mkdir(parents=True, exist_ok=True)
     tmp = SONG_CACHE_PATH.with_suffix(".json.tmp")
     with open(tmp, "w", encoding="utf-8") as f:
         json.dump(cache, f, ensure_ascii=False, indent=2, sort_keys=True)
     tmp.rename(SONG_CACHE_PATH)  # 원자적 교체
-
-
-# ── 인덱스 ───────────────────────────────────────────────────────────────────
-
-def _rebuild_index() -> None:
-    """data/index.json 재생성 — 원자적 쓰기로 손상 방지."""
-    files = sorted(DATA_DIR.glob("????-??-??.json"), reverse=True)
-    index = []
-    for f in files:
-        try:
-            with open(f, encoding="utf-8") as fp:
-                d = json.load(fp)
-        except json.JSONDecodeError:
-            print(f"[경고] {f.name} 손상 — 인덱스에서 제외")
-            continue
-        index.append({
-            "date": d["date"],
-            "dayOfWeek": d["dayOfWeek"],
-            "songCount": len(d.get("songs", [])),
-            "hasPlaylist": d.get("youtube") is not None,
-        })
-    tmp = DATA_DIR / "index.json.tmp"
-    with open(tmp, "w", encoding="utf-8") as f:
-        json.dump(index, f, ensure_ascii=False, indent=2)
-    tmp.rename(DATA_DIR / "index.json")  # 원자적 교체
 
 
 # ── Discord 알림 ─────────────────────────────────────────────────────────────
@@ -101,22 +78,22 @@ def _day_of_week_ko(d: date) -> str:
     return ["월요일", "화요일", "수요일", "목요일", "금요일", "토요일", "일요일"][d.weekday()]
 
 
-def _needs_processing(json_path: Path) -> bool:
-    """JSON이 없거나, 있어도 youtube가 null이면 처리 대상."""
-    if not json_path.exists():
-        return True
+def _needs_processing(target_date: date) -> bool:
+    """DB에 없거나, youtube가 null이면 처리 대상."""
     try:
-        with open(json_path, encoding="utf-8") as f:
-            data = json.load(f)
-        return data.get("youtube") is None
-    except json.JSONDecodeError:
-        print(f"[경고] {json_path.name} 손상 — 재처리 대상으로 표시")
+        conn = connect(_DB_PATH)
+        ep = get_episode(conn, _PROGRAM_ID, target_date.isoformat())
+        conn.close()
+    except Exception:
         return True
+    if ep is None:
+        return True
+    return ep.get("youtube") is None
 
 
 # ── 핵심 로직 ────────────────────────────────────────────────────────────────
 
-def run(target_date: date, dry_run: bool = False) -> Path:
+def run(target_date: date, dry_run: bool = False) -> None:
     date_str = target_date.isoformat()
     print(f"\n[bcamp-daily] {date_str} ({_day_of_week_ko(target_date)}) 처리 시작\n")
 
@@ -138,7 +115,8 @@ def run(target_date: date, dry_run: bool = False) -> Path:
 
     if dry_run:
         print("\n[dry-run] YouTube API 호출 없이 종료.")
-        return _save_json(date_str, target_date, seq_id, songs, playlist_id=None)
+        _save_to_db(date_str, target_date, seq_id, songs, playlist_id=None)
+        return
 
     print("\n3/4 YouTube 플레이리스트 생성...")
     if os.environ.get("GOOGLE_REFRESH_TOKEN"):
@@ -203,28 +181,23 @@ def run(target_date: date, dry_run: bool = False) -> Path:
         _save_cache(cache)
         if playlist_id:
             print(f"\n[쿼터 초과] 부분 저장 ({matched}/{len(songs)}곡)")
-            _save_json(date_str, target_date, seq_id, songs, playlist_id)
+            _save_to_db(date_str, target_date, seq_id, songs, playlist_id)
         raise
 
-    print(f"\n4/4 JSON 저장...")
-    output_path = _save_json(date_str, target_date, seq_id, songs, playlist_id)
-    print(f"     {output_path}")
+    print(f"\n4/4 DB 저장...")
+    _save_to_db(date_str, target_date, seq_id, songs, playlist_id)
     print(f"\n완료! {matched}/{len(songs)}곡 매칭")
     print(f"YouTube: https://www.youtube.com/playlist?list={playlist_id}")
-    return output_path
 
 
-def _save_json(
+def _save_to_db(
     date_str: str,
     target_date: date,
     seq_id: int,
     songs: list[dict],
     playlist_id: str | None,
-) -> Path:
+) -> None:
     import datetime as dt
-
-    DATA_DIR.mkdir(parents=True, exist_ok=True)
-    output_path = DATA_DIR / f"{date_str}.json"
 
     playlist_data = None
     if playlist_id:
@@ -234,23 +207,20 @@ def _save_json(
             "musicUrl": f"https://music.youtube.com/playlist?list={playlist_id}",
         }
 
-    payload = {
-        "date": date_str,
-        "dayOfWeek": _day_of_week_ko(target_date),
-        "seqID": seq_id,
-        "source": get_source_url(seq_id),
-        "youtube": playlist_data,
-        "songs": songs,
-        "createdAt": dt.datetime.now(dt.timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
+    episode = {
+        "date":       date_str,
+        "dayOfWeek":  _day_of_week_ko(target_date),
+        "seqID":      seq_id,
+        "source":     get_source_url(seq_id),
+        "youtube":    playlist_data,
+        "createdAt":  dt.datetime.now(dt.timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
         "matchCount": sum(1 for s in songs if s.get("matched", False)),
     }
 
-    tmp = output_path.with_suffix(".json.tmp")
-    with open(tmp, "w", encoding="utf-8") as f:
-        json.dump(payload, f, ensure_ascii=False, indent=2)
-    tmp.rename(output_path)  # 원자적 교체
-
-    return output_path
+    init_db(_DB_PATH)
+    conn = connect(_DB_PATH)
+    insert_episode(conn, _PROGRAM_ID, episode, songs)
+    conn.close()
 
 
 def _backfill(dry_run: bool) -> None:
@@ -259,7 +229,7 @@ def _backfill(dry_run: bool) -> None:
     today = date.today()
     for offset in range(1, 31):
         candidate = today - timedelta(days=offset)
-        if not _needs_processing(DATA_DIR / f"{candidate.isoformat()}.json"):
+        if not _needs_processing(candidate):
             continue
         seq_id = find_seq_id(candidate)
         if seq_id is None:
@@ -295,13 +265,11 @@ def main() -> None:
         except QuotaExceededError as e:
             print(f"\n[오류] {e}")
             sys.exit(1)
-        finally:
-            _rebuild_index()  # --date 실행 후에도 항상 갱신
         return
 
-    # 정기 실행: 오늘 처리 → 백필 → 인덱스 갱신
+    # 정기 실행: 오늘 처리 → 백필
     today = date.today()
-    if _needs_processing(DATA_DIR / f"{today.isoformat()}.json"):
+    if _needs_processing(today):
         seq_id = find_seq_id(today)
         if seq_id is not None:
             try:
@@ -318,15 +286,12 @@ def main() -> None:
                         ),
                         color=3447003,  # 파란색
                     )
-                _rebuild_index()
                 sys.exit(0)
             except SystemExit:
                 pass
 
     if not args.no_backfill:
         _backfill(dry_run=args.dry_run)
-
-    _rebuild_index()
 
 
 if __name__ == "__main__":

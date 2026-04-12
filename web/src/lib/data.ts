@@ -1,7 +1,11 @@
-import fs from "fs";
 import path from "path";
+import Database from "better-sqlite3";
 
-const DATA_DIR = path.join(process.cwd(), "..", "data", "bcamp");
+const DB_PATH = path.join(process.cwd(), "..", "data", "archive.db");
+
+function openDb(): Database.Database {
+  return new Database(DB_PATH, { readonly: true });
+}
 
 export interface Song {
   order: number;
@@ -35,46 +39,110 @@ export interface DateEntry {
   hasPlaylist: boolean;
 }
 
-function listJsonFiles(): string[] {
-  if (!fs.existsSync(DATA_DIR)) return [];
-  return fs
-    .readdirSync(DATA_DIR)
-    .filter((f) => f.match(/^\d{4}-\d{2}-\d{2}\.json$/))
-    .sort()
-    .reverse();
-}
-
 export function loadPlaylist(dateStr: string): PlaylistData | null {
-  const filePath = path.join(DATA_DIR, `${dateStr}.json`);
-  if (!fs.existsSync(filePath)) return null;
-  return JSON.parse(fs.readFileSync(filePath, "utf-8")) as PlaylistData;
+  const db = openDb();
+  try {
+    const ep = db
+      .prepare("SELECT * FROM episodes WHERE program_id = ? AND date = ?")
+      .get("bcamp", dateStr) as Record<string, unknown> | undefined;
+
+    if (!ep) return null;
+
+    const songs = db
+      .prepare(
+        "SELECT * FROM songs WHERE episode_id = ? ORDER BY order_no"
+      )
+      .all(ep.id as number) as Record<string, unknown>[];
+
+    const youtube =
+      ep.youtube_playlist_id
+        ? {
+            playlistId: ep.youtube_playlist_id as string,
+            url: ep.youtube_url as string,
+            musicUrl: ep.youtube_music_url as string,
+          }
+        : null;
+
+    return {
+      date: ep.date as string,
+      dayOfWeek: ep.day_of_week as string,
+      seqID: ep.seq_id as number,
+      source: ep.source as string,
+      youtube,
+      songs: songs.map((s) => ({
+        order: s.order_no as number,
+        title: s.title as string,
+        artist: s.artist as string,
+        videoId: (s.video_id as string | null) ?? null,
+        videoTitle: (s.video_title as string | null) ?? null,
+        channel: (s.channel as string | null) ?? null,
+        matched: Boolean(s.matched),
+      })),
+      createdAt: ep.created_at as string,
+      matchCount: ep.match_count as number,
+    };
+  } finally {
+    db.close();
+  }
 }
 
 export function loadLatest(): PlaylistData | null {
-  const files = listJsonFiles();
-  if (files.length === 0) return null;
-  return loadPlaylist(files[0].replace(".json", ""));
+  const db = openDb();
+  try {
+    const ep = db
+      .prepare(
+        "SELECT date FROM episodes WHERE program_id = ? ORDER BY date DESC LIMIT 1"
+      )
+      .get("bcamp") as { date: string } | undefined;
+
+    if (!ep) return null;
+    db.close();
+    return loadPlaylist(ep.date);
+  } catch {
+    db.close();
+    return null;
+  }
 }
 
 export function loadAllDates(): DateEntry[] {
-  const indexPath = path.join(DATA_DIR, "index.json");
-  if (fs.existsSync(indexPath)) {
-    return JSON.parse(fs.readFileSync(indexPath, "utf-8")) as DateEntry[];
+  const db = openDb();
+  try {
+    const rows = db
+      .prepare(
+        `SELECT
+           e.date,
+           e.day_of_week,
+           COUNT(s.id)                          AS song_count,
+           (e.youtube_playlist_id IS NOT NULL)  AS has_playlist
+         FROM episodes e
+         LEFT JOIN songs s ON s.episode_id = e.id
+         WHERE e.program_id = ?
+         GROUP BY e.id
+         ORDER BY e.date DESC`
+      )
+      .all("bcamp") as Record<string, unknown>[];
+
+    return rows.map((r) => ({
+      date: r.date as string,
+      dayOfWeek: r.day_of_week as string,
+      songCount: r.song_count as number,
+      hasPlaylist: Boolean(r.has_playlist),
+    }));
+  } finally {
+    db.close();
   }
-  // index.json 없으면 개별 파일 폴백 (초기 구동 시)
-  return listJsonFiles().map((f) => {
-    const data = JSON.parse(
-      fs.readFileSync(path.join(DATA_DIR, f), "utf-8")
-    ) as PlaylistData;
-    return {
-      date: data.date,
-      dayOfWeek: data.dayOfWeek,
-      songCount: data.songs.length,
-      hasPlaylist: !!data.youtube,
-    };
-  });
 }
 
 export function getAllDateParams(): { date: string }[] {
-  return listJsonFiles().map((f) => ({ date: f.replace(".json", "") }));
+  const db = openDb();
+  try {
+    const rows = db
+      .prepare(
+        "SELECT date FROM episodes WHERE program_id = ? ORDER BY date DESC"
+      )
+      .all("bcamp") as { date: string }[];
+    return rows.map((r) => ({ date: r.date }));
+  } finally {
+    db.close();
+  }
 }

@@ -7,25 +7,22 @@ Usage:
     python -m crawler.validate
 """
 
-import json
 import os
 import sys
 from pathlib import Path
 
 import requests
 
-DATA_DIR = Path(__file__).resolve().parent.parent / "data" / "bcamp"
+from crawler.db import DB_PATH, connect, get_playlist_ids
+
+_PROGRAM_ID = "bcamp"
 
 
 def _load_playlist_ids() -> list[tuple[str, str]]:
     """(date, playlistId) 목록 반환. youtube가 없는 날짜는 제외."""
-    result = []
-    for f in sorted(DATA_DIR.glob("????-??-??.json"), reverse=True):
-        with open(f, encoding="utf-8") as fp:
-            data = json.load(fp)
-        yt = data.get("youtube")
-        if yt and yt.get("playlistId"):
-            result.append((data["date"], yt["playlistId"]))
+    conn = connect(DB_PATH)
+    result = get_playlist_ids(conn, _PROGRAM_ID)
+    conn.close()
     return result
 
 
