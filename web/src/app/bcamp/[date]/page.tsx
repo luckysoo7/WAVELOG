@@ -6,7 +6,7 @@ export function generateStaticParams() {
   return getAllDateParams();
 }
 
-export default async function DatePage({ params }: { params: Promise<{ date: string }> }) {
+export default async function BcampEpisodePage({ params }: { params: Promise<{ date: string }> }) {
   const { date } = await params;
   const data = loadPlaylist(date);
 

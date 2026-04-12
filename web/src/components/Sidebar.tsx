@@ -19,7 +19,19 @@ export default function Sidebar({ dates }: SidebarProps) {
   return (
     <nav className="flex flex-col h-full px-4 py-8">
       {/* 대문 — 서비스 정체성 */}
-      <div className="mb-8 px-2">
+      <div className="mb-6 px-2">
+        {/* 홈 링크 */}
+        <Link
+          href="/"
+          className="flex items-center gap-1.5 mb-5 group"
+          style={{ color: pathname === "/" ? "var(--sunset-orange)" : "var(--text-muted)", opacity: pathname === "/" ? 1 : 0.5 }}
+        >
+          <span className="text-xs">←</span>
+          <span className="text-xs tracking-[0.18em] uppercase font-semibold transition-opacity group-hover:opacity-100">
+            Korean Radio Archive
+          </span>
+        </Link>
+
         {/* 라디오 레이블 */}
         <p
           className="text-xs tracking-[0.22em] uppercase font-semibold mb-4"
@@ -75,8 +87,11 @@ export default function Sidebar({ dates }: SidebarProps) {
       {/* 날짜 목록 */}
       <ul className="space-y-1 flex-1 overflow-y-auto">
         {dates.map((entry, i) => {
-          const href = i === 0 ? "/" : `/date/${entry.date}`;
-          const isActive = i === 0 ? pathname === "/" : pathname === `/date/${entry.date}`;
+          const href = i === 0 ? "/bcamp" : `/bcamp/${entry.date}`;
+          const isActive =
+            i === 0
+              ? pathname === "/bcamp"
+              : pathname === `/bcamp/${entry.date}`;
 
           return (
             <li key={entry.date}>
