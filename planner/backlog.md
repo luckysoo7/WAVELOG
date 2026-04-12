@@ -18,11 +18,11 @@
 
 ## Next — 기술 부채 (merge 완료 후 바로 가능)
 
-- [ ] 레포 이름 변경 `bcamp-daily` → `k-radio-archive`
-- [ ] GitHub Actions 수동 트리거로 누락 에피소드 복구 (4/4, 4/5, 4/6)
+- [x] 레포 이름 변경 `bcamp-daily` → `k-radio-archive`
+- [ ] 누락 에피소드 복구 (4/1~4/6) — 자동 백필 진행 중, 별도 조치 불필요
 - [x] 사이드바 활성 날짜 자동 스크롤
 - [x] `not-found.tsx` 커스텀 404 페이지
-- [ ] og:image 실제 이미지 생성
+- [x] og:image 실제 이미지 생성
 
 ---
 
