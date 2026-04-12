@@ -125,10 +125,10 @@ def insert_episode(
                :yt_playlist_id, :yt_url, :yt_music_url,
                :match_count, :created_at)
             ON CONFLICT(program_id, date) DO UPDATE SET
-                youtube_playlist_id = excluded.youtube_playlist_id,
-                youtube_url         = excluded.youtube_url,
-                youtube_music_url   = excluded.youtube_music_url,
-                match_count         = excluded.match_count
+                youtube_playlist_id = COALESCE(excluded.youtube_playlist_id, youtube_playlist_id),
+                youtube_url         = COALESCE(excluded.youtube_url, youtube_url),
+                youtube_music_url   = COALESCE(excluded.youtube_music_url, youtube_music_url),
+                match_count         = CASE WHEN excluded.match_count > 0 THEN excluded.match_count ELSE match_count END
             """,
             {
                 "program_id":    program_id,
