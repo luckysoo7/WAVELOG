@@ -10,11 +10,34 @@ function formatDate(dateStr: string): string {
   return `${+m}월 ${+d}일`;
 }
 
+// DSOTM: 트랙 번호 → 스펙트럼 색상 (red → violet)
+function spectrumColor(order: number, total: number): string {
+  const hue = Math.round(((order - 1) / Math.max(total - 1, 1)) * 220);
+  return `hsl(${hue}, 75%, 62%)`;
+}
+
 export default function PlaylistView({ data, label = "지난 방송" }: Props) {
+  const total = data.songs.length;
+
   return (
     <main className="px-8 max-w-[760px] mx-auto">
       {/* 에디토리얼 히어로 */}
-      <header className="pt-12 pb-8">
+      <header className="pt-12 pb-8" style={{ position: "relative" }}>
+        {/* 앰비언트 프리즘 글로우 — DSOTM 프리즘 오른쪽 빛 번짐 */}
+        <div
+          aria-hidden
+          style={{
+            position: "absolute",
+            top: 0,
+            right: 0,
+            width: "60%",
+            height: "280px",
+            background:
+              "radial-gradient(ellipse 80% 70% at 95% 10%, rgba(120,60,220,0.09) 0%, rgba(60,120,255,0.06) 40%, transparent 70%)",
+            pointerEvents: "none",
+          }}
+        />
+
         <div className="flex items-center justify-between mb-5">
           <p
             className="text-xs tracking-[0.25em] uppercase font-medium"
@@ -41,7 +64,16 @@ export default function PlaylistView({ data, label = "지난 방송" }: Props) {
           {formatDate(data.date)}
         </h1>
 
-        <div style={{ borderTop: "1px solid rgba(232, 112, 74, 0.3)", marginBottom: "1.25rem" }} />
+        {/* DSOTM 스펙트럼 구분선 — 프리즘을 통과한 빛 */}
+        <div
+          style={{
+            height: "1px",
+            marginBottom: "1.25rem",
+            background:
+              "linear-gradient(to right, transparent, #ff4444 8%, #ff8800 22%, #ffee00 38%, #44cc00 52%, #00aaff 66%, #6644ff 82%, transparent)",
+            opacity: 0.55,
+          }}
+        />
 
         <div className="flex items-center justify-between gap-4 flex-wrap">
           <p className="text-sm" style={{ color: "var(--text-muted)" }}>
@@ -86,7 +118,7 @@ export default function PlaylistView({ data, label = "지난 방송" }: Props) {
           >
             <span
               className="w-6 text-right text-xs tabular-nums shrink-0 font-mono"
-              style={{ color: "var(--text-muted)", opacity: 0.5 }}
+              style={{ color: spectrumColor(song.order, total), opacity: 0.85 }}
             >
               {song.order}
             </span>

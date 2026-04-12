@@ -18,3 +18,4 @@ web/.next/
 # 임시 파일
 tmp/
 web/tsconfig.tsbuildinfo
+.claude/settings.local.json

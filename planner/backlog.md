@@ -6,10 +6,15 @@
 
 ---
 
-## Now — feat/sqlite → main merge
+## Now — DSOTM 디자인 (배캠 페이지)
 
-- [ ] GitHub Actions 수동 실행 1회 확인 (새 에피소드 DB 입력 확인)
-- [ ] Vercel 프리뷰 최종 확인
+- [x] 히어로 구분선 → 스펙트럼 그라데이션 1px 선
+- [x] 트랙 번호 → hsl 스펙트럼 컬러링 (함수 1개)
+- [x] 배경 앰비언트 프리즘 글로우 (opacity 9%)
+
+## ✅ 완료 — feat/sqlite → main merge
+
+- [x] GitHub Actions 수동 실행 확인
 - [x] npm run build 성공 (37페이지)
 - [x] 4월 11일 YouTube 플리 복구
 - [x] insert_episode COALESCE 버그 수정
@@ -18,7 +23,7 @@
 
 ## Next — 기술 부채 (merge 완료 후 바로 가능)
 
-- [x] 레포 이름 변경 `bcamp-daily` → `k-radio-archive`
+- [ ] 레포 이름 변경 `bcamp-daily` → `k-radio-archive`
 - [ ] 누락 에피소드 복구 (4/1~4/6) — 자동 백필 진행 중, 별도 조치 불필요
 - [x] 사이드바 활성 날짜 자동 스크롤
 - [x] `not-found.tsx` 커스텀 404 페이지
