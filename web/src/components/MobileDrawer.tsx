@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { usePathname } from "next/navigation";
+import Link from "next/link";
 import Sidebar from "./Sidebar";
 import type { DateEntry } from "@/lib/data";
 
@@ -44,12 +45,20 @@ export default function MobileDrawer({ dates }: { dates: DateEntry[] }) {
           <span className="block h-px w-3" style={{ background: "var(--text-primary)" }} />
         </button>
 
-        <span
-          className="text-sm font-semibold tracking-tight"
-          style={{ color: "var(--text-primary)" }}
-        >
-          배철수의 음악캠프
-        </span>
+        <Link href="/" className="flex flex-col items-center gap-0.5">
+          <span
+            className="text-xs tracking-[0.18em] uppercase font-semibold"
+            style={{ color: "var(--sunset-orange)", opacity: 0.85 }}
+          >
+            K-Radio Archive
+          </span>
+          <span
+            className="text-xs font-semibold tracking-tight"
+            style={{ color: "var(--text-muted)" }}
+          >
+            배철수의 음악캠프
+          </span>
+        </Link>
 
         {/* 우측 균형용 공백 */}
         <div className="w-8" />
