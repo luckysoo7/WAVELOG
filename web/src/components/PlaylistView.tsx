@@ -131,7 +131,6 @@ export default function PlaylistView({ data }: Props) {
         {data.songs.map((song) => {
           const isExpanded = expandedId === song.order;
           const color = spectrumColor(song.order, total);
-          const hasAlbumInfo = song.albumName || song.albumArtUrl;
 
           return (
             <li
@@ -226,11 +225,11 @@ export default function PlaylistView({ data }: Props) {
                         border: `1px solid ${color}33`,
                       }}
                     />
-                  ) : hasAlbumInfo ? (
+                  ) : (
                     <div
                       style={{
-                        width: "64px",
-                        height: "64px",
+                        width: "52px",
+                        height: "52px",
                         borderRadius: "4px",
                         background: "var(--card-bg)",
                         border: `1px solid ${color}33`,
@@ -238,35 +237,35 @@ export default function PlaylistView({ data }: Props) {
                         alignItems: "center",
                         justifyContent: "center",
                         flexShrink: 0,
-                        fontSize: "1.5rem",
+                        fontSize: "1.2rem",
+                        opacity: 0.5,
                       }}
                     >
                       ♪
                     </div>
-                  ) : null}
+                  )}
 
-                  {/* 앨범 텍스트 정보 */}
+                  {/* 앨범/YouTube 정보 */}
                   <div className="flex-1 min-w-0 pt-1">
-                    <p className="font-semibold text-sm leading-tight truncate">
-                      {song.title}
-                    </p>
-                    <p className="text-xs mt-0.5 truncate" style={{ color: "var(--text-muted)" }}>
-                      {song.artist}
-                    </p>
                     {song.albumName && (
-                      <p className="text-xs mt-1 truncate" style={{ color: "var(--text-muted)", opacity: 0.7 }}>
+                      <p className="text-xs truncate font-medium" style={{ color: "var(--text-primary)", opacity: 0.85 }}>
                         {song.albumName}
-                        {song.releaseYear ? ` · ${song.releaseYear}` : ""}
                       </p>
                     )}
-                    {song.videoId && (
+                    {song.releaseYear && (
+                      <p className="text-xs mt-0.5" style={{ color: "var(--text-muted)" }}>
+                        {song.releaseYear}
+                      </p>
+                    )}
+                    {song.videoId ? (
                       <a
                         href={`https://www.youtube.com/watch?v=${song.videoId}`}
                         target="_blank"
                         rel="noopener noreferrer"
                         onClick={(e) => e.stopPropagation()}
-                        className="inline-block mt-2 px-3 py-1 text-xs font-semibold transition-opacity hover:opacity-85"
+                        className="inline-block px-3 py-1 text-xs font-semibold transition-opacity hover:opacity-85"
                         style={{
+                          marginTop: song.albumName || song.releaseYear ? "0.5rem" : "0.25rem",
                           background: color,
                           color: "#000",
                           borderRadius: "3px",
@@ -274,6 +273,10 @@ export default function PlaylistView({ data }: Props) {
                       >
                         ▶ YouTube에서 듣기
                       </a>
+                    ) : (
+                      <p className="text-xs mt-1" style={{ color: "var(--text-muted)", opacity: 0.5 }}>
+                        YouTube 매칭 없음
+                      </p>
                     )}
                   </div>
                 </div>
