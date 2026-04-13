@@ -127,9 +127,11 @@ body::before {
   font-size: clamp(5rem, 18vw, 11rem);
 }
 @media (min-width: 768px) {
-  /* 사이드바 288px 차감 후 콘텐츠 영역 기준으로 재계산 */
+  /* 사이드바 288px 차감 후 콘텐츠 영역 기준으로 재계산
+     Z Fold4 내부 디스플레이 CSS 뷰포트 실측 884px 기준: 10vw=88.4px 에서 깨짐 확인
+     → 8vw=70.7px 로 여유 확보 */
   .date-title {
-    font-size: clamp(3rem, 10vw, 8rem);
+    font-size: clamp(3rem, 8vw, 7rem);
   }
 }
 
