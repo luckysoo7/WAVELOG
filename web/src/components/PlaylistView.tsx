@@ -131,8 +131,6 @@ export default function PlaylistView({ data }: Props) {
         {data.songs.map((song) => {
           const isExpanded = expandedId === song.order;
           const color = spectrumColor(song.order, total);
-          // 유튜브 링크나 앨범아트 중 하나라도 있어야 expand 의미 있음
-          const isExpandable = !!(song.videoId || song.albumArtUrl || song.albumName);
 
           return (
             <li
@@ -140,11 +138,11 @@ export default function PlaylistView({ data }: Props) {
               className="track-row"
               style={{
                 borderBottom: isExpanded ? "none" : "1px solid var(--track-border)",
-                cursor: isExpandable ? "pointer" : "default",
+                cursor: song.videoId ? "pointer" : "default",
               }}
-              onMouseEnter={() => isExpandable && handleMouseEnter(song.order)}
+              onMouseEnter={() => song.videoId && handleMouseEnter(song.order)}
               onMouseLeave={handleMouseLeave}
-              onClick={() => isExpandable && handleClick(song.order)}
+              onClick={() => song.videoId && handleClick(song.order)}
             >
               {/* 트랙 행 */}
               <div className="flex items-center gap-4 py-3.5 group">
@@ -184,8 +182,8 @@ export default function PlaylistView({ data }: Props) {
                   </p>
                 </div>
 
-                {/* 확장 상태 표시 화살표 — expandable 곡만 */}
-                {isExpandable && (
+                {/* YouTube 있는 곡만 화살표 표시 */}
+                {song.videoId && (
                   <span
                     className="shrink-0 text-xs transition-all duration-200"
                     aria-hidden
@@ -200,91 +198,37 @@ export default function PlaylistView({ data }: Props) {
                 )}
               </div>
 
-              {/* 확장 패널 — 슬라이드다운 */}
-              <div
-                style={{
-                  maxHeight: isExpanded ? "140px" : "0px",
-                  overflow: "hidden",
-                  transition: "max-height 0.25s ease",
-                  borderBottom: isExpanded ? "1px solid var(--track-border)" : "none",
-                }}
-              >
+              {/* 확장 패널 — YouTube 버튼만 */}
+              {song.videoId && (
                 <div
-                  className="flex items-start gap-4 pb-4 pl-10 pr-2"
-                  style={{ opacity: isExpanded ? 1 : 0, transition: "opacity 0.2s ease 0.05s" }}
+                  style={{
+                    maxHeight: isExpanded ? "60px" : "0px",
+                    overflow: "hidden",
+                    transition: "max-height 0.25s ease",
+                    borderBottom: isExpanded ? "1px solid var(--track-border)" : "none",
+                  }}
                 >
-                  {/* 앨범아트 */}
-                  {song.albumArtUrl ? (
-                    <img
-                      src={song.albumArtUrl}
-                      alt={song.albumName ?? song.title}
-                      width={64}
-                      height={64}
+                  <div
+                    className="pl-10 pr-2 pb-3"
+                    style={{ opacity: isExpanded ? 1 : 0, transition: "opacity 0.2s ease 0.05s" }}
+                  >
+                    <a
+                      href={`https://www.youtube.com/watch?v=${song.videoId}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      onClick={(e) => e.stopPropagation()}
+                      className="inline-block px-3 py-1 text-xs font-semibold transition-opacity hover:opacity-85"
                       style={{
-                        width: "64px",
-                        height: "64px",
-                        objectFit: "cover",
-                        borderRadius: "4px",
-                        flexShrink: 0,
-                        border: `1px solid ${color}33`,
-                      }}
-                    />
-                  ) : (
-                    <div
-                      style={{
-                        width: "52px",
-                        height: "52px",
-                        borderRadius: "4px",
-                        background: "var(--card-bg)",
-                        border: `1px solid ${color}33`,
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "center",
-                        flexShrink: 0,
-                        fontSize: "1.2rem",
-                        opacity: 0.5,
+                        background: color,
+                        color: "#000",
+                        borderRadius: "3px",
                       }}
                     >
-                      ♪
-                    </div>
-                  )}
-
-                  {/* 앨범/YouTube 정보 */}
-                  <div className="flex-1 min-w-0 pt-1">
-                    {song.albumName && (
-                      <p className="text-xs truncate font-medium" style={{ color: "var(--text-primary)", opacity: 0.85 }}>
-                        {song.albumName}
-                      </p>
-                    )}
-                    {song.releaseYear && (
-                      <p className="text-xs mt-0.5" style={{ color: "var(--text-muted)" }}>
-                        {song.releaseYear}
-                      </p>
-                    )}
-                    {song.videoId ? (
-                      <a
-                        href={`https://www.youtube.com/watch?v=${song.videoId}`}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        onClick={(e) => e.stopPropagation()}
-                        className="inline-block px-3 py-1 text-xs font-semibold transition-opacity hover:opacity-85"
-                        style={{
-                          marginTop: song.albumName || song.releaseYear ? "0.5rem" : "0.25rem",
-                          background: color,
-                          color: "#000",
-                          borderRadius: "3px",
-                        }}
-                      >
-                        ▶ YouTube에서 듣기
-                      </a>
-                    ) : (
-                      <p className="text-xs mt-1" style={{ color: "var(--text-muted)", opacity: 0.5 }}>
-                        YouTube 매칭 없음
-                      </p>
-                    )}
+                      ▶ YouTube에서 듣기
+                    </a>
                   </div>
                 </div>
-              </div>
+              )}
             </li>
           );
         })}

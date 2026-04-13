@@ -22,7 +22,6 @@ from crawler.auth import get_youtube_client
 from crawler.db import DB_PATH, connect, init_db, insert_episode, get_episode, update_song_mb
 from crawler.mbc_crawler import find_seq_id, fetch_songs, get_source_url
 from crawler.youtube_client import search_videos, create_playlist, add_to_playlist, QuotaExceededError
-from crawler.lastfm_client import lookup as lastfm_lookup
 
 _ROOT_DATA = Path(__file__).resolve().parent.parent / "data"
 _DB_PATH = _ROOT_DATA / "archive.db"
@@ -187,19 +186,6 @@ def run(target_date: date, dry_run: bool = False) -> None:
             print(f"\n[쿼터 초과] 부분 저장 ({matched}/{len(songs)}곡)")
             _save_to_db(date_str, target_date, seq_id, songs, playlist_id)
         raise
-
-    print(f"\n3.5/4 Last.fm 앨범 정보 조회...")
-    lfm_found = 0
-    for song in songs:
-        time.sleep(0.25)  # Last.fm 5 req/s
-        result = lastfm_lookup(song["title"], song["artist"])
-        if result:
-            song.update(result)
-            lfm_found += 1
-            print(f"     ✓ {song['order']:2d}. {song['title']} → {result.get('albumName', '?')}")
-        else:
-            print(f"     ✗ {song['order']:2d}. {song['title']} — 미매칭")
-    print(f"     Last.fm {lfm_found}/{len(songs)}곡 매칭")
 
     print(f"\n4/4 DB 저장...")
     _save_to_db(date_str, target_date, seq_id, songs, playlist_id)
