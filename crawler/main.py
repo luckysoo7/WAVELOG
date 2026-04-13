@@ -243,6 +243,7 @@ def _save_to_db(
 def run_mb_only(target_date: date) -> None:
     """DB에 이미 저장된 에피소드 곡들에 MusicBrainz 조회만 수행."""
     date_str = target_date.isoformat()
+    init_db(_DB_PATH)  # mbid/album_name 등 컬럼 마이그레이션 보장
     conn = connect(_DB_PATH)
     ep = get_episode(conn, _PROGRAM_ID, date_str)
     conn.close()
