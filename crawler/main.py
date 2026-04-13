@@ -10,6 +10,7 @@ import argparse
 import json
 import os
 import sys
+import time
 from datetime import date, timedelta
 from pathlib import Path
 
@@ -19,6 +20,7 @@ from crawler.auth import get_youtube_client
 from crawler.db import DB_PATH, connect, init_db, insert_episode, get_episode
 from crawler.mbc_crawler import find_seq_id, fetch_songs, get_source_url
 from crawler.youtube_client import search_videos, create_playlist, add_to_playlist, QuotaExceededError
+from crawler.musicbrainz_client import lookup as mb_lookup
 
 _ROOT_DATA = Path(__file__).resolve().parent.parent / "data"
 _DB_PATH = _ROOT_DATA / "archive.db"
@@ -183,6 +185,19 @@ def run(target_date: date, dry_run: bool = False) -> None:
             print(f"\n[쿼터 초과] 부분 저장 ({matched}/{len(songs)}곡)")
             _save_to_db(date_str, target_date, seq_id, songs, playlist_id)
         raise
+
+    print(f"\n3.5/4 MusicBrainz 앨범 정보 조회...")
+    mb_found = 0
+    for song in songs:
+        time.sleep(1)  # MusicBrainz 1 req/s 권장
+        result = mb_lookup(song["title"], song["artist"])
+        if result:
+            song.update(result)
+            mb_found += 1
+            print(f"     ✓ {song['order']:2d}. {song['title']} → {result.get('albumName', '?')} ({result.get('releaseYear', '?')})")
+        else:
+            print(f"     ✗ {song['order']:2d}. {song['title']} — MB 없음")
+    print(f"     MusicBrainz {mb_found}/{len(songs)}곡 매칭")
 
     print(f"\n4/4 DB 저장...")
     _save_to_db(date_str, target_date, seq_id, songs, playlist_id)

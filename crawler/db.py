@@ -35,18 +35,22 @@ CREATE TABLE IF NOT EXISTS episodes (
 );
 
 CREATE TABLE IF NOT EXISTS songs (
-  id          INTEGER PRIMARY KEY AUTOINCREMENT,
-  episode_id  INTEGER NOT NULL REFERENCES episodes(id) ON DELETE CASCADE,
-  order_no    INTEGER NOT NULL,
-  title       TEXT    NOT NULL,
-  artist      TEXT    NOT NULL,
-  video_id    TEXT,
-  video_title TEXT,
-  channel     TEXT,
-  matched     INTEGER DEFAULT 0,
-  genre       TEXT,
-  year        INTEGER,
-  play_count  INTEGER DEFAULT 0
+  id            INTEGER PRIMARY KEY AUTOINCREMENT,
+  episode_id    INTEGER NOT NULL REFERENCES episodes(id) ON DELETE CASCADE,
+  order_no      INTEGER NOT NULL,
+  title         TEXT    NOT NULL,
+  artist        TEXT    NOT NULL,
+  video_id      TEXT,
+  video_title   TEXT,
+  channel       TEXT,
+  matched       INTEGER DEFAULT 0,
+  genre         TEXT,
+  year          INTEGER,
+  play_count    INTEGER DEFAULT 0,
+  mbid          TEXT,
+  album_name    TEXT,
+  album_art_url TEXT,
+  release_year  INTEGER
 );
 
 CREATE INDEX IF NOT EXISTS idx_episodes_date    ON episodes(date);
@@ -84,6 +88,17 @@ def init_db(db_path: Path = DB_PATH) -> None:
     conn = connect(db_path)
     with conn:
         conn.executescript(_SCHEMA)
+        # 마이그레이션: 기존 DB에 새 컬럼 추가 (idempotent)
+        for col, typedef in [
+            ("mbid",          "TEXT"),
+            ("album_name",    "TEXT"),
+            ("album_art_url", "TEXT"),
+            ("release_year",  "INTEGER"),
+        ]:
+            try:
+                conn.execute(f"ALTER TABLE songs ADD COLUMN {col} {typedef}")
+            except Exception:
+                pass  # 이미 존재하면 무시
         conn.execute(
             """
             INSERT INTO programs (id, name, slug, freq, start_year, active)
@@ -155,21 +170,27 @@ def insert_episode(
             """
             INSERT INTO songs
               (episode_id, order_no, title, artist,
-               video_id, video_title, channel, matched)
+               video_id, video_title, channel, matched,
+               mbid, album_name, album_art_url, release_year)
             VALUES
               (:episode_id, :order_no, :title, :artist,
-               :video_id, :video_title, :channel, :matched)
+               :video_id, :video_title, :channel, :matched,
+               :mbid, :album_name, :album_art_url, :release_year)
             """,
             [
                 {
-                    "episode_id":  episode_id,
-                    "order_no":    s["order"],
-                    "title":       s["title"],
-                    "artist":      s["artist"],
-                    "video_id":    s.get("videoId"),
-                    "video_title": s.get("videoTitle"),
-                    "channel":     s.get("channel"),
-                    "matched":     1 if s.get("matched") else 0,
+                    "episode_id":    episode_id,
+                    "order_no":      s["order"],
+                    "title":         s["title"],
+                    "artist":        s["artist"],
+                    "video_id":      s.get("videoId"),
+                    "video_title":   s.get("videoTitle"),
+                    "channel":       s.get("channel"),
+                    "matched":       1 if s.get("matched") else 0,
+                    "mbid":          s.get("mbid"),
+                    "album_name":    s.get("albumName"),
+                    "album_art_url": s.get("albumArtUrl"),
+                    "release_year":  s.get("releaseYear"),
                 }
                 for s in songs
             ],
@@ -212,13 +233,17 @@ def get_episode(
         "createdAt":  ep["created_at"],
         "songs": [
             {
-                "order":      r["order_no"],
-                "title":      r["title"],
-                "artist":     r["artist"],
-                "videoId":    r["video_id"],
-                "videoTitle": r["video_title"],
-                "channel":    r["channel"],
-                "matched":    bool(r["matched"]),
+                "order":        r["order_no"],
+                "title":        r["title"],
+                "artist":       r["artist"],
+                "videoId":      r["video_id"],
+                "videoTitle":   r["video_title"],
+                "channel":      r["channel"],
+                "matched":      bool(r["matched"]),
+                "mbid":         r["mbid"],
+                "albumName":    r["album_name"],
+                "albumArtUrl":  r["album_art_url"],
+                "releaseYear":  r["release_year"],
             }
             for r in rows
         ],

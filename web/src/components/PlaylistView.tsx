@@ -1,3 +1,6 @@
+"use client";
+
+import { useState } from "react";
 import type { PlaylistData } from "@/lib/data";
 
 interface Props {
@@ -16,15 +19,32 @@ function spectrumColor(order: number, total: number): string {
   return `hsl(${hue}, 75%, 62%)`;
 }
 
-export default function PlaylistView({ data, label = "지난 방송" }: Props) {
+// 터치 디바이스 여부 (hover 불가 환경 = 모바일)
+function isTouchDevice(): boolean {
+  return typeof window !== "undefined" && window.matchMedia("(hover: none)").matches;
+}
+
+export default function PlaylistView({ data }: Props) {
   const total = data.songs.length;
   const matchedCount = data.songs.filter((s) => s.videoId).length;
+  const [expandedId, setExpandedId] = useState<number | null>(null);
+
+  const handleMouseEnter = (order: number) => {
+    if (!isTouchDevice()) setExpandedId(order);
+  };
+  const handleMouseLeave = () => {
+    if (!isTouchDevice()) setExpandedId(null);
+  };
+  const handleClick = (order: number) => {
+    if (isTouchDevice()) {
+      setExpandedId((prev) => (prev === order ? null : order));
+    }
+  };
 
   return (
     <main className="px-8 max-w-[760px] mx-auto">
       {/* 에디토리얼 히어로 */}
       <header className="pt-12 pb-8">
-
         <div className="flex items-center justify-between mb-5">
           <p
             className="text-xs tracking-[0.25em] uppercase font-medium"
@@ -51,7 +71,7 @@ export default function PlaylistView({ data, label = "지난 방송" }: Props) {
           {formatDate(data.date)}
         </h1>
 
-        {/* DSOTM 스펙트럼 구분선 — 프리즘을 통과한 빛 */}
+        {/* DSOTM 스펙트럼 구분선 */}
         <div
           style={{
             height: "1px",
@@ -67,7 +87,6 @@ export default function PlaylistView({ data, label = "지난 방송" }: Props) {
             <p className="text-sm" style={{ color: "var(--text-muted)" }}>
               {data.dayOfWeek} · {data.songs.length}곡 선곡
             </p>
-            {/* Option B: YouTube 재생 가능 카운트 */}
             {matchedCount > 0 && (
               <p className="text-xs mt-1" style={{ color: "var(--text-muted)", opacity: 0.6 }}>
                 이 중{" "}
@@ -109,78 +128,159 @@ export default function PlaylistView({ data, label = "지난 방송" }: Props) {
 
       {/* 선곡 목록 */}
       <ol data-testid="song-list" className="pb-16">
-        {data.songs.map((song) => (
-          <li
-            key={song.order}
-            className="track-row flex items-center gap-4 py-3.5 group"
-            style={{
-              borderBottom: "1px solid var(--track-border)",
-              cursor: song.videoId ? "pointer" : "default",
-            }}
-          >
-            {/* Option A: 스펙트럼 점 — videoId 있는 곡만 */}
-            <div className="shrink-0 flex items-center justify-end gap-1.5 w-8">
-              {song.videoId && (
+        {data.songs.map((song) => {
+          const isExpanded = expandedId === song.order;
+          const color = spectrumColor(song.order, total);
+          const hasAlbumInfo = song.albumName || song.albumArtUrl;
+
+          return (
+            <li
+              key={song.order}
+              className="track-row"
+              style={{
+                borderBottom: isExpanded ? "none" : "1px solid var(--track-border)",
+                cursor: "pointer",
+              }}
+              onMouseEnter={() => handleMouseEnter(song.order)}
+              onMouseLeave={handleMouseLeave}
+              onClick={() => handleClick(song.order)}
+            >
+              {/* 트랙 행 */}
+              <div className="flex items-center gap-4 py-3.5 group">
+                {/* 스펙트럼 점 + 번호 */}
+                <div className="shrink-0 flex items-center justify-end gap-1.5 w-8">
+                  {song.videoId && (
+                    <span
+                      className="spectrum-dot"
+                      aria-hidden
+                      style={{
+                        display: "inline-block",
+                        width: "4px",
+                        height: "4px",
+                        borderRadius: "50%",
+                        background: color,
+                        opacity: 0.65,
+                        transition: "transform 0.15s, opacity 0.15s",
+                        flexShrink: 0,
+                      }}
+                    />
+                  )}
+                  <span
+                    className="text-right text-xs tabular-nums font-mono"
+                    style={{ color, opacity: 0.85 }}
+                  >
+                    {song.order}
+                  </span>
+                </div>
+
+                <div className="flex-1 min-w-0">
+                  <p className="font-medium text-sm leading-snug truncate"
+                     style={{ textDecorationColor: color }}>
+                    {song.title}
+                  </p>
+                  <p className="text-xs mt-0.5 truncate" style={{ color: "var(--text-muted)" }}>
+                    {song.artist}
+                  </p>
+                </div>
+
+                {/* 확장 상태 표시 화살표 */}
                 <span
-                  className="spectrum-dot"
+                  className="shrink-0 text-xs transition-all duration-200"
                   aria-hidden
                   style={{
-                    display: "inline-block",
-                    width: "4px",
-                    height: "4px",
-                    borderRadius: "50%",
-                    background: spectrumColor(song.order, total),
-                    opacity: 0.65,
-                    transition: "transform 0.15s, opacity 0.15s",
-                    flexShrink: 0,
+                    color,
+                    opacity: isExpanded ? 0.9 : 0.35,
+                    transform: isExpanded ? "rotate(90deg)" : "rotate(0deg)",
                   }}
-                />
-              )}
-              <span
-                className="text-right text-xs tabular-nums font-mono"
-                style={{ color: spectrumColor(song.order, total), opacity: 0.85 }}
-              >
-                {song.order}
-              </span>
-            </div>
-
-            {song.videoId ? (
-              <a
-                href={`https://www.youtube.com/watch?v=${song.videoId}`}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex-1 min-w-0"
-              >
-                <p className="font-medium text-sm leading-snug truncate group-hover:underline"
-                   style={{ textUnderlineOffset: "3px", textDecorationColor: spectrumColor(song.order, total) }}>
-                  {song.title}
-                </p>
-                <p className="text-xs mt-0.5 truncate" style={{ color: "var(--text-muted)" }}>
-                  {song.artist}
-                </p>
-              </a>
-            ) : (
-              <div className="flex-1 min-w-0">
-                <p className="font-medium text-sm leading-snug truncate">{song.title}</p>
-                <p className="text-xs mt-0.5 truncate" style={{ color: "var(--text-muted)" }}>
-                  {song.artist}
-                </p>
+                >
+                  ▶
+                </span>
               </div>
-            )}
 
-            {song.videoId ? (
-              <span
-                className="shrink-0 w-5 h-5 flex items-center justify-center text-xs transition-all opacity-0 group-hover:opacity-100"
-                aria-hidden
-                style={{ color: spectrumColor(song.order, total) }}
+              {/* 확장 패널 — 슬라이드다운 */}
+              <div
+                style={{
+                  maxHeight: isExpanded ? "140px" : "0px",
+                  overflow: "hidden",
+                  transition: "max-height 0.25s ease",
+                  borderBottom: isExpanded ? "1px solid var(--track-border)" : "none",
+                }}
               >
-                ▶
-              </span>
-            ) : (
-              <div className="w-5 shrink-0" />
-            )}
-          </li>
-        ))}
+                <div
+                  className="flex items-start gap-4 pb-4 pl-10 pr-2"
+                  style={{ opacity: isExpanded ? 1 : 0, transition: "opacity 0.2s ease 0.05s" }}
+                >
+                  {/* 앨범아트 */}
+                  {song.albumArtUrl ? (
+                    <img
+                      src={song.albumArtUrl}
+                      alt={song.albumName ?? song.title}
+                      width={64}
+                      height={64}
+                      style={{
+                        width: "64px",
+                        height: "64px",
+                        objectFit: "cover",
+                        borderRadius: "4px",
+                        flexShrink: 0,
+                        border: `1px solid ${color}33`,
+                      }}
+                    />
+                  ) : hasAlbumInfo ? (
+                    <div
+                      style={{
+                        width: "64px",
+                        height: "64px",
+                        borderRadius: "4px",
+                        background: "var(--card-bg)",
+                        border: `1px solid ${color}33`,
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        flexShrink: 0,
+                        fontSize: "1.5rem",
+                      }}
+                    >
+                      ♪
+                    </div>
+                  ) : null}
+
+                  {/* 앨범 텍스트 정보 */}
+                  <div className="flex-1 min-w-0 pt-1">
+                    <p className="font-semibold text-sm leading-tight truncate">
+                      {song.title}
+                    </p>
+                    <p className="text-xs mt-0.5 truncate" style={{ color: "var(--text-muted)" }}>
+                      {song.artist}
+                    </p>
+                    {song.albumName && (
+                      <p className="text-xs mt-1 truncate" style={{ color: "var(--text-muted)", opacity: 0.7 }}>
+                        {song.albumName}
+                        {song.releaseYear ? ` · ${song.releaseYear}` : ""}
+                      </p>
+                    )}
+                    {song.videoId && (
+                      <a
+                        href={`https://www.youtube.com/watch?v=${song.videoId}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        onClick={(e) => e.stopPropagation()}
+                        className="inline-block mt-2 px-3 py-1 text-xs font-semibold transition-opacity hover:opacity-85"
+                        style={{
+                          background: color,
+                          color: "#000",
+                          borderRadius: "3px",
+                        }}
+                      >
+                        ▶ YouTube에서 듣기
+                      </a>
+                    )}
+                  </div>
+                </div>
+              </div>
+            </li>
+          );
+        })}
       </ol>
     </main>
   );
