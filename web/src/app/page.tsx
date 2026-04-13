@@ -55,71 +55,121 @@ export default function HomePage() {
           Programs
         </p>
 
-        <div className="flex flex-col gap-3">
-          {/* 배철수의 음악캠프 — 활성 프로그램 */}
+        <div className="flex flex-col gap-4">
+          {/* 배철수의 음악캠프 */}
           <Link
             href="/bcamp"
-            className="group block p-6 transition-all"
+            className="group block transition-all overflow-hidden"
             style={{
-              background: "rgba(255,255,255,0.03)",
+              borderRadius: "8px",
               border: "1px solid rgba(255,255,255,0.07)",
-              borderRadius: "6px",
+              background: "rgba(255,255,255,0.02)",
             }}
           >
-            <div className="flex items-start justify-between gap-4">
-              <div className="flex-1 min-w-0">
-                <p
-                  className="text-xs tracking-widest uppercase mb-2.5 font-medium"
-                  style={{ color: "var(--sunset-orange)" }}
-                >
-                  Radio Station · MBC FM4U 91.9
-                </p>
-                <h2
-                  className="font-bold leading-tight mb-2"
-                  style={{ fontSize: "1.35rem", letterSpacing: "-0.02em" }}
-                >
-                  배철수의 음악캠프
-                </h2>
-                <p
-                  className="text-xs mb-4 tabular-nums"
-                  style={{ color: "var(--text-muted)", opacity: 0.7 }}
-                >
-                  1990년~ · 매일 저녁 6시
-                  {allDates.length > 0 && ` · ${allDates.length}개 에피소드`}
-                </p>
+            {/* 썸네일 영역 */}
+            <div
+              style={{
+                position: "relative",
+                height: "140px",
+                overflow: "hidden",
+              }}
+            >
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src="/bcamp-hero.png"
+                alt="배철수의 음악캠프"
+                style={{
+                  width: "100%",
+                  height: "100%",
+                  objectFit: "cover",
+                  objectPosition: "center top",
+                  filter: "brightness(0.65) saturate(1.05)",
+                  transition: "transform 0.4s ease, filter 0.4s ease",
+                }}
+                className="group-hover:scale-[1.03] group-hover:brightness-75"
+              />
+              {/* 하단 페이드 */}
+              <div
+                style={{
+                  position: "absolute",
+                  bottom: 0,
+                  left: 0,
+                  right: 0,
+                  height: "60%",
+                  background: "linear-gradient(to bottom, transparent, rgba(26,37,53,0.95))",
+                }}
+              />
+              {/* 방송국 라벨 */}
+              <p
+                style={{
+                  position: "absolute",
+                  bottom: "0.75rem",
+                  left: "1rem",
+                  fontSize: "0.6rem",
+                  letterSpacing: "0.2em",
+                  textTransform: "uppercase",
+                  color: "#e8704a",
+                  opacity: 0.9,
+                  fontWeight: 600,
+                }}
+              >
+                MBC FM4U 91.9 · since 1990
+              </p>
+            </div>
 
-                {latest && (
-                  <div className="flex items-center gap-2">
-                    <span
-                      className="inline-block font-semibold rounded-full"
-                      style={{
-                        background: "var(--sunset-orange)",
-                        color: "#fff",
-                        fontSize: "9px",
-                        padding: "2px 7px",
-                      }}
-                    >
-                      NEW
-                    </span>
-                    <span
-                      className="text-xs tabular-nums"
-                      style={{ color: "var(--text-muted)" }}
-                    >
-                      {formatDate(latest.date)} · {latest.songs.length}곡
-                      {latest.youtube && (
-                        <span style={{ color: "var(--sunset-orange)", marginLeft: "6px" }}>▶</span>
-                      )}
-                    </span>
-                  </div>
-                )}
+            {/* 텍스트 영역 */}
+            <div className="p-5">
+              <div className="flex items-start justify-between gap-4">
+                <div className="flex-1 min-w-0">
+                  <h2
+                    className="font-bold leading-tight mb-1.5"
+                    style={{ fontSize: "1.2rem", letterSpacing: "-0.02em" }}
+                  >
+                    배철수의 음악캠프
+                  </h2>
+                  <p
+                    className="text-xs tabular-nums"
+                    style={{ color: "var(--text-muted)", opacity: 0.65 }}
+                  >
+                    매일 저녁 6시
+                    {allDates.length > 0 && ` · ${allDates.length}개 에피소드`}
+                  </p>
+                </div>
+                <span
+                  className="text-lg shrink-0 mt-0.5 transition-transform duration-300 group-hover:translate-x-1"
+                  style={{ color: "#e8704a", opacity: 0.7 }}
+                >
+                  →
+                </span>
               </div>
 
-              <span
-                className="text-xl shrink-0 mt-0.5 transition-transform duration-200 group-hover:translate-x-1"
-                style={{ color: "var(--sunset-orange)", opacity: 0.8 }}
-              >
-                →
-              </span>
+              {latest && (
+                <div
+                  className="flex items-center gap-2 mt-3 pt-3"
+                  style={{ borderTop: "1px solid rgba(255,255,255,0.06)" }}
+                >
+                  <span
+                    className="inline-block font-semibold rounded-full shrink-0"
+                    style={{
+                      background: "#e8704a",
+                      color: "#fff",
+                      fontSize: "9px",
+                      padding: "2px 7px",
+                    }}
+                  >
+                    NEW
+                  </span>
+                  <span
+                    className="text-xs tabular-nums"
+                    style={{ color: "var(--text-muted)" }}
+                  >
+                    {formatDate(latest.date)} · {latest.songs.length}곡
+                    {latest.youtube && (
+                      <span style={{ color: "#e8704a", marginLeft: "6px" }}>▶</span>
+                    )}
+                  </span>
+                </div>
+              )}
             </div>
           </Link>
 
@@ -127,104 +177,173 @@ export default function HomePage() {
           {byulbamLatest ? (
             <Link
               href="/byulbam"
-              className="group block p-6 transition-all"
+              className="group block transition-all overflow-hidden"
               style={{
-                background: "rgba(255,255,255,0.03)",
+                borderRadius: "8px",
                 border: "1px solid rgba(255,255,255,0.07)",
-                borderRadius: "6px",
+                background: "rgba(255,255,255,0.02)",
               }}
             >
-              <div className="flex items-start justify-between gap-4">
-                <div className="flex-1 min-w-0">
-                  <p
-                    className="text-xs tracking-widest uppercase mb-2.5 font-medium"
-                    style={{ color: "var(--sunset-orange)" }}
-                  >
-                    Radio Station · MBC FM4U 91.9
-                  </p>
-                  <h2
-                    className="font-bold leading-tight mb-2"
-                    style={{ fontSize: "1.35rem", letterSpacing: "-0.02em" }}
-                  >
-                    별이 빛나는 밤에
-                  </h2>
-                  <p
-                    className="text-xs mb-4 tabular-nums"
-                    style={{ color: "var(--text-muted)", opacity: 0.7 }}
-                  >
-                    1969년~ · 매일 밤 10시
-                    {byulbamDates.length > 0 && ` · ${byulbamDates.length}개 에피소드`}
-                  </p>
+              {/* 썸네일 영역 */}
+              <div
+                style={{
+                  position: "relative",
+                  height: "140px",
+                  overflow: "hidden",
+                }}
+              >
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src="/byulbam-hero.png"
+                  alt="별이 빛나는 밤에"
+                  style={{
+                    width: "100%",
+                    height: "100%",
+                    objectFit: "cover",
+                    objectPosition: "center top",
+                    filter: "brightness(0.65) saturate(1.05)",
+                    transition: "transform 0.4s ease",
+                  }}
+                  className="group-hover:scale-[1.03]"
+                />
+                <div
+                  style={{
+                    position: "absolute",
+                    bottom: 0,
+                    left: 0,
+                    right: 0,
+                    height: "60%",
+                    background: "linear-gradient(to bottom, transparent, rgba(15,25,20,0.95))",
+                  }}
+                />
+                <p
+                  style={{
+                    position: "absolute",
+                    bottom: "0.75rem",
+                    left: "1rem",
+                    fontSize: "0.6rem",
+                    letterSpacing: "0.2em",
+                    textTransform: "uppercase",
+                    color: "#c4a84e",
+                    opacity: 0.9,
+                    fontWeight: 600,
+                  }}
+                >
+                  MBC FM4U 91.9 · since 1969
+                </p>
+              </div>
 
-                  <div className="flex items-center gap-2">
-                    <span
-                      className="inline-block font-semibold rounded-full"
-                      style={{
-                        background: "var(--sunset-orange)",
-                        color: "#fff",
-                        fontSize: "9px",
-                        padding: "2px 7px",
-                      }}
+              {/* 텍스트 영역 */}
+              <div className="p-5">
+                <div className="flex items-start justify-between gap-4">
+                  <div className="flex-1 min-w-0">
+                    <h2
+                      className="font-bold leading-tight mb-1.5"
+                      style={{ fontSize: "1.2rem", letterSpacing: "-0.02em" }}
                     >
-                      NEW
-                    </span>
-                    <span
+                      별이 빛나는 밤에
+                    </h2>
+                    <p
                       className="text-xs tabular-nums"
-                      style={{ color: "var(--text-muted)" }}
+                      style={{ color: "var(--text-muted)", opacity: 0.65 }}
                     >
-                      {formatDate(byulbamLatest.date)} · {byulbamLatest.songs.length}곡
-                      {byulbamLatest.youtube && (
-                        <span style={{ color: "var(--sunset-orange)", marginLeft: "6px" }}>▶</span>
-                      )}
-                    </span>
+                      매일 밤 10시
+                      {byulbamDates.length > 0 && ` · ${byulbamDates.length}개 에피소드`}
+                    </p>
                   </div>
+                  <span
+                    className="text-lg shrink-0 mt-0.5 transition-transform duration-300 group-hover:translate-x-1"
+                    style={{ color: "#c4a84e", opacity: 0.7 }}
+                  >
+                    →
+                  </span>
                 </div>
 
-                <span
-                  className="text-xl shrink-0 mt-0.5 transition-transform duration-200 group-hover:translate-x-1"
-                  style={{ color: "var(--sunset-orange)", opacity: 0.8 }}
+                <div
+                  className="flex items-center gap-2 mt-3 pt-3"
+                  style={{ borderTop: "1px solid rgba(255,255,255,0.06)" }}
                 >
-                  →
-                </span>
+                  <span
+                    className="inline-block font-semibold rounded-full shrink-0"
+                    style={{
+                      background: "#c4a84e",
+                      color: "#1a1408",
+                      fontSize: "9px",
+                      padding: "2px 7px",
+                    }}
+                  >
+                    NEW
+                  </span>
+                  <span
+                    className="text-xs tabular-nums"
+                    style={{ color: "var(--text-muted)" }}
+                  >
+                    {formatDate(byulbamLatest.date)} · {byulbamLatest.songs.length}곡
+                    {byulbamLatest.youtube && (
+                      <span style={{ color: "#c4a84e", marginLeft: "6px" }}>▶</span>
+                    )}
+                  </span>
+                </div>
               </div>
             </Link>
           ) : (
+            // 데이터 없을 때 COMING SOON
             <div
-              className="p-6"
+              className="overflow-hidden"
               style={{
-                background: "rgba(255,255,255,0.015)",
+                borderRadius: "8px",
                 border: "1px solid rgba(255,255,255,0.04)",
-                borderRadius: "6px",
+                background: "rgba(255,255,255,0.01)",
                 opacity: 0.4,
               }}
             >
-              <p
-                className="text-xs tracking-widest uppercase mb-2.5 font-medium"
-                style={{ color: "var(--text-muted)" }}
-              >
-                Radio Station · MBC FM4U 91.9
-              </p>
-              <h2
-                className="font-bold leading-tight mb-2"
-                style={{ fontSize: "1.35rem", letterSpacing: "-0.02em" }}
-              >
-                별이 빛나는 밤에
-              </h2>
-              <p className="text-xs mb-4" style={{ color: "var(--text-muted)", opacity: 0.7 }}>
-                1969년~ · 매일 밤 10시
-              </p>
-              <span
-                className="inline-block text-xs px-2 py-0.5"
-                style={{
-                  border: "1px solid rgba(138,155,176,0.2)",
-                  color: "var(--text-muted)",
-                  borderRadius: "2px",
-                  fontSize: "0.65rem",
-                  letterSpacing: "0.1em",
-                }}
-              >
-                COMING SOON
-              </span>
+              <div style={{ position: "relative", height: "140px", overflow: "hidden" }}>
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src="/byulbam-hero.png"
+                  alt="별이 빛나는 밤에"
+                  style={{
+                    width: "100%",
+                    height: "100%",
+                    objectFit: "cover",
+                    objectPosition: "center top",
+                    filter: "brightness(0.4) grayscale(0.4)",
+                  }}
+                />
+                <div
+                  style={{
+                    position: "absolute",
+                    bottom: 0,
+                    left: 0,
+                    right: 0,
+                    height: "60%",
+                    background: "linear-gradient(to bottom, transparent, rgba(15,25,35,0.95))",
+                  }}
+                />
+              </div>
+              <div className="p-5">
+                <h2
+                  className="font-bold leading-tight mb-1.5"
+                  style={{ fontSize: "1.2rem", letterSpacing: "-0.02em" }}
+                >
+                  별이 빛나는 밤에
+                </h2>
+                <p className="text-xs mb-3" style={{ color: "var(--text-muted)", opacity: 0.6 }}>
+                  매일 밤 10시 · since 1969
+                </p>
+                <span
+                  className="inline-block text-xs px-2 py-0.5"
+                  style={{
+                    border: "1px solid rgba(138,155,176,0.2)",
+                    color: "var(--text-muted)",
+                    borderRadius: "2px",
+                    fontSize: "0.65rem",
+                    letterSpacing: "0.1em",
+                  }}
+                >
+                  COMING SOON
+                </span>
+              </div>
             </div>
           )}
         </div>
@@ -236,7 +355,7 @@ export default function HomePage() {
         style={{ borderTop: "1px solid rgba(255,255,255,0.05)", paddingTop: "1.5rem" }}
       >
         <p className="text-xs leading-relaxed" style={{ color: "var(--text-muted)", opacity: 0.4 }}>
-          ⓒ MBC · 배철수의 음악캠프 — 방송 콘텐츠 저작권은 MBC에 있습니다
+          ⓒ MBC — 방송 콘텐츠 저작권은 MBC에 있습니다
           <br />
           unofficial fan site · not affiliated with MBC
         </p>
