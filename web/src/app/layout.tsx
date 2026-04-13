@@ -21,7 +21,8 @@ export const metadata: Metadata = {
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
-  const dates = loadAllDates();
+  const bcampDates = loadAllDates("bcamp");
+  const byulbamDates = loadAllDates("byulbam");
 
   return (
     <html lang="ko">
@@ -43,12 +44,12 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
               borderRight: "1px solid rgba(255, 255, 255, 0.07)",
             }}
           >
-            <Sidebar dates={dates} />
+            <Sidebar bcampDates={bcampDates} byulbamDates={byulbamDates} />
           </aside>
 
           {/* 메인 콘텐츠 */}
           <div className="flex-1 min-w-0 flex flex-col">
-            <MobileDrawer dates={dates} />
+            <MobileDrawer bcampDates={bcampDates} byulbamDates={byulbamDates} />
             <div className="flex-1">{children}</div>
 
             {/* 모바일 저작권 (사이드바 없을 때) */}
@@ -60,7 +61,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                 opacity: 0.45,
               }}
             >
-              ⓒ MBC · 배철수의 음악캠프 — 방송 콘텐츠 저작권은 MBC에 있습니다
+              ⓒ MBC — 방송 콘텐츠 저작권은 MBC에 있습니다
               <br />
               unofficial fan site · not affiliated with MBC
             </footer>

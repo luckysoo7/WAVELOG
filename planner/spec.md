@@ -32,8 +32,8 @@
 /                    홈페이지 랜딩 (프로그램 카드)
 /bcamp               배철수의 음악캠프 허브 (최신 에피소드)
 /bcamp/[date]        날짜별 에피소드
-/byulbam             별이 빛나는 밤 허브          ← Next
-/byulbam/[date]      날짜별 에피소드              ← Next
+/byulbam             별이 빛나는 밤 허브          ← Now
+/byulbam/[date]      날짜별 에피소드              ← Now
 /discover            통계 / 추천                  ← Later
 /discover/artist/[name]  아티스트 선곡 이력       ← Later
 ```
@@ -46,22 +46,17 @@
 
 ### 🟢 Now
 
-**별이 빛나는 밤 추가** — MBC 별밤 크롤러 + `/byulbam` 라우트 조사
+**별이 빛나는 밤 추가** — MBC 별밤 크롤러 + `/byulbam` 라우트
 
 ### 🔵 Next
 
-**별이 빛나는 밤 추가** — MBC 별밤 크롤러 + `/byulbam` 라우트
-- 전제: feat/sqlite merge 후 2주 이상 안정 운영 확인
-
-**기술 부채 처리** — merge 완료 후 바로 가능
+**기술 부채**
 - 레포 이름 변경 (`bcamp-daily` → `k-radio-archive`)
-- 누락 에피소드 복구 (4/4, 4/5, 4/6 등)
-- 사이드바 활성 날짜 자동 스크롤
 
 ### 🟡 Later
 
 **/discover 통계 페이지**
-- 전제: 배캠 데이터 3개월 이상 + SQLite 쿼리 검증 완료
+- 전제: 배캠 데이터 3개월 이상
 - TOP 30 선곡, 아티스트 탐색, 검색
 
 **아이디어 보관함**
@@ -73,6 +68,7 @@
 
 - 개인화 추천 — DB + 로그인 필요, 범위 밖
 - 크로스 프로그램 추천 — 프로그램별 큐레이션 정체성 유지 원칙으로 제외
+- 트랙 앨범 메타데이터 (MB/Last.fm) — 데이터 품질 문제로 보류
 
 ---
 
@@ -85,14 +81,14 @@
 
 ---
 
-## 현재 상태 (2026-04-12)
+## 현재 상태 (2026-04-13)
 
 | 컴포넌트 | 상태 | 비고 |
 |---------|------|------|
-| 홈페이지 + IA 개편 | ✅ main 배포 중 | Phase 1 완료 |
-| SQLite 전환 | ✅ main 배포 중 | Phase 2 완료, Actions 검증 완료 |
-| GitHub Actions 크롤러 | ✅ 매일 22:00 KST | SQLite 기반으로 정상 운영 중 |
-| DSOTM 디자인 테마 | ✅ 배포 완료 | 스펙트럼 컬러, 앰비언트 글로우 |
-| 트랙 앨범 슬라이드 패널 | ✅ 배포 완료 | MusicBrainz + hover/tap expand |
-| 별이 빛나는 밤 | ❌ 미착수 | Next 단계 |
-| /discover 통계 | ❌ 미착수 | 3개월 데이터 필요 |
+| 홈페이지 + IA 개편 | ✅ 배포 중 | |
+| SQLite 전환 | ✅ 배포 중 | Actions 검증 완료 |
+| GitHub Actions 크롤러 | ✅ 매일 22:00 KST | |
+| DSOTM 디자인 테마 | ✅ 배포 중 | 스펙트럼 컬러, 앰비언트 글로우 |
+| 트랙 hover → YouTube 버튼 | ✅ 배포 중 | videoId 있는 곡만 expand |
+| 별이 빛나는 밤 | ✅ 구현 완료 | 배포 대기 (DB 데이터 필요) |
+| /discover 통계 | ❌ 미착수 | Later |

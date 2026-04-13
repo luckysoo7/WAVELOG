@@ -69,6 +69,15 @@ _BCAMP_SEED = {
     "active": 1,
 }
 
+_BYULBAM_SEED = {
+    "id": "byulbam",
+    "name": "별이 빛나는 밤에",
+    "slug": "byulbam",
+    "freq": "FM 91.9MHz",
+    "start_year": 1969,
+    "active": 1,
+}
+
 
 def connect(db_path: Path = DB_PATH) -> sqlite3.Connection:
     """WAL 모드 활성화된 커넥션 반환."""
@@ -99,8 +108,7 @@ def init_db(db_path: Path = DB_PATH) -> None:
                 conn.execute(f"ALTER TABLE songs ADD COLUMN {col} {typedef}")
             except Exception:
                 pass  # 이미 존재하면 무시
-        conn.execute(
-            """
+        _upsert_program = """
             INSERT INTO programs (id, name, slug, freq, start_year, active)
             VALUES (:id, :name, :slug, :freq, :start_year, :active)
             ON CONFLICT(id) DO UPDATE SET
@@ -109,9 +117,9 @@ def init_db(db_path: Path = DB_PATH) -> None:
                 freq       = excluded.freq,
                 start_year = excluded.start_year,
                 active     = excluded.active
-            """,
-            _BCAMP_SEED,
-        )
+        """
+        conn.execute(_upsert_program, _BCAMP_SEED)
+        conn.execute(_upsert_program, _BYULBAM_SEED)
     conn.close()
 
 

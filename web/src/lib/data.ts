@@ -43,12 +43,12 @@ export interface DateEntry {
   hasPlaylist: boolean;
 }
 
-export function loadPlaylist(dateStr: string): PlaylistData | null {
+export function loadPlaylist(dateStr: string, programId = "bcamp"): PlaylistData | null {
   const db = openDb();
   try {
     const ep = db
       .prepare("SELECT * FROM episodes WHERE program_id = ? AND date = ?")
-      .get("bcamp", dateStr) as Record<string, unknown> | undefined;
+      .get(programId, dateStr) as Record<string, unknown> | undefined;
 
     if (!ep) return null;
 
@@ -94,25 +94,25 @@ export function loadPlaylist(dateStr: string): PlaylistData | null {
   }
 }
 
-export function loadLatest(): PlaylistData | null {
+export function loadLatest(programId = "bcamp"): PlaylistData | null {
   const db = openDb();
   try {
     const ep = db
       .prepare(
         "SELECT date FROM episodes WHERE program_id = ? ORDER BY date DESC LIMIT 1"
       )
-      .get("bcamp") as { date: string } | undefined;
+      .get(programId) as { date: string } | undefined;
 
     if (!ep) return null;
     db.close();
-    return loadPlaylist(ep.date);
+    return loadPlaylist(ep.date, programId);
   } catch {
     db.close();
     return null;
   }
 }
 
-export function loadAllDates(): DateEntry[] {
+export function loadAllDates(programId = "bcamp"): DateEntry[] {
   const db = openDb();
   try {
     const rows = db
@@ -128,7 +128,7 @@ export function loadAllDates(): DateEntry[] {
          GROUP BY e.id
          ORDER BY e.date DESC`
       )
-      .all("bcamp") as Record<string, unknown>[];
+      .all(programId) as Record<string, unknown>[];
 
     return rows.map((r) => ({
       date: r.date as string,
@@ -141,14 +141,14 @@ export function loadAllDates(): DateEntry[] {
   }
 }
 
-export function getAllDateParams(): { date: string }[] {
+export function getAllDateParams(programId = "bcamp"): { date: string }[] {
   const db = openDb();
   try {
     const rows = db
       .prepare(
         "SELECT date FROM episodes WHERE program_id = ? ORDER BY date DESC"
       )
-      .all("bcamp") as { date: string }[];
+      .all(programId) as { date: string }[];
     return rows.map((r) => ({ date: r.date }));
   } finally {
     db.close();

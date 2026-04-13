@@ -6,6 +6,7 @@ import type { PlaylistData } from "@/lib/data";
 interface Props {
   data: PlaylistData;
   label?: string;
+  programName?: string;
 }
 
 function formatDate(dateStr: string): string {
@@ -24,7 +25,7 @@ function isTouchDevice(): boolean {
   return typeof window !== "undefined" && window.matchMedia("(hover: none)").matches;
 }
 
-export default function PlaylistView({ data }: Props) {
+export default function PlaylistView({ data, programName = "배철수의 음악캠프" }: Props) {
   const total = data.songs.length;
   const matchedCount = data.songs.filter((s) => s.videoId).length;
   const [expandedId, setExpandedId] = useState<number | null>(null);
@@ -60,7 +61,7 @@ export default function PlaylistView({ data }: Props) {
         </div>
 
         <p className="text-sm font-medium mb-3" style={{ color: "var(--text-muted)" }}>
-          배철수의 음악캠프
+          {programName}
         </p>
 
         <h1

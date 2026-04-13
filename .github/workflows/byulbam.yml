@@ -1,0 +1,74 @@
+name: 별밤 플레이리스트 자동 생성
+
+on:
+  schedule:
+    - cron: '0 15 * * *'   # 00:00 KST — 방송 종료 직후 1차 실행
+    - cron: '30 16 * * *'  # 01:30 KST — MBC 업로드 지연 대비 재시도
+  workflow_dispatch:
+    inputs:
+      date:
+        description: '날짜 (YYYY-MM-DD). 비워두면 오늘/어제 자동 처리'
+        required: false
+        default: ''
+
+# 동시 실행 방지 — song_cache.json race condition 예방
+concurrency:
+  group: byulbam-daily
+  cancel-in-progress: false
+
+jobs:
+  crawl-and-deploy:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: 레포 체크아웃
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Python 설정
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: 'pip'
+          cache-dependency-path: crawler/requirements.txt
+
+      - name: 의존성 설치
+        run: pip install -r crawler/requirements.txt
+
+      - name: 선곡표 크롤링 + 플레이리스트 생성
+        env:
+          GOOGLE_CLIENT_SECRET: ${{ secrets.GOOGLE_CLIENT_SECRET }}
+          GOOGLE_REFRESH_TOKEN: ${{ secrets.GOOGLE_REFRESH_TOKEN }}
+        run: |
+          if [ -n "${{ github.event.inputs.date }}" ]; then
+            python -m crawler.byulbam_main --date "${{ github.event.inputs.date }}"
+          else
+            python -m crawler.byulbam_main
+          fi
+
+      - name: 결과 DB 커밋 + 푸시
+        run: |
+          git config user.name "bcamp-daily[bot]"
+          git config user.email "bcamp-daily[bot]@users.noreply.github.com"
+          git add data/
+          git diff --staged --quiet || git commit -m "chore: $(date +'%Y-%m-%d') 별밤 선곡표 자동 업데이트"
+          git push || (git pull --rebase && git push)
+
+      - name: Discord 실패 알림
+        if: failure()
+        run: |
+          curl -s -X POST "${{ secrets.DISCORD_WEBHOOK_URL }}" \
+            -H "Content-Type: application/json" \
+            -d '{
+              "embeds": [{
+                "title": "❌ 별밤 크롤러 실패",
+                "description": "GitHub Actions 자동 실행이 실패했습니다.\n[워크플로우 확인](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }})",
+                "color": 15158332,
+                "fields": [
+                  {"name": "트리거", "value": "${{ github.event_name }}", "inline": true}
+                ]
+              }]
+            }'

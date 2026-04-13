@@ -6,9 +6,17 @@ import Link from "next/link";
 import Sidebar from "./Sidebar";
 import type { DateEntry } from "@/lib/data";
 
-export default function MobileDrawer({ dates }: { dates: DateEntry[] }) {
+interface MobileDrawerProps {
+  bcampDates: DateEntry[];
+  byulbamDates: DateEntry[];
+}
+
+export default function MobileDrawer({ bcampDates, byulbamDates }: MobileDrawerProps) {
   const [isOpen, setIsOpen] = useState(false);
   const pathname = usePathname();
+
+  const isByulbam = pathname.startsWith("/byulbam");
+  const programName = isByulbam ? "별이 빛나는 밤에" : "배철수의 음악캠프";
 
   // 페이지 이동 시 드로어 자동 닫기
   useEffect(() => {
@@ -56,7 +64,7 @@ export default function MobileDrawer({ dates }: { dates: DateEntry[] }) {
             className="text-xs font-semibold tracking-tight"
             style={{ color: "var(--text-muted)" }}
           >
-            배철수의 음악캠프
+            {programName}
           </span>
         </Link>
 
@@ -99,7 +107,7 @@ export default function MobileDrawer({ dates }: { dates: DateEntry[] }) {
           </button>
         </div>
 
-        <Sidebar dates={dates} />
+        <Sidebar bcampDates={bcampDates} byulbamDates={byulbamDates} />
       </div>
     </>
   );

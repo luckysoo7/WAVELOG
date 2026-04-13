@@ -6,6 +6,17 @@ import { useEffect, useRef } from "react";
 import type { DateEntry } from "@/lib/data";
 
 interface SidebarProps {
+  bcampDates: DateEntry[];
+  byulbamDates: DateEntry[];
+}
+
+interface ProgramConfig {
+  id: string;
+  name: string;
+  nameShort: string;
+  freq: string;
+  schedule: string;
+  basePath: string;
   dates: DateEntry[];
 }
 
@@ -14,9 +25,31 @@ function formatSidebarDate(dateStr: string, dayOfWeek: string): string {
   return `${+m}/${+d} ${dayOfWeek.charAt(0)}`;
 }
 
-export default function Sidebar({ dates }: SidebarProps) {
+export default function Sidebar({ bcampDates, byulbamDates }: SidebarProps) {
   const pathname = usePathname();
   const activeRef = useRef<HTMLLIElement>(null);
+
+  const isByulbam = pathname.startsWith("/byulbam");
+
+  const program: ProgramConfig = isByulbam
+    ? {
+        id: "byulbam",
+        name: "별이 빛나는 밤에",
+        nameShort: "별이 빛나는\n밤에",
+        freq: "MBC FM4U 91.9 · 매일 밤 10시",
+        schedule: "1969년~ · 매일 밤 10시",
+        basePath: "/byulbam",
+        dates: byulbamDates,
+      }
+    : {
+        id: "bcamp",
+        name: "배철수의 음악캠프",
+        nameShort: "배철수의\n음악캠프",
+        freq: "MBC FM4U 91.9 · 매일 저녁 6시",
+        schedule: "1990년~ · 매일 저녁 6시",
+        basePath: "/bcamp",
+        dates: bcampDates,
+      };
 
   useEffect(() => {
     activeRef.current?.scrollIntoView({ block: "nearest" });
@@ -30,7 +63,10 @@ export default function Sidebar({ dates }: SidebarProps) {
         <Link
           href="/"
           className="flex items-center gap-1.5 mb-5 group"
-          style={{ color: pathname === "/" ? "var(--sunset-orange)" : "var(--text-muted)", opacity: pathname === "/" ? 1 : 0.5 }}
+          style={{
+            color: pathname === "/" ? "var(--sunset-orange)" : "var(--text-muted)",
+            opacity: pathname === "/" ? 1 : 0.5,
+          }}
         >
           <span className="text-xs">←</span>
           <span className="text-xs tracking-[0.18em] uppercase font-semibold transition-opacity group-hover:opacity-100">
@@ -48,31 +84,20 @@ export default function Sidebar({ dates }: SidebarProps) {
 
         {/* 프로그램 타이틀 */}
         <h2
-          className="font-black leading-none mb-1"
+          className="font-black leading-none mb-1 whitespace-pre-line"
           style={{ fontSize: "1.45rem", letterSpacing: "-0.02em", color: "var(--text-primary)" }}
         >
-          배철수의
-          <br />
-          음악캠프
+          {program.nameShort}
         </h2>
-        <p className="text-xs mt-1 mb-5 tracking-widest" style={{ color: "var(--text-muted)", opacity: 0.55 }}>
-          MBC FM4U 91.9 · 매일 저녁 6시
+        <p
+          className="text-xs mt-1 mb-5 tracking-widest"
+          style={{ color: "var(--text-muted)", opacity: 0.55 }}
+        >
+          {program.freq}
         </p>
 
         {/* 구분선 */}
         <div style={{ borderTop: "1px solid rgba(255,255,255,0.07)", marginBottom: "1.25rem" }} />
-
-        {/* 서비스 소개 */}
-        <p
-          className="text-xs leading-relaxed mb-4"
-          style={{ color: "var(--text-muted)", lineHeight: "1.7" }}
-        >
-          1990년부터 이어진 라디오 선곡표를
-          <br />
-          매일 YouTube 플레이리스트로.
-          <br />
-          <span style={{ opacity: 0.55 }}>배철수가 고른 오늘의 음악들.</span>
-        </p>
 
         {/* unofficial 배지 */}
         <span
@@ -92,12 +117,12 @@ export default function Sidebar({ dates }: SidebarProps) {
 
       {/* 날짜 목록 */}
       <ul className="space-y-1 flex-1 overflow-y-auto">
-        {dates.map((entry, i) => {
-          const href = i === 0 ? "/bcamp" : `/bcamp/${entry.date}`;
+        {program.dates.map((entry, i) => {
+          const href = i === 0 ? program.basePath : `${program.basePath}/${entry.date}`;
           const isActive =
             i === 0
-              ? pathname === "/bcamp"
-              : pathname === `/bcamp/${entry.date}`;
+              ? pathname === program.basePath
+              : pathname === `${program.basePath}/${entry.date}`;
 
           return (
             <li key={entry.date} ref={isActive ? activeRef : null}>
@@ -145,12 +170,20 @@ export default function Sidebar({ dates }: SidebarProps) {
             </li>
           );
         })}
+
+        {program.dates.length === 0 && (
+          <li className="px-3 py-4">
+            <p className="text-xs" style={{ color: "var(--text-muted)", opacity: 0.4 }}>
+              아직 에피소드가 없습니다
+            </p>
+          </li>
+        )}
       </ul>
 
       {/* 저작권 고지 */}
       <div className="mt-6 px-2 space-y-1">
         <p className="text-xs leading-relaxed" style={{ color: "var(--text-muted)", opacity: 0.55 }}>
-          ⓒ MBC · 배철수의 음악캠프
+          ⓒ MBC · {program.name}
           <br />
           방송 콘텐츠 저작권은 MBC에 있습니다
         </p>
