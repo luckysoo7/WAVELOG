@@ -6,11 +6,20 @@
 
 ---
 
-## Now — DSOTM 디자인 (배캠 페이지)
+## ✅ 완료 — DSOTM 디자인 (배캠 페이지)
 
 - [x] 히어로 구분선 → 스펙트럼 그라데이션 1px 선
 - [x] 트랙 번호 → hsl 스펙트럼 컬러링 (함수 1개)
 - [x] 배경 앰비언트 프리즘 글로우 (opacity 9%)
+
+## ✅ 완료 — 트랙 앨범 정보 슬라이드 패널
+
+- [x] MusicBrainz + Cover Art Archive 클라이언트 작성
+- [x] DB songs 테이블 mbid / album_name / album_art_url / release_year 컬럼 추가
+- [x] 크롤러 Step 3.5: MB 조회 루프 (1 req/s)
+- [x] PlaylistView "use client" + hover/tap expand 인터랙션
+- [x] 슬라이드 패널: 앨범아트 64px + 앨범명/연도 + YouTube 버튼
+- [x] 모바일 tap toggle / 데스크톱 hover 자동 분기
 
 ## ✅ 완료 — feat/sqlite → main merge
 

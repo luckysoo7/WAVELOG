@@ -1,6 +1,6 @@
 # K-Radio Archive — 스펙 (MASTER)
 
-최종 업데이트: 2026-04-12
+최종 업데이트: 2026-04-13
 
 > 이 파일이 단일 진실 공급원(SSOT).
 > 구조적 결정은 `decisions/`에 ADR로 기록.
@@ -46,9 +46,7 @@
 
 ### 🟢 Now
 
-**DSOTM 디자인 — 배캠 페이지 비주얼 아이덴티티**
-- PlaylistView 스펙트럼 테마 적용 (구분선, 트랙 번호 컬러링, 앰비언트 글로우)
-- Pink Floyd DSOTM 앨범 컨셉: DJ = 프리즘, 선곡 = 스펙트럼
+**별이 빛나는 밤 추가** — MBC 별밤 크롤러 + `/byulbam` 라우트 조사
 
 ### 🔵 Next
 
@@ -94,5 +92,7 @@
 | 홈페이지 + IA 개편 | ✅ main 배포 중 | Phase 1 완료 |
 | SQLite 전환 | ✅ main 배포 중 | Phase 2 완료, Actions 검증 완료 |
 | GitHub Actions 크롤러 | ✅ 매일 22:00 KST | SQLite 기반으로 정상 운영 중 |
+| DSOTM 디자인 테마 | ✅ 배포 완료 | 스펙트럼 컬러, 앰비언트 글로우 |
+| 트랙 앨범 슬라이드 패널 | ✅ 배포 완료 | MusicBrainz + hover/tap expand |
 | 별이 빛나는 밤 | ❌ 미착수 | Next 단계 |
 | /discover 통계 | ❌ 미착수 | 3개월 데이터 필요 |
