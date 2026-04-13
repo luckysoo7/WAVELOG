@@ -23,21 +23,7 @@ export default function PlaylistView({ data, label = "지난 방송" }: Props) {
   return (
     <main className="px-8 max-w-[760px] mx-auto">
       {/* 에디토리얼 히어로 */}
-      <header className="pt-12 pb-8" style={{ position: "relative" }}>
-        {/* 앰비언트 프리즘 글로우 — DSOTM 프리즘 오른쪽 빛 번짐 */}
-        <div
-          aria-hidden
-          style={{
-            position: "absolute",
-            top: 0,
-            right: 0,
-            width: "60%",
-            height: "280px",
-            background:
-              "radial-gradient(ellipse 80% 70% at 95% 10%, rgba(120,60,220,0.09) 0%, rgba(60,120,255,0.06) 40%, transparent 70%)",
-            pointerEvents: "none",
-          }}
-        />
+      <header className="pt-12 pb-8">
 
         <div className="flex items-center justify-between mb-5">
           <p
