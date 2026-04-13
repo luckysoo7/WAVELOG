@@ -197,6 +197,27 @@ def insert_episode(
         )
 
 
+def update_song_mb(
+    conn: sqlite3.Connection,
+    episode_id: int,
+    order_no: int,
+    mbid: str | None,
+    album_name: str | None,
+    album_art_url: str | None,
+    release_year: int | None,
+) -> None:
+    """songs 행의 MB 컬럼만 UPDATE (YouTube/matched 건드리지 않음)."""
+    with conn:
+        conn.execute(
+            """
+            UPDATE songs
+               SET mbid = ?, album_name = ?, album_art_url = ?, release_year = ?
+             WHERE episode_id = ? AND order_no = ?
+            """,
+            (mbid, album_name, album_art_url, release_year, episode_id, order_no),
+        )
+
+
 def get_episode(
     conn: sqlite3.Connection,
     program_id: str,

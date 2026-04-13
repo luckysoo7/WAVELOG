@@ -4,6 +4,8 @@ Usage:
     python -m crawler.main --date 2026-04-08
     python -m crawler.main               # 오늘/어제 자동 처리 + 백필
     python -m crawler.main --dry-run     # 크롤링만, YouTube API 호출 없음
+    python -m crawler.main --date 2026-04-08 --mb-only   # DB 기존 곡에 MusicBrainz만
+    python -m crawler.main --mb-only                     # 최근 30일 MB 백필
 """
 
 import argparse
@@ -17,7 +19,7 @@ from pathlib import Path
 import requests as req
 
 from crawler.auth import get_youtube_client
-from crawler.db import DB_PATH, connect, init_db, insert_episode, get_episode
+from crawler.db import DB_PATH, connect, init_db, insert_episode, get_episode, update_song_mb
 from crawler.mbc_crawler import find_seq_id, fetch_songs, get_source_url
 from crawler.youtube_client import search_videos, create_playlist, add_to_playlist, QuotaExceededError
 from crawler.musicbrainz_client import lookup as mb_lookup
@@ -238,6 +240,50 @@ def _save_to_db(
     conn.close()
 
 
+def run_mb_only(target_date: date) -> None:
+    """DB에 이미 저장된 에피소드 곡들에 MusicBrainz 조회만 수행."""
+    date_str = target_date.isoformat()
+    conn = connect(_DB_PATH)
+    ep = get_episode(conn, _PROGRAM_ID, date_str)
+    conn.close()
+
+    if ep is None:
+        print(f"[오류] {date_str} 에피소드가 DB에 없습니다. 먼저 일반 크롤링을 실행하세요.")
+        sys.exit(1)
+
+    songs = ep["songs"]
+    print(f"\n[MB-only] {date_str} — {len(songs)}곡 MusicBrainz 조회 시작\n")
+
+    # episode_id는 get_episode가 반환하지 않으므로 직접 조회
+    conn = connect(_DB_PATH)
+    row = conn.execute(
+        "SELECT id FROM episodes WHERE program_id=? AND date=?",
+        (_PROGRAM_ID, date_str),
+    ).fetchone()
+    episode_id = row["id"]
+
+    mb_found = 0
+    for song in songs:
+        time.sleep(1)
+        result = mb_lookup(song["title"], song["artist"])
+        if result:
+            update_song_mb(
+                conn,
+                episode_id,
+                song["order"],
+                result.get("mbid"),
+                result.get("albumName"),
+                result.get("albumArtUrl"),
+                result.get("releaseYear"),
+            )
+            mb_found += 1
+            print(f"  ✓ {song['order']:2d}. {song['title']} → {result.get('albumName', '?')} ({result.get('releaseYear', '?')})")
+        else:
+            print(f"  ✗ {song['order']:2d}. {song['title']} — MB 없음")
+    conn.close()
+    print(f"\n완료: {mb_found}/{len(songs)}곡 매칭")
+
+
 def _backfill(dry_run: bool) -> None:
     """최근 30일 중 미처리 날짜를 최신순으로 처리. 쿼터 초과 시 즉시 중단."""
     filled = 0
@@ -270,9 +316,26 @@ def main() -> None:
     parser.add_argument("--date", help="처리할 날짜 (YYYY-MM-DD). 기본값: 자동 감지")
     parser.add_argument("--dry-run", action="store_true", help="크롤링만, YouTube API 호출 없음")
     parser.add_argument("--no-backfill", action="store_true", help="백필 스킵")
+    parser.add_argument("--mb-only", action="store_true", help="DB 기존 곡에 MusicBrainz 조회만 (YouTube 불필요)")
     args = parser.parse_args()
 
     webhook_url = os.environ.get("DISCORD_WEBHOOK_URL")
+
+    # --mb-only: YouTube 없이 MusicBrainz만
+    if args.mb_only:
+        if args.date:
+            run_mb_only(_parse_date(args.date))
+        else:
+            # 최근 30일 중 DB에 있는 날짜 전체 MB 백필
+            today = date.today()
+            for offset in range(0, 31):
+                candidate = today - timedelta(days=offset)
+                conn = connect(_DB_PATH)
+                ep = get_episode(conn, _PROGRAM_ID, candidate.isoformat())
+                conn.close()
+                if ep is not None:
+                    run_mb_only(candidate)
+        return
 
     if args.date:
         try:
