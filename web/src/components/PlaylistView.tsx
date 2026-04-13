@@ -17,7 +17,7 @@ const THEMES = {
     heroImage: "/byulbam-hero.png",
     label: "MBC FM4U 91.9",
     ambientClass: "ambient-byulbam",
-    heroBg: "#050e0a",
+    heroBg: "linear-gradient(to bottom, #050e0a 0%, #050c0a 100%)",
     spectrumLine: "linear-gradient(to right, transparent, #4a7a5a 8%, #c4a84e 35%, #e8d878 52%, #c4a84e 68%, #4a7a5a 88%, transparent)",
     trackRowClass: "track-row-byulbam",
     heroFade: "linear-gradient(to bottom, transparent 30%, rgba(5,10,8,0.7) 65%, #050c0a 100%)",
@@ -29,7 +29,7 @@ const THEMES = {
     heroImage: "/bcamp-hero.png",
     label: "MBC FM4U 91.9",
     ambientClass: "ambient-bcamp",
-    heroBg: "#120a03",
+    heroBg: "linear-gradient(to bottom, #120a03 0%, #0d1720 100%)",
     spectrumLine: "linear-gradient(to right, transparent, #ff4444 8%, #ff8800 22%, #ffee00 38%, #44cc00 52%, #00aaff 66%, #6644ff 82%, transparent)",
     trackRowClass: "track-row-bcamp",
     heroFade: "linear-gradient(to bottom, transparent 30%, rgba(18,10,3,0.7) 65%, #0d1720 100%)",
@@ -117,7 +117,7 @@ export default function PlaylistView({
       </div>
 
       {/* ── 날짜 오버랩 ────────────────────────────────────── */}
-      <div className="date-overlap" style={{ maxWidth: "760px", margin: "0 auto", padding: "0 2rem" }}>
+      <div className="date-overlap" style={{ maxWidth: "760px", marginLeft: "auto", marginRight: "auto", padding: "0 2rem" }}>
 
         {/* 프로그램 라벨 + 상태 칩 */}
         <div className="flex items-center gap-3 mb-4 flex-wrap">
