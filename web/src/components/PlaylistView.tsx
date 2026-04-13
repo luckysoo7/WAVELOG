@@ -19,7 +19,7 @@ const THEMES = {
     heroBgClass: "hero-bg-byulbam",
     trackRowClass: "track-row-byulbam",
     // 이미지 하단 페이드 — 별밤 배경색으로
-    fadeBg: "linear-gradient(to bottom, transparent 0%, rgba(5, 12, 10, 0.7) 45%, #0d1720 100%)",
+    fadeBg: "linear-gradient(to bottom, transparent 0%, rgba(5, 12, 10, 0.92) 55%, #0d1720 80%, #0d1720 100%)",
     // 날짜 헤딩 아래 스펙트럼 라인
     spectrumLine: "linear-gradient(to right, transparent, #4a7a5a 8%, #c4a84e 35%, #e8d878 52%, #c4a84e 68%, #4a7a5a 88%, transparent)",
   },
@@ -31,7 +31,7 @@ const THEMES = {
     heroBgClass: "hero-bg-bcamp",
     trackRowClass: "track-row-bcamp",
     // 이미지 하단 페이드 — 배캠 배경색으로
-    fadeBg: "linear-gradient(to bottom, transparent 0%, rgba(20, 12, 5, 0.65) 40%, #0d1720 100%)",
+    fadeBg: "linear-gradient(to bottom, transparent 0%, rgba(20, 12, 5, 0.92) 55%, #0d1720 80%, #0d1720 100%)",
     spectrumLine: "linear-gradient(to right, transparent, #ff4444 8%, #ff8800 22%, #ffee00 38%, #44cc00 52%, #00aaff 66%, #6644ff 82%, transparent)",
   },
 } as const;

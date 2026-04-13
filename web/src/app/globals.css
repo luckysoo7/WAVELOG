@@ -54,8 +54,7 @@ body::before {
 .hero-image-section {
   position: relative;
   width: 100%;
-  /* 이미지 자연 비율을 보존하기 위해 height: auto */
-  overflow: hidden;
+  overflow: visible; /* fade가 컨테이너 아래로 삐져나와야 함 */
   pointer-events: none;
 }
 
@@ -108,11 +107,10 @@ body::before {
 /* 이미지 하단 페이드 — 페이지 배경으로 자연스럽게 흡수 */
 .hero-bg-fade {
   position: absolute;
-  bottom: 0;
+  bottom: -80px;   /* 컨테이너 경계 아래 80px까지 삐져나옴 — 경계선 제거 */
   left: 0;
   right: 0;
-  /* 이미지 하단 40%를 페이드 */
-  height: 45%;
+  height: 55%;
   pointer-events: none;
   z-index: 1;
 }
