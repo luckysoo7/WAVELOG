@@ -122,6 +122,95 @@ body::before {
   opacity: 1 !important;
 }
 
+/* ── 날짜 칩 스트립 (A안) ──────────────────────────────────────── */
+.date-chip-strip {
+  padding: 1.25rem 2rem 0;
+  overflow: hidden;
+}
+
+.date-chip-scroll {
+  display: flex;
+  gap: 6px;
+  overflow-x: auto;
+  padding-bottom: 4px;
+  /* 스크롤바 숨김 */
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.date-chip-scroll::-webkit-scrollbar { display: none; }
+
+.date-chip {
+  display: inline-flex;
+  align-items: center;
+  white-space: nowrap;
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  padding: 5px 10px;
+  border-radius: 20px;
+  text-decoration: none;
+  transition: opacity 0.12s ease;
+  flex-shrink: 0;
+}
+.date-chip:hover { opacity: 0.8; }
+
+/* ── 하단 고정 날짜 바 (B안) ───────────────────────────────────── */
+.date-nav-bar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 20;
+  display: flex;
+  align-items: center;
+  height: 52px;
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+  background: rgba(13, 23, 32, 0.92);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.date-nav-side {
+  flex: 1;
+  display: flex;
+  align-items: center;
+}
+
+.date-nav-btn {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 8px 16px;
+  text-decoration: none;
+  color: var(--text-muted);
+  transition: color 0.12s ease;
+}
+.date-nav-btn:hover { color: var(--text-primary); }
+
+.date-nav-disabled {
+  opacity: 0.25;
+  pointer-events: none;
+}
+
+.date-nav-arrow {
+  font-size: 0.85rem;
+}
+
+.date-nav-label {
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  tabular-nums: 1;
+}
+
+.date-nav-center {
+  flex: 0 0 auto;
+  padding: 8px 16px;
+  text-decoration: none;
+  text-align: center;
+}
+
 /* 프로그램 라벨 뱃지 */
 .program-label-badge {
   display: inline-flex;

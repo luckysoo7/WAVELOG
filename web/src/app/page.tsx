@@ -35,11 +35,11 @@ export default function HomePage() {
         </h1>
         <p
           className="text-sm leading-relaxed"
-          style={{ color: "var(--text-muted)", maxWidth: "28rem" }}
+          style={{ color: "var(--text-muted)", maxWidth: "30rem" }}
         >
           배철수, DJ들이 직접 고른 곡들을 매일 기록합니다.
           <br />
-          <span style={{ opacity: 0.55 }}>1990년부터 이어진 선곡표를 YouTube 플레이리스트로.</span>
+          선곡표 + YouTube 링크 — 오늘 방송부터 1990년 아카이브까지.
         </p>
       </header>
 
@@ -133,6 +133,9 @@ export default function HomePage() {
                   >
                     매일 저녁 6시
                     {allDates.length > 0 && ` · ${allDates.length}개 에피소드`}
+                  </p>
+                  <p className="text-xs mt-1" style={{ color: "var(--text-muted)", opacity: 0.4 }}>
+                    선곡표 · YouTube 플레이리스트
                   </p>
                 </div>
                 <span
@@ -249,6 +252,9 @@ export default function HomePage() {
                     >
                       매일 밤 10시
                       {byulbamDates.length > 0 && ` · ${byulbamDates.length}개 에피소드`}
+                    </p>
+                    <p className="text-xs mt-1" style={{ color: "var(--text-muted)", opacity: 0.4 }}>
+                      선곡표 · YouTube 플레이리스트
                     </p>
                   </div>
                   <span

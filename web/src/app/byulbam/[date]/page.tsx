@@ -1,6 +1,6 @@
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
-import { loadPlaylist, getAllDateParams } from "@/lib/data";
+import { loadPlaylist, getAllDateParams, loadAllDates } from "@/lib/data";
 import PlaylistView from "@/components/PlaylistView";
 
 export function generateStaticParams() {
@@ -33,10 +33,11 @@ export async function generateMetadata({ params }: { params: Promise<{ date: str
 export default async function ByulbamEpisodePage({ params }: { params: Promise<{ date: string }> }) {
   const { date } = await params;
   const data = loadPlaylist(date, "byulbam");
+  const allDates = loadAllDates("byulbam");
 
   if (!data) {
     notFound();
   }
 
-  return <PlaylistView data={data} programName="별이 빛나는 밤에" />;
+  return <PlaylistView data={data} allDates={allDates} programName="별이 빛나는 밤에" />;
 }
