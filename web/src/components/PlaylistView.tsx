@@ -157,10 +157,9 @@ export default function PlaylistView({
 
         {/* 날짜 타이포 */}
         <h1
-          className="font-black leading-none"
+          className="font-black leading-none date-title"
           data-testid="date-heading"
           style={{
-            fontSize: "clamp(5rem, 18vw, 11rem)",
             letterSpacing: "-0.045em",
             color: "#f0ebe3",
             lineHeight: 0.86,
