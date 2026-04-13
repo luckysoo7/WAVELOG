@@ -5,7 +5,7 @@
 
 ---
 
-## 🟢 Now — 별이 빛나는 밤
+## ✅ 완료
 
 - [x] MBC 별밤 선곡표 URL 구조 조사
 - [x] `crawler/byulbam_crawler.py` 작성
@@ -13,11 +13,8 @@
 - [x] GitHub Actions: 별밤 크롤링 스케줄 추가 (`byulbam.yml`, 00:00/01:30 KST)
 - [x] `/byulbam` + `/byulbam/[date]` 라우트
 - [x] 홈페이지 별밤 카드 활성화 (데이터 있으면 활성, 없으면 COMING SOON)
-
----
-
-## ✅ 완료
-
+- [x] 프로그램별 히어로 이미지 + ambient 컬러 테마 (배캠 오렌지·골드 / 별밤 딥 틸)
+- [x] hero-fixed 오버랩 디자인 — 날짜가 이미지 하단 안으로 파고들어 경계 제거
 - [x] DSOTM 디자인 (스펙트럼 구분선, 트랙 번호 컬러링, 앰비언트 글로우)
 - [x] 트랙 hover/tap → YouTube 버튼 슬라이드 패널
 - [x] feat/sqlite → main merge (Actions 검증, 409 버그 수정)

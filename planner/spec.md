@@ -32,8 +32,8 @@
 /                    홈페이지 랜딩 (프로그램 카드)
 /bcamp               배철수의 음악캠프 허브 (최신 에피소드)
 /bcamp/[date]        날짜별 에피소드
-/byulbam             별이 빛나는 밤 허브          ← Now
-/byulbam/[date]      날짜별 에피소드              ← Now
+/byulbam             별이 빛나는 밤 허브
+/byulbam/[date]      날짜별 에피소드
 /discover            통계 / 추천                  ← Later
 /discover/artist/[name]  아티스트 선곡 이력       ← Later
 ```
@@ -46,7 +46,7 @@
 
 ### 🟢 Now
 
-**별이 빛나는 밤 추가** — MBC 별밤 크롤러 + `/byulbam` 라우트
+없음 — 현재 진행 중인 스프린트 없음
 
 ### 🔵 Next
 
@@ -87,8 +87,9 @@
 |---------|------|------|
 | 홈페이지 + IA 개편 | ✅ 배포 중 | |
 | SQLite 전환 | ✅ 배포 중 | Actions 검증 완료 |
-| GitHub Actions 크롤러 | ✅ 매일 22:00 KST | |
+| GitHub Actions 크롤러 | ✅ 매일 22:00 KST (배캠) / 00:00·01:30 KST (별밤) | |
 | DSOTM 디자인 테마 | ✅ 배포 중 | 스펙트럼 컬러, 앰비언트 글로우 |
 | 트랙 hover → YouTube 버튼 | ✅ 배포 중 | videoId 있는 곡만 expand |
-| 별이 빛나는 밤 | ✅ 구현 완료 | 배포 대기 (DB 데이터 필요) |
+| 별이 빛나는 밤 | ✅ 배포 중 | 크롤러 + 라우트 + 디자인 완료 |
+| 프로그램별 히어로 이미지 | ✅ 배포 중 | hero-fixed 오버랩 디자인, 레터박스 제거 |
 | /discover 통계 | ❌ 미착수 | Later |
