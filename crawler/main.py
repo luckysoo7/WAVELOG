@@ -4,8 +4,8 @@ Usage:
     python -m crawler.main --date 2026-04-08
     python -m crawler.main               # 오늘/어제 자동 처리 + 백필
     python -m crawler.main --dry-run     # 크롤링만, YouTube API 호출 없음
-    python -m crawler.main --date 2026-04-08 --mb-only   # DB 기존 곡에 MusicBrainz만
-    python -m crawler.main --mb-only                     # 최근 30일 MB 백필
+    python -m crawler.main --date 2026-04-08 --album-only   # DB 기존 곡에 Last.fm 앨범 정보만
+    python -m crawler.main --album-only                     # 최근 30일 백필
 """
 
 import argparse
@@ -22,7 +22,7 @@ from crawler.auth import get_youtube_client
 from crawler.db import DB_PATH, connect, init_db, insert_episode, get_episode, update_song_mb
 from crawler.mbc_crawler import find_seq_id, fetch_songs, get_source_url
 from crawler.youtube_client import search_videos, create_playlist, add_to_playlist, QuotaExceededError
-from crawler.musicbrainz_client import lookup as mb_lookup
+from crawler.lastfm_client import lookup as lastfm_lookup
 
 _ROOT_DATA = Path(__file__).resolve().parent.parent / "data"
 _DB_PATH = _ROOT_DATA / "archive.db"
@@ -188,18 +188,18 @@ def run(target_date: date, dry_run: bool = False) -> None:
             _save_to_db(date_str, target_date, seq_id, songs, playlist_id)
         raise
 
-    print(f"\n3.5/4 MusicBrainz 앨범 정보 조회...")
-    mb_found = 0
+    print(f"\n3.5/4 Last.fm 앨범 정보 조회...")
+    lfm_found = 0
     for song in songs:
-        time.sleep(1)  # MusicBrainz 1 req/s 권장
-        result = mb_lookup(song["title"], song["artist"])
+        time.sleep(0.25)  # Last.fm 5 req/s
+        result = lastfm_lookup(song["title"], song["artist"])
         if result:
             song.update(result)
-            mb_found += 1
-            print(f"     ✓ {song['order']:2d}. {song['title']} → {result.get('albumName', '?')} ({result.get('releaseYear', '?')})")
+            lfm_found += 1
+            print(f"     ✓ {song['order']:2d}. {song['title']} → {result.get('albumName', '?')}")
         else:
-            print(f"     ✗ {song['order']:2d}. {song['title']} — MB 없음")
-    print(f"     MusicBrainz {mb_found}/{len(songs)}곡 매칭")
+            print(f"     ✗ {song['order']:2d}. {song['title']} — 미매칭")
+    print(f"     Last.fm {lfm_found}/{len(songs)}곡 매칭")
 
     print(f"\n4/4 DB 저장...")
     _save_to_db(date_str, target_date, seq_id, songs, playlist_id)
@@ -240,10 +240,10 @@ def _save_to_db(
     conn.close()
 
 
-def run_mb_only(target_date: date) -> None:
-    """DB에 이미 저장된 에피소드 곡들에 MusicBrainz 조회만 수행."""
+def run_album_only(target_date: date) -> None:
+    """DB에 이미 저장된 에피소드 곡들에 Last.fm 앨범 정보 조회만 수행."""
     date_str = target_date.isoformat()
-    init_db(_DB_PATH)  # mbid/album_name 등 컬럼 마이그레이션 보장
+    init_db(_DB_PATH)
     conn = connect(_DB_PATH)
     ep = get_episode(conn, _PROGRAM_ID, date_str)
     conn.close()
@@ -253,9 +253,8 @@ def run_mb_only(target_date: date) -> None:
         sys.exit(1)
 
     songs = ep["songs"]
-    print(f"\n[MB-only] {date_str} — {len(songs)}곡 MusicBrainz 조회 시작\n")
+    print(f"\n[album-only] {date_str} — {len(songs)}곡 Last.fm 조회 시작\n")
 
-    # episode_id는 get_episode가 반환하지 않으므로 직접 조회
     conn = connect(_DB_PATH)
     row = conn.execute(
         "SELECT id FROM episodes WHERE program_id=? AND date=?",
@@ -263,10 +262,10 @@ def run_mb_only(target_date: date) -> None:
     ).fetchone()
     episode_id = row["id"]
 
-    mb_found = 0
+    found = 0
     for song in songs:
-        time.sleep(1)
-        result = mb_lookup(song["title"], song["artist"])
+        time.sleep(0.25)
+        result = lastfm_lookup(song["title"], song["artist"])
         if result:
             update_song_mb(
                 conn,
@@ -277,12 +276,12 @@ def run_mb_only(target_date: date) -> None:
                 result.get("albumArtUrl"),
                 result.get("releaseYear"),
             )
-            mb_found += 1
-            print(f"  ✓ {song['order']:2d}. {song['title']} → {result.get('albumName', '?')} ({result.get('releaseYear', '?')})")
+            found += 1
+            print(f"  ✓ {song['order']:2d}. {song['title']} → {result.get('albumName', '?')}")
         else:
-            print(f"  ✗ {song['order']:2d}. {song['title']} — MB 없음")
+            print(f"  ✗ {song['order']:2d}. {song['title']} — 미매칭")
     conn.close()
-    print(f"\n완료: {mb_found}/{len(songs)}곡 매칭")
+    print(f"\n완료: {found}/{len(songs)}곡 매칭")
 
 
 def _backfill(dry_run: bool) -> None:
@@ -317,17 +316,17 @@ def main() -> None:
     parser.add_argument("--date", help="처리할 날짜 (YYYY-MM-DD). 기본값: 자동 감지")
     parser.add_argument("--dry-run", action="store_true", help="크롤링만, YouTube API 호출 없음")
     parser.add_argument("--no-backfill", action="store_true", help="백필 스킵")
-    parser.add_argument("--mb-only", action="store_true", help="DB 기존 곡에 MusicBrainz 조회만 (YouTube 불필요)")
+    parser.add_argument("--album-only", action="store_true", help="DB 기존 곡에 Last.fm 앨범 정보만 (YouTube 불필요)")
     args = parser.parse_args()
 
     webhook_url = os.environ.get("DISCORD_WEBHOOK_URL")
 
-    # --mb-only: YouTube 없이 MusicBrainz만
-    if args.mb_only:
+    # --album-only: YouTube 없이 Last.fm 앨범 정보만
+    if args.album_only:
+        init_db(_DB_PATH)
         if args.date:
-            run_mb_only(_parse_date(args.date))
+            run_album_only(_parse_date(args.date))
         else:
-            # 최근 30일 중 DB에 있는 날짜 전체 MB 백필
             today = date.today()
             for offset in range(0, 31):
                 candidate = today - timedelta(days=offset)
@@ -335,7 +334,7 @@ def main() -> None:
                 ep = get_episode(conn, _PROGRAM_ID, candidate.isoformat())
                 conn.close()
                 if ep is not None:
-                    run_mb_only(candidate)
+                    run_album_only(candidate)
         return
 
     if args.date:
