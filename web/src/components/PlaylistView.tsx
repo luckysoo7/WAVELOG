@@ -131,6 +131,8 @@ export default function PlaylistView({ data }: Props) {
         {data.songs.map((song) => {
           const isExpanded = expandedId === song.order;
           const color = spectrumColor(song.order, total);
+          // 유튜브 링크나 앨범아트 중 하나라도 있어야 expand 의미 있음
+          const isExpandable = !!(song.videoId || song.albumArtUrl || song.albumName);
 
           return (
             <li
@@ -138,11 +140,11 @@ export default function PlaylistView({ data }: Props) {
               className="track-row"
               style={{
                 borderBottom: isExpanded ? "none" : "1px solid var(--track-border)",
-                cursor: "pointer",
+                cursor: isExpandable ? "pointer" : "default",
               }}
-              onMouseEnter={() => handleMouseEnter(song.order)}
+              onMouseEnter={() => isExpandable && handleMouseEnter(song.order)}
               onMouseLeave={handleMouseLeave}
-              onClick={() => handleClick(song.order)}
+              onClick={() => isExpandable && handleClick(song.order)}
             >
               {/* 트랙 행 */}
               <div className="flex items-center gap-4 py-3.5 group">
@@ -182,18 +184,20 @@ export default function PlaylistView({ data }: Props) {
                   </p>
                 </div>
 
-                {/* 확장 상태 표시 화살표 */}
-                <span
-                  className="shrink-0 text-xs transition-all duration-200"
-                  aria-hidden
-                  style={{
-                    color,
-                    opacity: isExpanded ? 0.9 : 0.35,
-                    transform: isExpanded ? "rotate(90deg)" : "rotate(0deg)",
-                  }}
-                >
-                  ▶
-                </span>
+                {/* 확장 상태 표시 화살표 — expandable 곡만 */}
+                {isExpandable && (
+                  <span
+                    className="shrink-0 text-xs transition-all duration-200"
+                    aria-hidden
+                    style={{
+                      color,
+                      opacity: isExpanded ? 0.9 : 0.35,
+                      transform: isExpanded ? "rotate(90deg)" : "rotate(0deg)",
+                    }}
+                  >
+                    ▶
+                  </span>
+                )}
               </div>
 
               {/* 확장 패널 — 슬라이드다운 */}

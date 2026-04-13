@@ -7,14 +7,19 @@ Rate limit: MusicBrainz 공식 권장 1 req/s.
 호출자는 time.sleep(1) 책임.
 """
 
+import re
 import sys
+import time
 
 import requests
+
+_LIVE_DATE_RE = re.compile(r"^\d{4}[\-\u2010\u2011\u2012\u2013]\d{2}[\-\u2010\u2011\u2012\u2013]\d{2}[\s:]")
+_LIVE_TITLE_RE = re.compile(r"^live[\s\-:]|[\(\[]live[\)\]]|\blive at\b|\blive,?\s+\d{4}", re.IGNORECASE)
 
 _MB_BASE = "https://musicbrainz.org/ws/2"
 _CAA_BASE = "https://coverartarchive.org"
 _USER_AGENT = "k-radio-archive/1.0 (github.com/luckysoo7/k-radio-archive)"
-_TIMEOUT = 8
+_TIMEOUT = 15
 
 
 def _mb_get(path: str, params: dict) -> dict | None:
@@ -72,9 +77,17 @@ def _caa_get(release_mbid: str, rg_mbid: str | None = None) -> str | None:
 _BAD_SECONDARY = {"Live", "Compilation", "DJ-mix", "Interview", "Mixtape/Street", "Remix"}
 
 
+def _is_live_title(title: str) -> bool:
+    """라이브 날짜 / 라이브 타이틀 감지."""
+    t = title or ""
+    return bool(_LIVE_DATE_RE.match(t)) or bool(_LIVE_TITLE_RE.search(t))
+
+
 def _is_studio_album(release: dict) -> bool:
-    """Official 스튜디오 앨범 판별 — Live/Compilation secondary type 제외."""
+    """Official 스튜디오 앨범 판별 — Live/Compilation secondary type 및 라이브 날짜 제목 제외."""
     if release.get("status") != "Official":
+        return False
+    if _is_live_title(release.get("title", "")):
         return False
     rg = release.get("release-group", {})
     if rg.get("primary-type") != "Album":
@@ -86,7 +99,11 @@ def _is_studio_album(release: dict) -> bool:
 def _is_official_any(release: dict) -> bool:
     rg = release.get("release-group", {})
     secondary = set(rg.get("secondary-types", []))
-    return release.get("status") == "Official" and not (secondary & _BAD_SECONDARY)
+    return (
+        release.get("status") == "Official"
+        and not _is_live_title(release.get("title", ""))
+        and not (secondary & _BAD_SECONDARY)
+    )
 
 
 def _choose_release(releases: list[dict]) -> dict | None:
@@ -98,8 +115,12 @@ def _choose_release(releases: list[dict]) -> dict | None:
     for r in releases:
         if _is_official_any(r):
             return r
-    # 3순위: 뭐든 첫 번째
-    return releases[0] if releases else None
+    # 3순위: 라이브 날짜 제목만 제외 — 나머지는 컴필, 부틀렉 무관 허용
+    for r in releases:
+        if not _is_live_title(r.get("title", "")):
+            return r
+    # 전부 라이브 날짜 쓰레기 → None
+    return None
 
 
 def _fetch_releases_for_recording(rec_mbid: str) -> list[dict]:
@@ -154,6 +175,7 @@ def lookup(title: str, artist: str) -> dict | None:
             if not rec_mbid:
                 continue
 
+            time.sleep(1)  # MB 1 req/s
             releases = _fetch_releases_for_recording(rec_mbid)
             if not releases:
                 releases = rec.get("releases", [])
