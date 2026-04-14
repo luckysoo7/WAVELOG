@@ -180,6 +180,8 @@ body::before {
   text-decoration: none;
   transition: opacity 0.12s ease;
   flex-shrink: 0;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
 }
 .date-chip:hover { opacity: 0.8; }
 
