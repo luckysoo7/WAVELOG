@@ -7,7 +7,7 @@
 
 ## ✅ 완료
 
-**2026-04-15 세션**
+**2026-04-15 세션 1**
 - [x] crawl/match 분리 아키텍처 재설계 (crawl.py + match.py)
 - [x] byulbam YouTube 매핑 통합 (match.yml 백필, 1:1 인터리브)
 - [x] PST 타이밍 버그 수정 (07:10→08:15 UTC)
@@ -19,6 +19,21 @@
 - [x] 크로스 프로그램 네비게이션 — Sidebar [배캠|별밤] 탭, MobileDrawer ⇄ 버튼, 하단 바 중앙 전환
 - [x] 하단/상단 바 색상 현대화 (프로그램별 색감 + 액센트 테두리)
 - [x] YouTube/Music 버튼 라벨 명확화 ("▶ YouTube로 전체 듣기" / "♪ Music으로 전체 듣기")
+
+**2026-04-15 세션 2**
+- [x] MBC 공식 URL 수정 (/camp/→/musiccamp/, /byulnight/→/starnight/)
+- [x] 프로그램명 업데이트 — "김이나의 별이 빛나는 밤에" 전체 반영
+- [x] 히어로 헤딩 구조 개편 — 프로그램명(대) / 날짜+연도(소) / 방송정보
+- [x] 날짜 칩 UX — 모바일 전용 5개 + 전체› 버튼 (CustomEvent 드로어 연동)
+- [x] 방송정보 + 진행바 한 줄 레이아웃 (flex:1 가변)
+- [x] 날짜 칩 backdrop blur + 가독성 개선
+- [x] 글자수 비례 vw 분리 (배캠 9.2vw/별밤 6.8vw, 데스크톱 동일 수렴)
+- [x] crawl 스케줄 일시 중지, match.yml 만 운영
+- [x] DisclaimerButton — 저작권 팝업 (fixed 중앙 정렬, 법적 고지)
+- [x] ConditionalFooter — 홈페이지 저작권 중복 제거
+- [x] 다음 방송 실시간 카운트다운 (LiveCountdown, KST, LIVE NOW 배지)
+- [x] MBC favicon 하단 바 버튼
+- [x] KBS 라디오 3개 프로그램 backlog 등록 (가요광장, 볼륨높여요, 출발FM)
 
 **이전 세션**
 - [x] MBC 별밤 선곡표 URL 구조 조사
