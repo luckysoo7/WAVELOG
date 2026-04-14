@@ -82,7 +82,7 @@ export default function PlaylistView({
 
   // 날짜 칩: 항상 7개 고정 — 현재 날짜를 중심으로 슬라이딩 윈도우
   // 경계(최신/최오래된)에서는 윈도우를 반대 방향으로 밀어서 개수 유지
-  const CHIP_COUNT = 7;
+  const CHIP_COUNT = 5;
   let chipStart = currentIdx - Math.floor(CHIP_COUNT / 2);
   let chipEnd = chipStart + CHIP_COUNT - 1;
   if (chipStart < 0) { chipEnd -= chipStart; chipStart = 0; }
@@ -229,6 +229,15 @@ export default function PlaylistView({
           style={{ maxWidth: "760px", margin: "0 auto" }}
         >
           <div className="date-chip-scroll">
+            {/* 전체 날짜 드로어 열기 힌트 — 맨 왼쪽 */}
+            <button
+              onClick={() => window.dispatchEvent(new CustomEvent("open-drawer"))}
+              className="date-chip"
+              style={{ color: accent, background: `${accent}10`, border: `1px solid ${accent}30` }}
+              aria-label="전체 날짜 목록 열기"
+            >
+              전체 ›
+            </button>
             {nearbyDates.map((entry) => {
               const isCurrent = entry.date === data.date;
               return (
@@ -250,15 +259,6 @@ export default function PlaylistView({
                 </Link>
               );
             })}
-            {/* 전체 날짜 드로어 열기 힌트 */}
-            <button
-              onClick={() => window.dispatchEvent(new CustomEvent("open-drawer"))}
-              className="date-chip"
-              style={{ color: accent, background: `${accent}10`, border: `1px solid ${accent}30` }}
-              aria-label="전체 날짜 목록 열기"
-            >
-              전체 ›
-            </button>
           </div>
         </div>
       )}
