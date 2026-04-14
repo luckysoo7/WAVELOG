@@ -103,7 +103,7 @@ export default function DisclaimerButton() {
               style={{
                 fontSize: "9.5px",
                 color: "var(--text-muted)",
-                opacity: 0.5,
+                opacity: 0.65,
                 marginTop: "10px",
               }}
             >

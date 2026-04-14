@@ -36,7 +36,7 @@ export default function HomePage() {
         </h1>
         <p
           className="text-sm leading-relaxed"
-          style={{ color: "var(--text-muted)", maxWidth: "32rem", lineHeight: "1.85" }}
+          style={{ color: "var(--text-primary)", opacity: 0.75, maxWidth: "32rem", lineHeight: "1.85" }}
         >
           알고리즘 추천에 질렸을 때.
           <br />
@@ -48,7 +48,7 @@ export default function HomePage() {
           오늘 방송부터 오래된 아카이브까지.
           <br />
           <br />
-          <span style={{ opacity: 0.55 }}>
+          <span style={{ opacity: 0.65 }}>
             라디오를 사랑하는 학생이 만들었습니다. 무료, 광고 없음.
           </span>
         </p>
@@ -61,7 +61,7 @@ export default function HomePage() {
       <section className="pb-16">
         <p
           className="text-xs tracking-[0.22em] uppercase font-medium mb-5"
-          style={{ color: "var(--text-muted)", opacity: 0.5 }}
+          style={{ color: "var(--text-muted)", opacity: 0.7 }}
         >
           Programs
         </p>
@@ -145,7 +145,7 @@ export default function HomePage() {
                     매일 저녁 6시
                     {allDates.length > 0 && ` · ${allDates.length}개 에피소드`}
                   </p>
-                  <p className="text-xs mt-1" style={{ color: "var(--text-muted)", opacity: 0.4 }}>
+                  <p className="text-xs mt-1" style={{ color: "var(--text-muted)", opacity: 0.6 }}>
                     선곡표 · YouTube 플레이리스트
                   </p>
                 </div>
@@ -264,7 +264,7 @@ export default function HomePage() {
                       매일 밤 10시
                       {byulbamDates.length > 0 && ` · ${byulbamDates.length}개 에피소드`}
                     </p>
-                    <p className="text-xs mt-1" style={{ color: "var(--text-muted)", opacity: 0.4 }}>
+                    <p className="text-xs mt-1" style={{ color: "var(--text-muted)", opacity: 0.6 }}>
                       선곡표 · YouTube 플레이리스트
                     </p>
                   </div>
