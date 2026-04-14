@@ -101,9 +101,8 @@ export default function PlaylistView({
     if (!isTouchDevice()) setExpandedId(null);
   };
   const handleClick = (order: number) => {
-    if (isTouchDevice()) {
-      setExpandedId((prev) => (prev === order ? null : order));
-    }
+    // 모든 곡 클릭 가능 — 매핑된 곡은 YouTube, 미매핑 곡은 안내 패널
+    setExpandedId((prev) => (prev === order ? null : order));
   };
 
   const mappingPct = total > 0 ? Math.round((matchedCount / total) * 100) : 0;
@@ -294,11 +293,11 @@ export default function PlaylistView({
                 className={`track-row ${theme.trackRowClass}`}
                 style={{
                   borderBottom: isExpanded ? "none" : "1px solid var(--track-border)",
-                  cursor: song.videoId ? "pointer" : "default",
+                  cursor: "pointer",
                 }}
                 onMouseEnter={() => song.videoId && handleMouseEnter(song.order)}
                 onMouseLeave={handleMouseLeave}
-                onClick={() => song.videoId && handleClick(song.order)}
+                onClick={() => handleClick(song.order)}
               >
                 <div className="flex items-center gap-4 py-3.5 group">
                   <div className="shrink-0 flex items-center justify-end gap-1.5 w-8">
@@ -318,19 +317,19 @@ export default function PlaylistView({
                         }}
                       />
                     )}
-                    <span className="text-right text-xs tabular-nums font-mono" style={{ color, opacity: 0.85 }}>
+                    <span className="text-right text-xs tabular-nums font-mono" style={{ color, opacity: song.videoId ? 0.85 : 0.35 }}>
                       {song.order}
                     </span>
                   </div>
 
                   <div className="flex-1 min-w-0">
-                    <p className="font-medium text-sm leading-snug truncate">{song.title}</p>
-                    <p className="text-xs mt-0.5 truncate" style={{ color: "var(--text-muted)" }}>
+                    <p className="font-medium text-sm leading-snug truncate" style={{ opacity: song.videoId ? 1 : 0.5 }}>{song.title}</p>
+                    <p className="text-xs mt-0.5 truncate" style={{ color: "var(--text-muted)", opacity: song.videoId ? 1 : 0.5 }}>
                       {song.artist}
                     </p>
                   </div>
 
-                  {song.videoId && (
+                  {song.videoId ? (
                     <span
                       className="shrink-0 text-xs transition-all duration-200"
                       aria-hidden
@@ -342,9 +341,18 @@ export default function PlaylistView({
                     >
                       ▶
                     </span>
+                  ) : (
+                    <span
+                      className="shrink-0 text-xs"
+                      aria-hidden
+                      style={{ color: "var(--text-muted)", opacity: isExpanded ? 0.4 : 0.2, letterSpacing: "0.05em" }}
+                    >
+                      ···
+                    </span>
                   )}
                 </div>
 
+                {/* 매핑된 곡 — YouTube 버튼 */}
                 {song.videoId && (
                   <div
                     style={{
@@ -368,6 +376,30 @@ export default function PlaylistView({
                       >
                         ▶ YouTube에서 듣기
                       </a>
+                    </div>
+                  </div>
+                )}
+
+                {/* 미매핑 곡 — 안내 패널 */}
+                {!song.videoId && (
+                  <div
+                    style={{
+                      maxHeight: isExpanded ? "56px" : "0px",
+                      overflow: "hidden",
+                      transition: "max-height 0.25s ease",
+                      borderBottom: isExpanded ? "1px solid var(--track-border)" : "none",
+                    }}
+                  >
+                    <div
+                      className="pl-10 pr-2 pb-3"
+                      style={{ opacity: isExpanded ? 1 : 0, transition: "opacity 0.2s ease 0.05s" }}
+                    >
+                      <p className="text-xs" style={{ color: "var(--text-muted)", opacity: 0.7 }}>
+                        아직 YouTube 링크가 연결되지 않은 곡이에요.
+                      </p>
+                      <p className="text-xs mt-0.5" style={{ color: "var(--text-muted)", opacity: 0.4 }}>
+                        매일 자동으로 업데이트됩니다.
+                      </p>
                     </div>
                   </div>
                 )}
