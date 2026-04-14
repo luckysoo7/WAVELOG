@@ -120,8 +120,8 @@ export function loadAllDates(programId = "bcamp"): DateEntry[] {
         `SELECT
            e.date,
            e.day_of_week,
-           COUNT(s.id)                          AS song_count,
-           (e.youtube_playlist_id IS NOT NULL)  AS has_playlist
+           COUNT(s.id)                                                              AS song_count,
+           (e.youtube_playlist_id IS NOT NULL AND e.match_count > 0)               AS has_playlist
          FROM episodes e
          LEFT JOIN songs s ON s.episode_id = e.id
          WHERE e.program_id = ?
