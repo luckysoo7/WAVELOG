@@ -1,22 +1,23 @@
-name: "[구] 배캠 플레이리스트 (비활성 — crawl-bcamp.yml로 대체됨)"
+name: 배캠 크롤 + 당일 매핑
 
-# ⚠️ 스케줄 비활성화 — crawl-bcamp.yml + match.yml 로 기능 분리
-# 수동 실행(workflow_dispatch)만 유지 (긴급 시 사용)
 on:
+  schedule:
+    - cron: '20 13 * * *'   # 22:20 KST — 방송 종료 후
+    - cron: '50 14 * * *'   # 23:50 KST — MBC 업로드 지연 대비 재시도
   workflow_dispatch:
     inputs:
       date:
-        description: '날짜 (YYYY-MM-DD). 비워두면 오늘/어제 자동 처리'
+        description: '날짜 (YYYY-MM-DD). 비워두면 오늘 자동 감지'
         required: false
         default: ''
 
-# 동시 실행 방지 — song_cache.json race condition 예방
+# match.yml / crawl-byulbam.yml 과 동일 그룹 — YouTube API 동시 호출 방지
 concurrency:
-  group: bcamp-daily
+  group: youtube-api
   cancel-in-progress: false
 
 jobs:
-  crawl-and-deploy:
+  crawl-and-match:
     runs-on: ubuntu-latest
     permissions:
       contents: write
@@ -37,24 +38,41 @@ jobs:
       - name: 의존성 설치
         run: pip install -r crawler/requirements.txt
 
-      - name: 선곡표 크롤링 + 플레이리스트 생성
+      - name: MBC 선곡표 크롤 (YouTube 없음)
+        run: |
+          if [ -n "${{ github.event.inputs.date }}" ]; then
+            python -m crawler.crawl --program bcamp --date "${{ github.event.inputs.date }}"
+          else
+            python -m crawler.crawl --program bcamp
+          fi
+
+      - name: 당일 YouTube 매핑 (budget 2500 units)
         env:
           GOOGLE_CLIENT_SECRET: ${{ secrets.GOOGLE_CLIENT_SECRET }}
           GOOGLE_REFRESH_TOKEN: ${{ secrets.GOOGLE_REFRESH_TOKEN }}
+        run: |
+          if [ -n "${{ github.event.inputs.date }}" ]; then
+            python -m crawler.match --program bcamp --budget 2500 --date "${{ github.event.inputs.date }}"
+          else
+            python -m crawler.match --program bcamp --budget 2500 --days 2
+          fi
+
+      - name: Last.fm 앨범 정보 보충
+        env:
           LASTFM_API_KEY: ${{ secrets.LASTFM_API_KEY }}
         run: |
           if [ -n "${{ github.event.inputs.date }}" ]; then
-            python -m crawler.main --date "${{ github.event.inputs.date }}"
+            python -m crawler.main --album-only --date "${{ github.event.inputs.date }}"
           else
-            python -m crawler.main
+            python -m crawler.main --album-only
           fi
 
-      - name: 결과 JSON 커밋 + 푸시
+      - name: DB 커밋 + 푸시
         run: |
           git config user.name "bcamp-daily[bot]"
           git config user.email "bcamp-daily[bot]@users.noreply.github.com"
           git add data/
-          git diff --staged --quiet || git commit -m "chore: $(date +'%Y-%m-%d') 선곡표 자동 업데이트"
+          git diff --staged --quiet || git commit -m "chore: $(date +'%Y-%m-%d') 배캠 선곡표 업데이트"
           git push || (git pull --rebase && git push)
 
       - name: 플레이리스트 유효성 검증
@@ -70,12 +88,8 @@ jobs:
             -H "Content-Type: application/json" \
             -d '{
               "embeds": [{
-                "title": "❌ bcamp-daily 크롤러 실패",
-                "description": "GitHub Actions 자동 실행이 실패했습니다.\n[워크플로우 확인](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }})",
-                "color": 15158332,
-                "fields": [
-                  {"name": "트리거", "value": "${{ github.event_name }}", "inline": true},
-                  {"name": "실행 시각", "value": "${{ github.event.head_commit.timestamp }}", "inline": true}
-                ]
+                "title": "❌ 배캠 크롤 실패",
+                "description": "[워크플로우 확인](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }})",
+                "color": 15158332
               }]
             }'

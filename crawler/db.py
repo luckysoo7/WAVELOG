@@ -316,6 +316,67 @@ def get_latest_date(conn: sqlite3.Connection, program_id: str) -> str | None:
     return row["date"] if row else None
 
 
+def episode_exists(conn: sqlite3.Connection, program_id: str, date_str: str) -> bool:
+    """에피소드가 DB에 존재하는지 확인 (YouTube 여부 무관)."""
+    row = conn.execute(
+        "SELECT 1 FROM episodes WHERE program_id=? AND date=?",
+        (program_id, date_str),
+    ).fetchone()
+    return row is not None
+
+
+def get_unmatched_episodes(
+    conn: sqlite3.Connection,
+    program_id: str | None = None,
+    min_days: int = 0,
+    max_days: int = 90,
+) -> list[dict]:
+    """YouTube 매핑이 필요한 에피소드 목록.
+
+    조건:
+    - 곡이 1곡 이상 존재
+    - youtube_playlist_id IS NULL (미처리)
+      OR (playlist 있지만 match_count = 0 — 쿼터 초과로 빈 상태)
+    - date가 [today - max_days, today - min_days] 범위 이내
+    """
+    prog_clause = "AND e.program_id = :prog" if program_id else ""
+    rows = conn.execute(
+        f"""
+        SELECT
+            e.id,
+            e.program_id,
+            e.date,
+            e.youtube_playlist_id,
+            e.match_count,
+            COUNT(s.id) AS song_count
+          FROM episodes e
+          JOIN songs s ON s.episode_id = e.id
+         WHERE (e.youtube_playlist_id IS NULL OR e.match_count = 0)
+           AND e.date >= date('now', :from_days)
+           AND e.date <= date('now', :to_days)
+           {prog_clause}
+         GROUP BY e.id
+        HAVING COUNT(s.id) > 0
+         ORDER BY e.date DESC
+        """,
+        {
+            "prog":      program_id,
+            "from_days": f"-{max_days} days",
+            "to_days":   f"-{min_days} days",
+        },
+    ).fetchall()
+    return [
+        {
+            "id":          r["id"],
+            "program_id":  r["program_id"],
+            "date":        r["date"],
+            "playlist_id": r["youtube_playlist_id"],
+            "song_count":  r["song_count"],
+        }
+        for r in rows
+    ]
+
+
 def get_incomplete_episodes(
     conn: sqlite3.Connection,
     program_id: str,
