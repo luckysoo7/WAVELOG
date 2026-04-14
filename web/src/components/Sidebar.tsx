@@ -163,9 +163,30 @@ export default function Sidebar({ bcampDates, byulbamDates }: SidebarProps) {
             i === 0
               ? pathname === program.basePath
               : pathname === `${program.basePath}/${entry.date}`;
+          const year = entry.date.slice(0, 4);
+          const prevYear = i > 0 ? program.dates[i - 1].date.slice(0, 4) : null;
+          const showYearDivider = year !== prevYear; // i===0 포함 (첫 항목도 연도 표시)
 
           return (
             <li key={entry.date} ref={isActive ? activeRef : null}>
+              {showYearDivider && (
+                <div
+                  className="flex items-center gap-2 px-3 pt-3 pb-1"
+                >
+                  <span
+                    style={{
+                      fontSize: "0.62rem",
+                      fontWeight: 700,
+                      letterSpacing: "0.08em",
+                      color: accent,
+                      opacity: 0.55,
+                    }}
+                  >
+                    {year}
+                  </span>
+                  <div style={{ flex: 1, height: "1px", background: `${accent}22` }} />
+                </div>
+              )}
               <Link
                 href={href}
                 className="flex items-center justify-between px-3 py-2.5 rounded-lg text-sm transition-all"
