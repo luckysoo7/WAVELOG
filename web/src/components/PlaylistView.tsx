@@ -244,6 +244,7 @@ export default function PlaylistView({
                 <Link
                   key={entry.date}
                   href={dateHref(entry)}
+                  scroll={false}
                   className="date-chip"
                   style={
                     isCurrent
