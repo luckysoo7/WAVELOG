@@ -233,7 +233,7 @@ export default function PlaylistView({
             <button
               onClick={() => window.dispatchEvent(new CustomEvent("open-drawer"))}
               className="date-chip"
-              style={{ color: accent, background: `${accent}10`, border: `1px solid ${accent}30` }}
+              style={{ color: accent, background: `${accent}22`, border: `1px solid ${accent}55` }}
               aria-label="전체 날짜 목록 열기"
             >
               전체 ›
@@ -248,7 +248,7 @@ export default function PlaylistView({
                   style={
                     isCurrent
                       ? { color: accent, background: `${accent}20`, border: `1px solid ${accent}50` }
-                      : { color: "var(--text-muted)", background: "rgba(255,255,255,0.09)", border: "1px solid rgba(255,255,255,0.18)" }
+                      : { color: "var(--text-primary)", background: "rgba(255,255,255,0.12)", border: "1px solid rgba(255,255,255,0.28)" }
                   }
                   aria-current={isCurrent ? "page" : undefined}
                 >
