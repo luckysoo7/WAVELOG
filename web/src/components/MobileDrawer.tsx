@@ -25,6 +25,13 @@ export default function MobileDrawer({ bcampDates, byulbamDates }: MobileDrawerP
     setIsOpen(false);
   }, [pathname]);
 
+  // 외부(PlaylistView 등)에서 드로어 열기 요청
+  useEffect(() => {
+    const handler = () => setIsOpen(true);
+    window.addEventListener("open-drawer", handler);
+    return () => window.removeEventListener("open-drawer", handler);
+  }, []);
+
   // 드로어 열릴 때 body 스크롤 잠금
   useEffect(() => {
     document.body.style.overflow = isOpen ? "hidden" : "";

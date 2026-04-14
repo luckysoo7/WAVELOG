@@ -222,10 +222,10 @@ export default function PlaylistView({
         </div>{/* date-overlap */}
       </section>
 
-      {/* ── 날짜 칩 스트립 (A안) ─────────────────────────── */}
+      {/* ── 날짜 칩 스트립 — 모바일 전용 ────────────────── */}
       {nearbyDates.length > 1 && (
         <div
-          className="date-chip-strip"
+          className="date-chip-strip md:hidden"
           style={{ maxWidth: "760px", margin: "0 auto" }}
         >
           <div className="date-chip-scroll">
@@ -250,6 +250,15 @@ export default function PlaylistView({
                 </Link>
               );
             })}
+            {/* 전체 날짜 드로어 열기 힌트 */}
+            <button
+              onClick={() => window.dispatchEvent(new CustomEvent("open-drawer"))}
+              className="date-chip"
+              style={{ color: accent, background: `${accent}10`, border: `1px solid ${accent}30` }}
+              aria-label="전체 날짜 목록 열기"
+            >
+              전체 ›
+            </button>
           </div>
         </div>
       )}
