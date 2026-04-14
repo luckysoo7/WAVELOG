@@ -178,7 +178,7 @@ export default function PlaylistView({
             data-testid="date-heading"
             style={{
               fontSize: isbyulbam
-                ? "clamp(1.3rem, 6.8vw, 3.68rem)"   /* 14유닛 — 9.2 × (9/13) ≈ 6.8 */
+                ? "clamp(1.5rem, 7.8vw, 4.23rem)"   /* 14유닛 × 1.15 */
                 : "clamp(1.5rem, 9.2vw, 3.68rem)",   /* 9유닛 */
               letterSpacing: "-0.03em",
               color: "#f0ebe3",
