@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 import ConditionalAside from "@/components/ConditionalAside";
 import MobileDrawer from "@/components/MobileDrawer";
+import ConditionalFooter from "@/components/ConditionalFooter";
 import { loadAllDates } from "@/lib/data";
 
 export const metadata: Metadata = {
@@ -42,19 +43,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             <MobileDrawer bcampDates={bcampDates} byulbamDates={byulbamDates} />
             <div className="flex-1">{children}</div>
 
-            {/* 모바일 저작권 (사이드바 없을 때) */}
-            <footer
-              className="md:hidden px-6 py-4 border-t text-xs leading-relaxed"
-              style={{
-                borderColor: "rgba(138,155,176,0.08)",
-                color: "var(--text-muted)",
-                opacity: 0.45,
-              }}
-            >
-              ⓒ MBC — 방송 콘텐츠 저작권은 MBC에 있습니다
-              <br />
-              unofficial fan site · not affiliated with MBC
-            </footer>
+            <ConditionalFooter />
           </div>
         </div>
       </body>
