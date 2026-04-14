@@ -46,13 +46,23 @@ body::before {
     radial-gradient(ellipse 80%  35% at 50% 90%,  rgba(5, 15, 12, 0.70) 0%,    transparent 60%);
 }
 
-/* ── 히어로 — Fixed Height, Image Absolute ─────────────────────── */
+/* ── 히어로 — 이미지와 날짜를 같은 stacking context에 배치 ───────── */
+
+.hero-date-stack {
+  --hero-height: clamp(220px, 55vw, 420px);
+  --date-pullout: clamp(48px, 9vw, 96px);
+  display: grid;
+  grid-template-areas: "stack";
+  min-height: var(--hero-height);
+  margin-bottom: var(--date-pullout);
+}
 
 /* hero 컨테이너 — 고정 높이, 이미지가 안에서 절대 위치 */
 .hero-fixed {
+  grid-area: stack;
   position: relative;
   width: 100%;
-  height: clamp(220px, 55vw, 420px);
+  height: var(--hero-height);
   overflow: hidden;
 }
 
@@ -84,9 +94,12 @@ body::before {
 
 /* ── 날짜 오버랩 — hero 하단 안으로 파고듦 ───────────────────── */
 .date-overlap {
+  grid-area: stack;
+  align-self: end;
+  justify-self: stretch;
   position: relative;
   z-index: 3;
-  margin-top: clamp(-200px, -38vw, -120px);  /* hero 하단으로 파고듦 — 38vw: 390px→-148px, 884px→-336px(cap -200) */
+  transform: translateY(var(--date-pullout));
   padding-bottom: clamp(16px, 2.5vh, 32px);
 }
 

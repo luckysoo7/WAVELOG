@@ -109,101 +109,103 @@ export default function PlaylistView({
       className={`relative min-h-screen ${theme.ambientClass}`}
       style={{ background: theme.pageBg, paddingBottom: "80px" }}
     >
-      {/* ── HERO ─────────────────────────────────────────────── */}
-      <div className="hero-fixed" style={{ background: theme.heroBg }}>
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src={theme.heroImage} alt={programName} className="hero-fixed-img" />
-        <div className="hero-fixed-fade" style={{ background: theme.heroFade }} />
-      </div>
+      <section className="hero-date-stack" aria-label={`${programName} 날짜 헤더`}>
+        {/* ── HERO ─────────────────────────────────────────────── */}
+        <div className="hero-fixed" style={{ background: theme.heroBg }}>
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src={theme.heroImage} alt={programName} className="hero-fixed-img" />
+          <div className="hero-fixed-fade" style={{ background: theme.heroFade }} />
+        </div>
 
-      {/* ── 날짜 오버랩 ────────────────────────────────────── */}
-      <div className="date-overlap" style={{ maxWidth: "760px", marginLeft: "auto", marginRight: "auto", padding: "0 2rem" }}>
+        {/* ── 날짜 오버랩 ────────────────────────────────────── */}
+        <div className="date-overlap" style={{ maxWidth: "760px", marginLeft: "auto", marginRight: "auto", paddingLeft: "2rem", paddingRight: "2rem" }}>
 
-        {/* 프로그램 라벨 + 상태 칩 */}
-        <div className="flex items-center gap-3 mb-4 flex-wrap">
-          <p
-            className="program-label-badge"
-            style={{
-              color: accent,
-              background: `${accent}18`,
-              border: `1px solid ${accent}30`,
-            }}
-          >
-            <span style={{ display: "inline-block", width: "5px", height: "5px", borderRadius: "50%", background: accent }} />
-            {theme.label}
-          </p>
-          {/* 상태 칩 */}
-          {matchedCount > 0 && (
-            <span
+          {/* 프로그램 라벨 + 상태 칩 */}
+          <div className="flex items-center gap-3 mb-4 flex-wrap">
+            <p
               className="program-label-badge"
               style={{
-                color: matchedCount === total ? accent : `${accent}aa`,
-                background: `${accent}12`,
-                border: `1px solid ${accent}25`,
+                color: accent,
+                background: `${accent}18`,
+                border: `1px solid ${accent}30`,
               }}
             >
-              ▶ {matchedCount === total ? `${matchedCount}곡 전부 청취 가능` : `${matchedCount}/${total} 청취 가능`}
-            </span>
-          )}
-          {matchedCount === 0 && total > 0 && (
-            <span
-              className="program-label-badge"
-              style={{ color: "var(--text-muted)", background: "rgba(138,155,176,0.08)", border: "1px solid rgba(138,155,176,0.15)" }}
-            >
-              YouTube 매핑 준비 중
-            </span>
-          )}
-        </div>
-
-        {/* 날짜 타이포 */}
-        <h1
-          className="font-black leading-none date-title"
-          data-testid="date-heading"
-          style={{
-            letterSpacing: "-0.045em",
-            color: "#f0ebe3",
-            lineHeight: 0.86,
-            textShadow: `0 4px 80px rgba(0,0,0,0.9), 0 0 120px ${accent}22`,
-          }}
-        >
-          {formatDate(data.date)}
-        </h1>
-
-        {/* 메타 + 매핑 진행 바 */}
-        <div className="mt-4">
-          <p className="text-sm font-medium" style={{ color: "var(--text-muted)" }}>
-            {programName} · {data.dayOfWeek} · {total}곡
-          </p>
-          {total > 0 && (
-            <div className="mt-2 flex items-center gap-2">
-              {/* 진행 바 */}
-              <div
+              <span style={{ display: "inline-block", width: "5px", height: "5px", borderRadius: "50%", background: accent }} />
+              {theme.label}
+            </p>
+            {/* 상태 칩 */}
+            {matchedCount > 0 && (
+              <span
+                className="program-label-badge"
                 style={{
-                  flex: "0 0 120px",
-                  height: "3px",
-                  borderRadius: "2px",
-                  background: "rgba(138,155,176,0.15)",
-                  overflow: "hidden",
+                  color: matchedCount === total ? accent : `${accent}aa`,
+                  background: `${accent}12`,
+                  border: `1px solid ${accent}25`,
                 }}
               >
+                ▶ {matchedCount === total ? `${matchedCount}곡 전부 청취 가능` : `${matchedCount}/${total} 청취 가능`}
+              </span>
+            )}
+            {matchedCount === 0 && total > 0 && (
+              <span
+                className="program-label-badge"
+                style={{ color: "var(--text-muted)", background: "rgba(138,155,176,0.08)", border: "1px solid rgba(138,155,176,0.15)" }}
+              >
+                YouTube 매핑 준비 중
+              </span>
+            )}
+          </div>
+
+          {/* 날짜 타이포 */}
+          <h1
+            className="font-black leading-none date-title"
+            data-testid="date-heading"
+            style={{
+              letterSpacing: "-0.045em",
+              color: "#f0ebe3",
+              lineHeight: 0.86,
+              textShadow: `0 4px 80px rgba(0,0,0,0.9), 0 0 120px ${accent}22`,
+            }}
+          >
+            {formatDate(data.date)}
+          </h1>
+
+          {/* 메타 + 매핑 진행 바 */}
+          <div className="mt-4">
+            <p className="text-sm font-medium" style={{ color: "var(--text-muted)" }}>
+              {programName} · {data.dayOfWeek} · {total}곡
+            </p>
+            {total > 0 && (
+              <div className="mt-2 flex items-center gap-2">
+                {/* 진행 바 */}
                 <div
                   style={{
-                    width: `${mappingPct}%`,
-                    height: "100%",
-                    background: accent,
-                    opacity: 0.75,
+                    flex: "0 0 120px",
+                    height: "3px",
                     borderRadius: "2px",
-                    transition: "width 0.4s ease",
+                    background: "rgba(138,155,176,0.15)",
+                    overflow: "hidden",
                   }}
-                />
+                >
+                  <div
+                    style={{
+                      width: `${mappingPct}%`,
+                      height: "100%",
+                      background: accent,
+                      opacity: 0.75,
+                      borderRadius: "2px",
+                      transition: "width 0.4s ease",
+                    }}
+                  />
+                </div>
+                <span className="text-xs tabular-nums" style={{ color: "var(--text-muted)", opacity: 0.55 }}>
+                  {matchedCount}/{total} YouTube
+                </span>
               </div>
-              <span className="text-xs tabular-nums" style={{ color: "var(--text-muted)", opacity: 0.55 }}>
-                {matchedCount}/{total} YouTube
-              </span>
-            </div>
-          )}
+            )}
+          </div>
         </div>
-      </div>
+      </section>
 
       {/* ── 날짜 칩 스트립 (A안) ─────────────────────────── */}
       {nearbyDates.length > 1 && (
