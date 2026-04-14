@@ -56,14 +56,14 @@ body::before {
   overflow: hidden;
 }
 
-/* hero 이미지 — 전체 채움, object-fit: contain으로 로고 보존 */
+/* hero 이미지 — cover로 letterbox 완전 제거, right top으로 로고(우측) 보존 */
 .hero-fixed-img {
   position: absolute;
   inset: 0;
   width: 100%;
   height: 100%;
-  object-fit: contain;
-  object-position: right top;  /* 로고가 오른쪽에, 이미지는 상단부터 — 상단 레터박스 제거 */
+  object-fit: cover;
+  object-position: right top;
   filter: brightness(0.62) saturate(1.2);
 }
 
