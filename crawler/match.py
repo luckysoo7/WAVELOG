@@ -33,9 +33,9 @@ from pathlib import Path
 from crawler.db import (
     DB_PATH, connect, init_db,
     get_unmatched_episodes,
-    update_song_match, increment_match_count,
+    update_song_match, increment_match_count, update_song_view_counts,
 )
-from crawler.youtube_client import search_videos, create_playlist, add_to_playlist, QuotaExceededError
+from crawler.youtube_client import search_videos, create_playlist, add_to_playlist, get_video_stats, QuotaExceededError
 
 _ROOT_DATA = Path(__file__).resolve().parent.parent / "data"
 SONG_CACHE_PATH = _ROOT_DATA / "song_cache.json"
@@ -230,6 +230,26 @@ def process_episode(
         conn = connect(DB_PATH)
         increment_match_count(conn, episode_id, newly_matched)
         conn.close()
+
+    # 에피소드의 모든 매핑된 video_id 조회 → 조회수 일괄 업데이트 (1 unit)
+    conn = connect(DB_PATH)
+    matched_rows = conn.execute(
+        "SELECT video_id FROM songs WHERE episode_id=? AND video_id IS NOT NULL",
+        (episode_id,),
+    ).fetchall()
+    conn.close()
+
+    video_ids = [r["video_id"] for r in matched_rows]
+    if video_ids:
+        try:
+            stats = get_video_stats(youtube, video_ids)
+            if stats:
+                conn = connect(DB_PATH)
+                update_song_view_counts(conn, episode_id, stats)
+                conn.close()
+                print(f"  [{program_id}] {date_str} — 조회수 업데이트 {len(stats)}곡")
+        except Exception as e:
+            print(f"  [{program_id}] {date_str} — 조회수 조회 실패 (스킵): {e}")
 
     print(f"  [{program_id}] {date_str} — {newly_matched}/{len(unmatched)}곡 완료 ({units_used} units 사용)")
     return newly_matched, units_used

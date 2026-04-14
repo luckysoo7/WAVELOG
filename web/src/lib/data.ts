@@ -19,6 +19,7 @@ export interface Song {
   albumName: string | null;
   albumArtUrl: string | null;
   releaseYear: number | null;
+  viewCount: number | null;
 }
 
 export interface PlaylistData {
@@ -85,6 +86,7 @@ export function loadPlaylist(dateStr: string, programId = "bcamp"): PlaylistData
         albumName: (s.album_name as string | null) ?? null,
         albumArtUrl: (s.album_art_url as string | null) ?? null,
         releaseYear: (s.release_year as number | null) ?? null,
+        viewCount: (s.view_count as number | null) ?? null,
       })),
       createdAt: ep.created_at as string,
       matchCount: ep.match_count as number,

@@ -79,6 +79,26 @@ def create_playlist(
     return response["id"]
 
 
+def get_video_stats(youtube: Resource, video_ids: list[str]) -> dict[str, int]:
+    """video_id → view_count 매핑 반환. 최대 50개 배치, 1 unit 소모."""
+    if not video_ids:
+        return {}
+    result: dict[str, int] = {}
+    for i in range(0, len(video_ids), 50):
+        chunk = video_ids[i:i + 50]
+        response = _retry(
+            youtube.videos().list(
+                part="statistics",
+                id=",".join(chunk),
+            ).execute
+        )
+        for item in response.get("items", []):
+            vc = item.get("statistics", {}).get("viewCount")
+            if vc is not None:
+                result[item["id"]] = int(vc)
+    return result
+
+
 def add_to_playlist(
     youtube: Resource, playlist_id: str, video_id: str
 ) -> None:

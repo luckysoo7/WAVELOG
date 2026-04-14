@@ -103,6 +103,7 @@ def init_db(db_path: Path = DB_PATH) -> None:
             ("album_name",    "TEXT"),
             ("album_art_url", "TEXT"),
             ("release_year",  "INTEGER"),
+            ("view_count",    "INTEGER"),
         ]:
             try:
                 conn.execute(f"ALTER TABLE songs ADD COLUMN {col} {typedef}")
@@ -226,6 +227,22 @@ def update_song_mb(
         )
 
 
+def update_song_view_counts(
+    conn: sqlite3.Connection,
+    episode_id: int,
+    counts: dict[str, int],
+) -> None:
+    """video_id → view_count 매핑으로 songs 행들 일괄 UPDATE."""
+    if not counts:
+        return
+    with conn:
+        for video_id, vc in counts.items():
+            conn.execute(
+                "UPDATE songs SET view_count = ? WHERE episode_id = ? AND video_id = ?",
+                (vc, episode_id, video_id),
+            )
+
+
 def get_episode(
     conn: sqlite3.Connection,
     program_id: str,
@@ -273,6 +290,7 @@ def get_episode(
                 "albumName":    r["album_name"],
                 "albumArtUrl":  r["album_art_url"],
                 "releaseYear":  r["release_year"],
+                "viewCount":    r["view_count"],
             }
             for r in rows
         ],

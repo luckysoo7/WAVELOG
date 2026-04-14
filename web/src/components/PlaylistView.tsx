@@ -62,6 +62,12 @@ function spectrumColor(order: number, total: number, accent: string): string {
   return `hsl(${hue}, 75%, 62%)`;
 }
 
+function formatViewCount(n: number): string {
+  if (n >= 1_000_000) return `${(n / 1_000_000).toFixed(1).replace(/\.0$/, "")}M`;
+  if (n >= 1_000) return `${Math.round(n / 1_000)}K`;
+  return String(n);
+}
+
 function isTouchDevice(): boolean {
   return typeof window !== "undefined" && window.matchMedia("(hover: none)").matches;
 }
@@ -118,6 +124,15 @@ export default function PlaylistView({
   };
 
   const mappingPct = total > 0 ? Math.round((matchedCount / total) * 100) : 0;
+
+  // 조회수 상위 5곡 order 번호 집합 (viewCount 있는 곡만)
+  const top5Orders = new Set(
+    [...data.songs]
+      .filter((s) => s.viewCount != null)
+      .sort((a, b) => (b.viewCount ?? 0) - (a.viewCount ?? 0))
+      .slice(0, 5)
+      .map((s) => s.order)
+  );
 
   return (
     <article
@@ -359,7 +374,27 @@ export default function PlaylistView({
                   </div>
 
                   <div className="flex-1 min-w-0">
-                    <p className="font-medium text-sm leading-snug truncate" style={{ opacity: song.videoId ? 1 : 0.75 }}>{song.title}</p>
+                    <div className="flex items-center gap-1.5 min-w-0">
+                      <p className="font-medium text-sm leading-snug truncate" style={{ opacity: song.videoId ? 1 : 0.75 }}>{song.title}</p>
+                      {top5Orders.has(song.order) && song.viewCount != null && (
+                        <span
+                          className="shrink-0 tabular-nums"
+                          style={{
+                            fontSize: "9px",
+                            fontWeight: 700,
+                            letterSpacing: "0.03em",
+                            color: color,
+                            background: `${color}18`,
+                            border: `1px solid ${color}35`,
+                            borderRadius: "3px",
+                            padding: "1px 4px",
+                            lineHeight: 1.5,
+                          }}
+                        >
+                          {formatViewCount(song.viewCount)}
+                        </span>
+                      )}
+                    </div>
                     <p className="text-xs mt-0.5 truncate" style={{ color: "var(--text-muted)", opacity: song.videoId ? 1 : 0.7 }}>
                       {song.artist}
                     </p>
