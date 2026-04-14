@@ -513,7 +513,16 @@ export default function PlaylistView({
               onMouseEnter={e => (e.currentTarget.style.background = "rgba(255,255,255,0.06)")}
               onMouseLeave={e => (e.currentTarget.style.background = "transparent")}
             >
-              <span style={{ fontSize: "13px", lineHeight: 1 }}>📻</span>
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src="https://www.imbc.com/favicon.ico"
+                alt="MBC"
+                width={16}
+                height={16}
+                style={{ borderRadius: "3px", opacity: 0.75 }}
+                onError={e => { (e.currentTarget as HTMLImageElement).style.display = "none"; (e.currentTarget.nextSibling as HTMLElement).style.display = "block"; }}
+              />
+              <span style={{ fontSize: "13px", lineHeight: 1, display: "none" }}>📻</span>
               <span style={{ fontSize: "9px", opacity: 0.55, letterSpacing: "0.06em", marginTop: "2px" }}>MBC</span>
             </a>
           </div>
