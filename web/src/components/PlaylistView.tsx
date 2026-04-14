@@ -379,7 +379,14 @@ export default function PlaylistView({
 
       {/* ── 하단 고정 날짜 바 — 모바일 + 데스크톱 공통 ──────── */}
       {allDates.length > 0 && (
-        <nav className="date-nav-bar" aria-label="날짜 탐색">
+        <nav
+          className="date-nav-bar"
+          aria-label="날짜 탐색"
+          style={{
+            background: isbyulbam ? "rgba(4,12,8,0.90)" : "rgba(12,10,5,0.90)",
+            borderTop: `1px solid ${accent}22`,
+          }}
+        >
           {/* 이전 (더 최신) */}
           <div className="date-nav-side">
             {prevEntry ? (

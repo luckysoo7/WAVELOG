@@ -41,10 +41,10 @@ export default function MobileDrawer({ bcampDates, byulbamDates }: MobileDrawerP
       <header
         className="md:hidden flex items-center justify-between px-4 h-14 sticky top-0 z-10 shrink-0"
         style={{
-          background: "rgba(15,25,35,0.92)",
-          backdropFilter: "blur(16px)",
-          WebkitBackdropFilter: "blur(16px)",
-          borderBottom: "1px solid rgba(255,255,255,0.07)",
+          background: isByulbam ? "rgba(4,12,8,0.92)" : "rgba(12,10,5,0.92)",
+          backdropFilter: "blur(28px)",
+          WebkitBackdropFilter: "blur(28px)",
+          borderBottom: `1px solid ${isByulbam ? "rgba(196,168,78,0.18)" : "rgba(232,112,74,0.18)"}`,
         }}
       >
         <button
