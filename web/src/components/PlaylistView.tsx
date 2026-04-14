@@ -177,7 +177,9 @@ export default function PlaylistView({
             className="font-black leading-none"
             data-testid="date-heading"
             style={{
-              fontSize: "clamp(1.5rem, 9.2vw, 3.68rem)",
+              fontSize: isbyulbam
+                ? "clamp(1.3rem, 6.8vw, 3.68rem)"   /* 14유닛 — 9.2 × (9/13) ≈ 6.8 */
+                : "clamp(1.5rem, 9.2vw, 3.68rem)",   /* 9유닛 */
               letterSpacing: "-0.03em",
               color: "#f0ebe3",
               lineHeight: 1.1,
