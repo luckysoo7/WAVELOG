@@ -18,7 +18,7 @@ export default function MobileDrawer({ bcampDates, byulbamDates }: MobileDrawerP
   // 홈페이지에서는 모바일 헤더/드로어 불필요
   const isHome = pathname === "/";
   const isByulbam = pathname.startsWith("/byulbam");
-  const programName = isByulbam ? "별이 빛나는 밤에" : "배철수의 음악캠프";
+  const programName = isByulbam ? "김이나의 별이 빛나는 밤에" : "배철수의 음악캠프";
 
   // 페이지 이동 시 드로어 자동 닫기
   useEffect(() => {

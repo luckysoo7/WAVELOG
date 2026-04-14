@@ -39,5 +39,5 @@ export default async function ByulbamEpisodePage({ params }: { params: Promise<{
     notFound();
   }
 
-  return <PlaylistView data={data} allDates={allDates} programName="별이 빛나는 밤에" />;
+  return <PlaylistView data={data} allDates={allDates} programName="김이나의 별이 빛나는 밤에" />;
 }

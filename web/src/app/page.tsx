@@ -255,7 +255,7 @@ export default function HomePage() {
                       className="font-bold leading-tight mb-1.5"
                       style={{ fontSize: "1.2rem", letterSpacing: "-0.02em" }}
                     >
-                      별이 빛나는 밤에
+                      김이나의 별이 빛나는 밤에
                     </h2>
                     <p
                       className="text-xs tabular-nums"

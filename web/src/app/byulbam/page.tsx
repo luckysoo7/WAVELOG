@@ -10,5 +10,5 @@ export default function ByulbamHub() {
     notFound();
   }
 
-  return <PlaylistView data={latest} allDates={allDates} programName="별이 빛나는 밤에" />;
+  return <PlaylistView data={latest} allDates={allDates} programName="김이나의 별이 빛나는 밤에" />;
 }

@@ -32,8 +32,8 @@ function formatSidebarDate(dateStr: string, dayOfWeek: string): string {
 const PROGRAMS: Record<string, ProgramConfig> = {
   byulbam: {
     id: "byulbam",
-    name: "별이 빛나는 밤에",
-    nameShort: "별이 빛나는\n밤에",
+    name: "김이나의 별이 빛나는 밤에",
+    nameShort: "김이나의\n별이 빛나는 밤에",
     freq: "매일 밤 10시 · since 1969",
     basePath: "/byulbam",
     officialUrl: "https://www.imbc.com/broad/radio/fm4u/starnight/",

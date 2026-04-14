@@ -72,7 +72,7 @@ export default function PlaylistView({
   const matchedCount = data.songs.filter((s) => s.videoId).length;
   const [expandedId, setExpandedId] = useState<number | null>(null);
 
-  const isbyulbam = programName === "별이 빛나는 밤에";
+  const isbyulbam = programName.includes("별이 빛나는 밤에");
   const theme = isbyulbam ? THEMES.byulbam : THEMES.bcamp;
   const accent = theme.accent;
 
@@ -177,10 +177,10 @@ export default function PlaylistView({
             className="font-black leading-none"
             data-testid="date-heading"
             style={{
-              fontSize: "clamp(2.3rem, 9.2vw, 3.68rem)",
+              fontSize: isbyulbam ? "clamp(1.6rem, 6.4vw, 2.8rem)" : "clamp(2.3rem, 9.2vw, 3.68rem)",
               letterSpacing: "-0.03em",
               color: "#f0ebe3",
-              lineHeight: 1.05,
+              lineHeight: 1.1,
               textShadow: `0 4px 80px rgba(0,0,0,0.9)`,
             }}
           >
