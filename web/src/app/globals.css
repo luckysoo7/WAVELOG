@@ -124,11 +124,19 @@ body::before {
 }
 
 /* 트랙 row */
+@keyframes track-reveal {
+  from { opacity: 0.15; }
+  to   { opacity: 1; }
+}
+
 .track-row {
   transition: transform 0.12s ease, background 0.12s ease;
   border-radius: 4px;
   margin-inline: -8px;
   padding-inline: 8px;
+  animation: track-reveal linear both;
+  animation-timeline: view();
+  animation-range: entry 0% entry 22%;
 }
 
 .track-row-bcamp:hover {
