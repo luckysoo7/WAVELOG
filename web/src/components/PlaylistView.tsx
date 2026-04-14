@@ -367,7 +367,7 @@ export default function PlaylistView({
 
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-1.5 min-w-0">
-                      <p className="font-medium text-sm leading-snug truncate" style={{ opacity: song.videoId ? 1 : 0.75 }}>{song.title}</p>
+                      <p className="font-medium text-sm leading-snug truncate" style={{ opacity: song.videoId ? 1 : 0.85 }}>{song.title}</p>
                       {viewRankMap.has(song.order) && song.viewCount != null && (() => {
                         const rank = viewRankMap.get(song.order)!;
                         const isGold = rank <= 3;
@@ -392,7 +392,7 @@ export default function PlaylistView({
                         );
                       })()}
                     </div>
-                    <p className="text-xs mt-0.5 truncate" style={{ color: "var(--text-muted)", opacity: song.videoId ? 1 : 0.7 }}>
+                    <p className="text-xs mt-0.5 truncate" style={{ color: "#9aafc4", opacity: song.videoId ? 1 : 0.8 }}>
                       {song.artist}
                     </p>
                   </div>
