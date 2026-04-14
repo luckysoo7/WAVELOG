@@ -1,6 +1,6 @@
 # K-Radio Archive — 스펙 (MASTER)
 
-최종 업데이트: 2026-04-13
+최종 업데이트: 2026-04-15
 
 > 이 파일이 단일 진실 공급원(SSOT).
 > 구조적 결정은 `decisions/`에 ADR로 기록.
@@ -50,7 +50,6 @@
 
 ### 🔵 Next
 
-**기술 부채**
 - 레포 이름 변경 (`bcamp-daily` → `k-radio-archive`)
 
 ### 🟡 Later
@@ -78,19 +77,24 @@
 |---|------|------|------|
 | 001 | SQLite DB 전환 (JSON → DB) | ✅ 확정 | `decisions/001-sqlite-db.md` |
 | 002 | SSG 전략 (빌드 타임 DB 읽기) | ✅ 확정 | `decisions/002-ssg-strategy.md` |
+| 003 | 크롤/매핑 분리 + 쿼터 인터리브 | ✅ 확정 | `decisions/003-crawl-match-split.md` |
 
 ---
 
-## 현재 상태 (2026-04-13)
+## 현재 상태 (2026-04-15)
 
 | 컴포넌트 | 상태 | 비고 |
 |---------|------|------|
-| 홈페이지 + IA 개편 | ✅ 배포 중 | |
+| 홈페이지 + IA 개편 | ✅ 배포 중 | 사이드바 홈에서 숨김, 카피 개선 |
 | SQLite 전환 | ✅ 배포 중 | Actions 검증 완료 |
-| GitHub Actions 크롤러 | ✅ 매일 22:00 KST (배캠) / 00:00·01:30 KST (별밤) | |
+| GitHub Actions 크롤러 | ✅ 배포 중 | crawl-bcamp / crawl-byulbam / match.yml 3-워크플로우 구조 |
+| 크롤/매핑 분리 아키텍처 | ✅ 배포 중 | crawl.py + match.py 완전 분리, 쿼터 배분 최적화 |
+| byulbam YouTube 매핑 | ✅ 배포 중 | match.yml 백필 인터리브, PST 타이밍 버그 수정 |
 | DSOTM 디자인 테마 | ✅ 배포 중 | 스펙트럼 컬러, 앰비언트 글로우 |
 | 트랙 hover → YouTube 버튼 | ✅ 배포 중 | videoId 있는 곡만 expand |
 | 별이 빛나는 밤 | ✅ 배포 중 | 크롤러 + 라우트 + 디자인 완료 |
-| 프로그램별 히어로 이미지 | ✅ 배포 중 | hero-fixed 오버랩 디자인, 레터박스 제거 |
-| UX 구조 개선 | ✅ 배포 중 | 홈 설명·상태 칩·날짜 칩 스트립·하단 날짜 바 |
+| 프로그램별 히어로 이미지 | ✅ 배포 중 | hero-fixed 오버랩 디자인 |
+| 크로스 프로그램 네비게이션 | ✅ 배포 중 | Sidebar 탭 스위처, MobileDrawer ⇄ 버튼, 하단 바 전환 |
+| 하단/상단 바 디자인 | ✅ 배포 중 | 프로그램별 색감 + 액센트 테두리 |
+| YouTube/Music 버튼 라벨 | ✅ 배포 중 | "▶ YouTube로 전체 듣기" / "♪ Music으로 전체 듣기" |
 | /discover 통계 | ❌ 미착수 | Later |
