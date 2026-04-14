@@ -160,9 +160,13 @@ def process_episode(
             youtube,
             title=f"{prog_title} {date_str}",
             description=(
-                "K-Radio Archive가 자동으로 수집한 선곡표입니다.\n"
-                "매일 방송되는 라디오 선곡을 YouTube 플레이리스트로 기록하는 서비스입니다.\n"
-                "계정을 팔로우하시거나, https://bcamp-daily.vercel.app 에서 확인하세요.\n"
+                "알고리즘이 아닌, DJ가 직접 고른 음악들입니다.\n"
+                "\n"
+                "K-Radio Archive는 배철수의 음악캠프·별이 빛나는 밤에 선곡표를 매일 기록하는 아카이브예요.\n"
+                "오늘 방송부터 오래된 에피소드까지 날짜별로 찾아볼 수 있습니다.\n"
+                "라디오를 좋아하는 학생이 만든 무료 서비스입니다.\n"
+                "\n"
+                "https://bcamp-daily.vercel.app\n"
                 f"\n{prog_title} {date_str} 방송분"
             ),
         )
