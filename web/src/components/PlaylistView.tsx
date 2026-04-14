@@ -239,7 +239,7 @@ export default function PlaylistView({
                   style={
                     isCurrent
                       ? { color: accent, background: `${accent}20`, border: `1px solid ${accent}50` }
-                      : { color: "var(--text-muted)", background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.08)" }
+                      : { color: "var(--text-muted)", background: "rgba(255,255,255,0.09)", border: "1px solid rgba(255,255,255,0.18)" }
                   }
                   aria-current={isCurrent ? "page" : undefined}
                 >
