@@ -111,11 +111,7 @@ export default function PlaylistView({
   const handleMouseLeave = () => {
     if (!isTouchDevice()) setExpandedId(null);
   };
-  const handleClick = (order: number, videoId?: string | null) => {
-    if (videoId) {
-      window.open(`https://www.youtube.com/watch?v=${videoId}`, "_blank", "noopener,noreferrer");
-      return;
-    }
+  const handleClick = (order: number) => {
     setExpandedId((prev) => (prev === order ? null : order));
   };
 
@@ -344,7 +340,7 @@ export default function PlaylistView({
                 }}
                 onMouseEnter={() => song.videoId && handleMouseEnter(song.order)}
                 onMouseLeave={handleMouseLeave}
-                onClick={() => handleClick(song.order, song.videoId)}
+                onClick={() => handleClick(song.order)}
               >
                 <div className="flex items-center gap-4 py-3.5 group">
                   <div className="shrink-0 flex items-center justify-end gap-1.5 w-8">
@@ -425,6 +421,29 @@ export default function PlaylistView({
                 </div>
 
                 {/* 매핑된 곡 — YouTube 버튼 */}
+                {song.videoId && (
+                  <div
+                    style={{
+                      maxHeight: isExpanded ? "60px" : "0px",
+                      overflow: "hidden",
+                      transition: "max-height 0.25s ease",
+                      borderBottom: isExpanded ? "1px solid var(--track-border)" : "none",
+                    }}
+                  >
+                    <div className="pl-10 pr-2 pb-3">
+                      <a
+                        href={`https://www.youtube.com/watch?v=${song.videoId}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        onClick={(e) => e.stopPropagation()}
+                        className="inline-block px-3 py-1 text-xs font-semibold transition-opacity hover:opacity-85"
+                        style={{ background: color, color: "#000", borderRadius: "3px" }}
+                      >
+                        ▶ YouTube에서 듣기
+                      </a>
+                    </div>
+                  </div>
+                )}
 
                 {/* 미매핑 곡 — 안내 패널 */}
                 {!song.videoId && (
