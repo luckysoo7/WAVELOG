@@ -37,16 +37,18 @@ export default function HomePage() {
           className="text-sm leading-relaxed"
           style={{ color: "var(--text-muted)", maxWidth: "32rem", lineHeight: "1.85" }}
         >
-          오늘 배캠에서 나온 그 곡, 제목이 뭐였더라?
+          알고리즘 추천에 질렸을 때.
+          <br />
+          대한민국에서 음악 가장 잘 아는 DJ들의 선곡표가 여기 있습니다.
           <br />
           <br />
-          배철수의 음악캠프, 별이 빛나는 밤에 — DJ가 방송에서 직접 고른 곡들을 날짜별로 기록합니다.
-          곡마다 YouTube 링크가 달려 있어서, 오늘 라디오에서 흘러나온 노래를 바로 찾아 들을 수 있어요.
+          배철수의 음악캠프, 별이 빛나는 밤에 — 매일 방송된 선곡을 날짜별로 기록합니다.
+          곡마다 YouTube 링크가 달려 있어서 바로 들을 수 있어요.
           오늘 방송부터 오래된 아카이브까지.
           <br />
           <br />
           <span style={{ opacity: 0.55 }}>
-            라디오 좋아하는 사람이 만들었습니다. 무료, 광고 없음.
+            라디오를 사랑하는 학생이 만들었습니다. 무료, 광고 없음.
           </span>
         </p>
       </header>
