@@ -41,8 +41,8 @@ const THEMES = {
 } as const;
 
 function formatDate(dateStr: string): string {
-  const [, m, d] = dateStr.split("-");
-  return `${+m}월 ${+d}일`;
+  const [y, m, d] = dateStr.split("-");
+  return `${y}년 ${+m}월 ${+d}일`;
 }
 
 function formatChipDate(dateStr: string, dayOfWeek: string): string {
