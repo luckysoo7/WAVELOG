@@ -37,8 +37,7 @@ _PROGRAMS = {
 }
 
 
-def _day_of_week_ko(d: date) -> str:
-    return ["월요일", "화요일", "수요일", "목요일", "금요일", "토요일", "일요일"][d.weekday()]
+from crawler.utils import day_of_week_ko as _day_of_week_ko
 
 
 def crawl_one(program_id: str, target_date: date) -> bool:
@@ -103,7 +102,6 @@ def crawl_program(program_id: str, target_date: date | None, backfill_days: int)
         crawl_one(program_id, today - timedelta(days=1))
 
     # 백필: DB에 없는 날짜만
-    filled = 0
     for offset in range(2, backfill_days + 1):
         candidate = today - timedelta(days=offset)
         crawl_one(program_id, candidate)

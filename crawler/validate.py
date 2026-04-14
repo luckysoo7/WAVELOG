@@ -15,13 +15,15 @@ import requests
 
 from crawler.db import DB_PATH, connect, get_playlist_ids
 
-_PROGRAM_ID = "bcamp"
+_PROGRAM_IDS = ["bcamp", "byulbam"]
 
 
 def _load_playlist_ids() -> list[tuple[str, str]]:
-    """(date, playlistId) 목록 반환. youtube가 없는 날짜는 제외."""
+    """(date, playlistId) 목록 반환 — bcamp + byulbam 합산. youtube 없는 날짜 제외."""
     conn = connect(DB_PATH)
-    result = get_playlist_ids(conn, _PROGRAM_ID)
+    result = []
+    for prog in _PROGRAM_IDS:
+        result.extend(get_playlist_ids(conn, prog))
     conn.close()
     return result
 
@@ -98,6 +100,8 @@ def main() -> None:
     if webhook_url:
         _send_discord(webhook_url, broken)
         print("[validate] Discord 알림 전송 완료")
+
+    sys.exit(1)  # 깨진 플레이리스트 발견 → CI 실패 신호
 
 
 if __name__ == "__main__":

@@ -1,6 +1,6 @@
 # K-Radio Archive — 스펙 (MASTER)
 
-최종 업데이트: 2026-04-15 (세션 2)
+최종 업데이트: 2026-04-15 (세션 3)
 
 > 이 파일이 단일 진실 공급원(SSOT).
 > 구조적 결정은 `decisions/`에 ADR로 기록.
@@ -81,7 +81,7 @@
 
 ---
 
-## 현재 상태 (2026-04-15 세션 2)
+## 현재 상태 (2026-04-15 세션 3)
 
 | 컴포넌트 | 상태 | 비고 |
 |---------|------|------|
@@ -91,14 +91,16 @@
 | 크롤/매핑 분리 아키텍처 | ✅ 배포 중 | crawl.py + match.py 완전 분리 |
 | byulbam YouTube 매핑 | ✅ 배포 중 | match.yml 백필 인터리브 진행 중 |
 | DSOTM 디자인 테마 | ✅ 배포 중 | 스펙트럼 컬러, 앰비언트 글로우 |
-| 트랙 hover → YouTube 버튼 | ✅ 배포 중 | videoId 있는 곡만 expand |
-| 별이 빛나는 밤 (김이나) | ✅ 배포 중 | 프로그램명 풀네임으로 업데이트 |
+| 트랙 tap → YouTube 버튼 | ✅ 배포 중 | 매칭/미매칭 구분 없이 동일 토글 동작 |
+| YouTube 조회수 배지 | ✅ 배포 중 | top-5 금색/은색, 매일 backfill_views 갱신 |
+| 별이 빛나는 밤 (김이나) | ✅ 배포 중 | 방송시각 밤 8시 반영, 프로그램명 풀네임 |
 | 프로그램별 히어로 이미지 | ✅ 배포 중 | CSS Grid stacking, hero-fixed 오버랩 |
 | 크로스 프로그램 네비게이션 | ✅ 배포 중 | Sidebar 탭 스위처, MobileDrawer, 하단 바 |
+| Sidebar 연도 구분선 | ✅ 배포 중 | 연도 경계마다 액센트 색상 헤더 |
 | 히어로 헤딩 구조 개편 | ✅ 배포 중 | 프로그램명(대) → 날짜+연도(소), 글자수 비례 vw |
 | 날짜 칩 UX | ✅ 배포 중 | 모바일 전용 5개 + 전체› 버튼, backdrop blur |
-| 방송정보 + 진행바 한 줄 | ✅ 배포 중 | flex:1 로 progress bar 가변 |
 | 다음 방송 카운트다운 | ✅ 배포 중 | KST 기준 실시간, LIVE NOW 펄스 배지 |
-| MBC 공식 링크 + favicon | ✅ 배포 중 | 하단 바 MBC 버튼에 공식 favicon |
-| 저작권 DisclaimerButton | ✅ 배포 중 | ? 팝업, 법적 고지 4개 항목 |
+| 저작권 DisclaimerButton | ✅ 배포 중 | 팝업, 법적 고지 4개 항목 |
+| 크롤러 유틸 통합 | ✅ 완료 | crawler/utils.py 추출, 5개 파일 중복 제거 |
+| validate.py 개선 | ✅ 완료 | byulbam 커버리지 추가, 실패 시 sys.exit(1) |
 | /discover 통계 | ❌ 미착수 | Later |

@@ -58,6 +58,13 @@
 
 - [ ] 레포 이름 변경 `bcamp-daily` → `k-radio-archive`
 
+### 기술 부채
+
+- [ ] **`isbyulbam` 문자열 의존 제거** — `PlaylistView.tsx:84`의 `programName.includes("별이 빛나는 밤에")` → `programId` prop으로 교체. 프로그램명 변경 시 버그 위험.
+- [ ] **`match.py` 조회수 누락 경로** — `process_episode`가 미매핑 곡 없으면 early return → 기존 곡 조회수 미갱신. `backfill_views.py`가 daily로 보완 중이나, 이상적으로는 process_episode 안에서도 갱신해야 함.
+- [ ] **`main.py` / `byulbam_main.py` 정리** — 레거시 긴급 전용 파일. `_DB_PATH`는 `DB_PATH` 중복. `daily.yml` / `byulbam.yml` 폐기 시 파일째 삭제 가능.
+- [ ] **TypeScript DB 행 타입** — `data.ts`의 `better-sqlite3` 반환값이 `any`. `Episode`, `Song` Row 인터페이스 정의 권장.
+
 ---
 
 ## 🟡 Later

@@ -23,12 +23,9 @@ Usage:
 """
 
 import argparse
-import json
-import os
 import sys
-from datetime import date, timedelta
+from datetime import date
 from itertools import zip_longest
-from pathlib import Path
 
 from crawler.db import (
     DB_PATH, connect, init_db,
@@ -36,9 +33,7 @@ from crawler.db import (
     update_song_match, increment_match_count, update_song_view_counts,
 )
 from crawler.youtube_client import search_videos, create_playlist, add_to_playlist, get_video_stats, QuotaExceededError
-
-_ROOT_DATA = Path(__file__).resolve().parent.parent / "data"
-SONG_CACHE_PATH = _ROOT_DATA / "song_cache.json"
+from crawler.utils import cache_key as _cache_key, load_cache as _load_cache, save_cache as _save_cache, get_youtube_client as _get_youtube_client
 
 # ── 쿼터 상수 ─────────────────────────────────────────────────────────────────
 
@@ -59,29 +54,6 @@ _PROGRAM_SOURCE = {
 }
 
 
-# ── 캐시 ──────────────────────────────────────────────────────────────────────
-
-def _cache_key(title: str, artist: str) -> str:
-    return f"{title.strip().upper()} — {artist.strip().upper()}"
-
-
-def _load_cache() -> dict[str, str]:
-    if not SONG_CACHE_PATH.exists():
-        return {}
-    try:
-        return json.loads(SONG_CACHE_PATH.read_text(encoding="utf-8"))
-    except json.JSONDecodeError:
-        print("[경고] song_cache.json 손상 — 빈 캐시로 시작")
-        return {}
-
-
-def _save_cache(cache: dict[str, str]) -> None:
-    _ROOT_DATA.mkdir(parents=True, exist_ok=True)
-    tmp = SONG_CACHE_PATH.with_suffix(".json.tmp")
-    tmp.write_text(json.dumps(cache, ensure_ascii=False, indent=2, sort_keys=True), encoding="utf-8")
-    tmp.rename(SONG_CACHE_PATH)
-
-
 # ── 쿼터 추정 ─────────────────────────────────────────────────────────────────
 
 def estimate_units(songs: list[dict], cache: dict, has_playlist: bool) -> int:
@@ -94,19 +66,6 @@ def estimate_units(songs: list[dict], cache: dict, has_playlist: bool) -> int:
         key = _cache_key(s["title"], s["artist"])
         total += UNITS_ADD + (0 if key in cache else UNITS_SEARCH)
     return total
-
-
-# ── YouTube 클라이언트 ─────────────────────────────────────────────────────────
-
-def _get_youtube_client():
-    if os.environ.get("GOOGLE_REFRESH_TOKEN"):
-        from crawler.auth_ci import get_youtube_client_ci
-        return get_youtube_client_ci()
-    from crawler.auth import get_youtube_client
-    return get_youtube_client(
-        client_secret_path=str(Path(__file__).parent / "client_secret.json"),
-        token_path=str(Path(__file__).parent / "token.pickle"),
-    )
 
 
 # ── 에피소드 처리 ─────────────────────────────────────────────────────────────

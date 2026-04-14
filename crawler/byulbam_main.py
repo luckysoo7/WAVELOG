@@ -7,7 +7,6 @@ Usage:
 """
 
 import argparse
-import json
 import os
 import sys
 from datetime import date, timedelta
@@ -15,40 +14,20 @@ from pathlib import Path
 
 import requests as req
 
-from crawler.auth import get_youtube_client
 from crawler.db import DB_PATH, connect, init_db, insert_episode, get_episode
 from crawler.byulbam_crawler import find_seq_id, fetch_songs, get_source_url
+from crawler.utils import (
+    cache_key as _cache_key,
+    load_cache as _load_cache,
+    save_cache as _save_cache,
+    get_youtube_client as _get_youtube_client,
+    day_of_week_ko as _day_of_week_ko,
+)
 from crawler.youtube_client import search_videos, create_playlist, add_to_playlist, QuotaExceededError
 
 _ROOT_DATA = Path(__file__).resolve().parent.parent / "data"
 _DB_PATH = _ROOT_DATA / "archive.db"
-SONG_CACHE_PATH = _ROOT_DATA / "song_cache.json"  # 프로그램 공유 캐시
 _PROGRAM_ID = "byulbam"
-
-
-# ── 캐시 ────────────────────────────────────────────────────────────────────
-
-def _cache_key(title: str, artist: str) -> str:
-    return f"{title.strip().upper()} — {artist.strip().upper()}"
-
-
-def _load_cache() -> dict[str, str]:
-    if not SONG_CACHE_PATH.exists():
-        return {}
-    try:
-        with open(SONG_CACHE_PATH, encoding="utf-8") as f:
-            return json.load(f)
-    except json.JSONDecodeError:
-        print("[경고] song_cache.json 손상 — 빈 캐시로 시작")
-        return {}
-
-
-def _save_cache(cache: dict[str, str]) -> None:
-    _ROOT_DATA.mkdir(parents=True, exist_ok=True)
-    tmp = SONG_CACHE_PATH.with_suffix(".json.tmp")
-    with open(tmp, "w", encoding="utf-8") as f:
-        json.dump(cache, f, ensure_ascii=False, indent=2, sort_keys=True)
-    tmp.rename(SONG_CACHE_PATH)
 
 
 # ── Discord 알림 ─────────────────────────────────────────────────────────────
@@ -72,10 +51,6 @@ def _parse_date(date_str: str) -> date:
     except ValueError:
         print(f"[오류] 날짜 형식이 올바르지 않습니다: {date_str} (예: 2026-04-12)")
         sys.exit(1)
-
-
-def _day_of_week_ko(d: date) -> str:
-    return ["월요일", "화요일", "수요일", "목요일", "금요일", "토요일", "일요일"][d.weekday()]
 
 
 def _needs_processing(target_date: date) -> bool:
@@ -118,14 +93,7 @@ def run(target_date: date, dry_run: bool = False) -> None:
         return
 
     print("\n3/4 YouTube 플레이리스트 생성...")
-    if os.environ.get("GOOGLE_REFRESH_TOKEN"):
-        from crawler.auth_ci import get_youtube_client_ci
-        youtube = get_youtube_client_ci()
-    else:
-        youtube = get_youtube_client(
-            client_secret_path=str(Path(__file__).parent / "client_secret.json"),
-            token_path=str(Path(__file__).parent / "token.pickle"),
-        )
+    youtube = _get_youtube_client()
 
     playlist_id = None
     cache = _load_cache()

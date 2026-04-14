@@ -9,7 +9,6 @@ Usage:
 """
 
 import argparse
-import json
 import os
 import sys
 from datetime import date, timedelta
@@ -17,43 +16,23 @@ from pathlib import Path
 
 import requests as req
 
-from crawler.auth import get_youtube_client
 from crawler.db import (
     DB_PATH, connect, init_db, insert_episode, get_episode,
     get_incomplete_episodes, update_song_match, increment_match_count,
 )
 from crawler.mbc_crawler import find_seq_id, fetch_songs, get_source_url
+from crawler.utils import (
+    cache_key as _cache_key,
+    load_cache as _load_cache,
+    save_cache as _save_cache,
+    get_youtube_client as _get_youtube_client,
+    day_of_week_ko as _day_of_week_ko,
+)
 from crawler.youtube_client import search_videos, create_playlist, add_to_playlist, QuotaExceededError
 
 _ROOT_DATA = Path(__file__).resolve().parent.parent / "data"
 _DB_PATH = _ROOT_DATA / "archive.db"
-SONG_CACHE_PATH = _ROOT_DATA / "song_cache.json"  # 프로그램 공유 캐시
 _PROGRAM_ID = "bcamp"
-
-
-# ── 캐시 ────────────────────────────────────────────────────────────────────
-
-def _cache_key(title: str, artist: str) -> str:
-    return f"{title.strip().upper()} — {artist.strip().upper()}"
-
-
-def _load_cache() -> dict[str, str]:
-    if not SONG_CACHE_PATH.exists():
-        return {}
-    try:
-        with open(SONG_CACHE_PATH, encoding="utf-8") as f:
-            return json.load(f)
-    except json.JSONDecodeError:
-        print("[경고] song_cache.json 손상 — 빈 캐시로 시작")
-        return {}
-
-
-def _save_cache(cache: dict[str, str]) -> None:
-    _ROOT_DATA.mkdir(parents=True, exist_ok=True)
-    tmp = SONG_CACHE_PATH.with_suffix(".json.tmp")
-    with open(tmp, "w", encoding="utf-8") as f:
-        json.dump(cache, f, ensure_ascii=False, indent=2, sort_keys=True)
-    tmp.rename(SONG_CACHE_PATH)  # 원자적 교체
 
 
 # ── Discord 알림 ─────────────────────────────────────────────────────────────
@@ -79,10 +58,6 @@ def _parse_date(date_str: str) -> date:
         sys.exit(1)
 
 
-def _day_of_week_ko(d: date) -> str:
-    return ["월요일", "화요일", "수요일", "목요일", "금요일", "토요일", "일요일"][d.weekday()]
-
-
 def _needs_processing(target_date: date) -> bool:
     """DB에 없거나, youtube가 null이면 처리 대상."""
     try:
@@ -97,17 +72,6 @@ def _needs_processing(target_date: date) -> bool:
 
 
 # ── 핵심 로직 ────────────────────────────────────────────────────────────────
-
-def _get_youtube_client():
-    """환경에 맞는 YouTube API 클라이언트 반환 (CI/로컬 자동 분기)."""
-    if os.environ.get("GOOGLE_REFRESH_TOKEN"):
-        from crawler.auth_ci import get_youtube_client_ci
-        return get_youtube_client_ci()
-    return get_youtube_client(
-        client_secret_path=str(Path(__file__).parent / "client_secret.json"),
-        token_path=str(Path(__file__).parent / "token.pickle"),
-    )
-
 
 def run_match_only(target_date: date, program_id: str = _PROGRAM_ID) -> int:
     """DB의 기존 에피소드에서 미매핑 곡만 재시도 — 기존 플레이리스트에 추가.

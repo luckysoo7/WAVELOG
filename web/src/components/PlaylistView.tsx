@@ -102,7 +102,7 @@ export default function PlaylistView({
 
   function dateHref(entry: DateEntry): string {
     // allDates[0]이 최신 → basePath로 이동
-    return allDates.indexOf(entry) === 0 ? theme.basePath : `${theme.basePath}/${entry.date}`;
+    return entry.date === allDates[0]?.date ? theme.basePath : `${theme.basePath}/${entry.date}`;
   }
 
   const handleMouseEnter = (order: number) => {

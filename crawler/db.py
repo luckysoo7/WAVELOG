@@ -99,8 +99,8 @@ def init_db(db_path: Path = DB_PATH) -> None:
         ]:
             try:
                 conn.execute(f"ALTER TABLE songs ADD COLUMN {col} {typedef}")
-            except Exception:
-                pass  # 이미 존재하면 무시
+            except sqlite3.OperationalError:
+                pass  # 이미 존재하면 무시 (duplicate column name)
         _upsert_program = """
             INSERT INTO programs (id, name, slug, freq, start_year, active)
             VALUES (:id, :name, :slug, :freq, :start_year, :active)

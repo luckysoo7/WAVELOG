@@ -7,22 +7,9 @@ Usage:
     python -m crawler.backfill_views
 """
 
-import os
-from pathlib import Path
-
 from crawler.db import DB_PATH, connect, init_db
+from crawler.utils import get_youtube_client as _get_youtube_client
 from crawler.youtube_client import get_video_stats
-
-
-def _get_youtube_client():
-    if os.environ.get("GOOGLE_REFRESH_TOKEN"):
-        from crawler.auth_ci import get_youtube_client_ci
-        return get_youtube_client_ci()
-    from crawler.auth import get_youtube_client
-    return get_youtube_client(
-        client_secret_path=str(Path(__file__).parent / "client_secret.json"),
-        token_path=str(Path(__file__).parent / "token.pickle"),
-    )
 
 
 def main() -> None:
