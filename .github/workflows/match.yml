@@ -67,13 +67,18 @@ jobs:
             --budget "${{ github.event.inputs.budget || 4500 }}" \
             --days "${{ github.event.inputs.days || 90 }}"
 
+      - name: 조회수 갱신 (매핑 여부 무관, ~6 units)
+        env:
+          GOOGLE_CLIENT_SECRET: ${{ secrets.GOOGLE_CLIENT_SECRET }}
+          GOOGLE_REFRESH_TOKEN: ${{ secrets.GOOGLE_REFRESH_TOKEN }}
+        run: python -m crawler.backfill_views
+
       - name: DB 커밋 + 푸시
-        if: steps.check.outputs.count != '0'
         run: |
           git config user.name "bcamp-daily[bot]"
           git config user.email "bcamp-daily[bot]@users.noreply.github.com"
           git add data/
-          git diff --staged --quiet || git commit -m "chore: YouTube 백필 매핑 ($(date +'%Y-%m-%d'))"
+          git diff --staged --quiet || git commit -m "chore: YouTube 백필 매핑 + 조회수 갱신 ($(date +'%Y-%m-%d'))"
           git push || (git pull --rebase && git push)
 
       - name: Discord 실패 알림
