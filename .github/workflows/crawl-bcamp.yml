@@ -55,16 +55,6 @@ jobs:
             python -m crawler.match --program bcamp --budget 2500 --days 2
           fi
 
-      - name: Last.fm 앨범 정보 보충
-        env:
-          LASTFM_API_KEY: ${{ secrets.LASTFM_API_KEY }}
-        run: |
-          if [ -n "${{ github.event.inputs.date }}" ]; then
-            python -m crawler.main --album-only --date "${{ github.event.inputs.date }}"
-          else
-            python -m crawler.main --album-only
-          fi
-
       - name: DB 커밋 + 푸시
         run: |
           git config user.name "bcamp-daily[bot]"

@@ -4,8 +4,6 @@ Usage:
     python -m crawler.main --date 2026-04-08
     python -m crawler.main               # 오늘/어제 자동 처리 + 백필
     python -m crawler.main --dry-run     # 크롤링만, YouTube API 호출 없음
-    python -m crawler.main --date 2026-04-08 --album-only   # DB 기존 곡에 Last.fm 앨범 정보만
-    python -m crawler.main --album-only                     # 최근 30일 백필
     python -m crawler.main --match-only                     # 미매핑 에피소드 재시도 (기존 플리 재사용)
     python -m crawler.main --match-only --date 2026-04-12   # 특정 날짜만 재시도
 """
@@ -14,7 +12,6 @@ import argparse
 import json
 import os
 import sys
-import time
 from datetime import date, timedelta
 from pathlib import Path
 
@@ -22,7 +19,7 @@ import requests as req
 
 from crawler.auth import get_youtube_client
 from crawler.db import (
-    DB_PATH, connect, init_db, insert_episode, get_episode, update_song_mb,
+    DB_PATH, connect, init_db, insert_episode, get_episode,
     get_incomplete_episodes, update_song_match, increment_match_count,
 )
 from crawler.mbc_crawler import find_seq_id, fetch_songs, get_source_url
@@ -343,50 +340,6 @@ def _save_to_db(
     conn.close()
 
 
-def run_album_only(target_date: date) -> None:
-    """DB에 이미 저장된 에피소드 곡들에 Last.fm 앨범 정보 조회만 수행."""
-    date_str = target_date.isoformat()
-    init_db(_DB_PATH)
-    conn = connect(_DB_PATH)
-    ep = get_episode(conn, _PROGRAM_ID, date_str)
-    conn.close()
-
-    if ep is None:
-        print(f"[오류] {date_str} 에피소드가 DB에 없습니다. 먼저 일반 크롤링을 실행하세요.")
-        sys.exit(1)
-
-    songs = ep["songs"]
-    print(f"\n[album-only] {date_str} — {len(songs)}곡 Last.fm 조회 시작\n")
-
-    conn = connect(_DB_PATH)
-    row = conn.execute(
-        "SELECT id FROM episodes WHERE program_id=? AND date=?",
-        (_PROGRAM_ID, date_str),
-    ).fetchone()
-    episode_id = row["id"]
-
-    found = 0
-    for song in songs:
-        time.sleep(0.25)
-        result = lastfm_lookup(song["title"], song["artist"])
-        if result:
-            update_song_mb(
-                conn,
-                episode_id,
-                song["order"],
-                result.get("mbid"),
-                result.get("albumName"),
-                result.get("albumArtUrl"),
-                result.get("releaseYear"),
-            )
-            found += 1
-            print(f"  ✓ {song['order']:2d}. {song['title']} → {result.get('albumName', '?')}")
-        else:
-            print(f"  ✗ {song['order']:2d}. {song['title']} — 미매칭")
-    conn.close()
-    print(f"\n완료: {found}/{len(songs)}곡 매칭")
-
-
 def _backfill(dry_run: bool) -> None:
     """최근 30일 중 미처리 날짜를 최신순으로 처리. 쿼터 초과 시 즉시 중단."""
     filled = 0
@@ -419,7 +372,6 @@ def main() -> None:
     parser.add_argument("--date", help="처리할 날짜 (YYYY-MM-DD). 기본값: 자동 감지")
     parser.add_argument("--dry-run", action="store_true", help="크롤링만, YouTube API 호출 없음")
     parser.add_argument("--no-backfill", action="store_true", help="백필 스킵")
-    parser.add_argument("--album-only", action="store_true", help="DB 기존 곡에 Last.fm 앨범 정보만 (YouTube 불필요)")
     parser.add_argument("--match-only", action="store_true", help="미매핑 에피소드 재시도 — 기존 플레이리스트에 곡 채워넣기")
     args = parser.parse_args()
 
@@ -436,22 +388,6 @@ def main() -> None:
         except QuotaExceededError as e:
             print(f"\n[오류] {e}")
             sys.exit(1)
-        return
-
-    # --album-only: YouTube 없이 Last.fm 앨범 정보만
-    if args.album_only:
-        init_db(_DB_PATH)
-        if args.date:
-            run_album_only(_parse_date(args.date))
-        else:
-            today = date.today()
-            for offset in range(0, 31):
-                candidate = today - timedelta(days=offset)
-                conn = connect(_DB_PATH)
-                ep = get_episode(conn, _PROGRAM_ID, candidate.isoformat())
-                conn.close()
-                if ep is not None:
-                    run_album_only(candidate)
         return
 
     if args.date:

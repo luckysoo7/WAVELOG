@@ -46,11 +46,7 @@ CREATE TABLE IF NOT EXISTS songs (
   matched       INTEGER DEFAULT 0,
   genre         TEXT,
   year          INTEGER,
-  play_count    INTEGER DEFAULT 0,
-  mbid          TEXT,
-  album_name    TEXT,
-  album_art_url TEXT,
-  release_year  INTEGER
+  play_count    INTEGER DEFAULT 0
 );
 
 CREATE INDEX IF NOT EXISTS idx_episodes_date    ON episodes(date);
@@ -99,11 +95,7 @@ def init_db(db_path: Path = DB_PATH) -> None:
         conn.executescript(_SCHEMA)
         # 마이그레이션: 기존 DB에 새 컬럼 추가 (idempotent)
         for col, typedef in [
-            ("mbid",          "TEXT"),
-            ("album_name",    "TEXT"),
-            ("album_art_url", "TEXT"),
-            ("release_year",  "INTEGER"),
-            ("view_count",    "INTEGER"),
+            ("view_count", "INTEGER"),
         ]:
             try:
                 conn.execute(f"ALTER TABLE songs ADD COLUMN {col} {typedef}")
@@ -179,51 +171,24 @@ def insert_episode(
             """
             INSERT INTO songs
               (episode_id, order_no, title, artist,
-               video_id, video_title, channel, matched,
-               mbid, album_name, album_art_url, release_year)
+               video_id, video_title, channel, matched)
             VALUES
               (:episode_id, :order_no, :title, :artist,
-               :video_id, :video_title, :channel, :matched,
-               :mbid, :album_name, :album_art_url, :release_year)
+               :video_id, :video_title, :channel, :matched)
             """,
             [
                 {
-                    "episode_id":    episode_id,
-                    "order_no":      s["order"],
-                    "title":         s["title"],
-                    "artist":        s["artist"],
-                    "video_id":      s.get("videoId"),
-                    "video_title":   s.get("videoTitle"),
-                    "channel":       s.get("channel"),
-                    "matched":       1 if s.get("matched") else 0,
-                    "mbid":          s.get("mbid"),
-                    "album_name":    s.get("albumName"),
-                    "album_art_url": s.get("albumArtUrl"),
-                    "release_year":  s.get("releaseYear"),
+                    "episode_id":  episode_id,
+                    "order_no":    s["order"],
+                    "title":       s["title"],
+                    "artist":      s["artist"],
+                    "video_id":    s.get("videoId"),
+                    "video_title": s.get("videoTitle"),
+                    "channel":     s.get("channel"),
+                    "matched":     1 if s.get("matched") else 0,
                 }
                 for s in songs
             ],
-        )
-
-
-def update_song_mb(
-    conn: sqlite3.Connection,
-    episode_id: int,
-    order_no: int,
-    mbid: str | None,
-    album_name: str | None,
-    album_art_url: str | None,
-    release_year: int | None,
-) -> None:
-    """songs 행의 MB 컬럼만 UPDATE (YouTube/matched 건드리지 않음)."""
-    with conn:
-        conn.execute(
-            """
-            UPDATE songs
-               SET mbid = ?, album_name = ?, album_art_url = ?, release_year = ?
-             WHERE episode_id = ? AND order_no = ?
-            """,
-            (mbid, album_name, album_art_url, release_year, episode_id, order_no),
         )
 
 
@@ -286,10 +251,6 @@ def get_episode(
                 "videoTitle":   r["video_title"],
                 "channel":      r["channel"],
                 "matched":      bool(r["matched"]),
-                "mbid":         r["mbid"],
-                "albumName":    r["album_name"],
-                "albumArtUrl":  r["album_art_url"],
-                "releaseYear":  r["release_year"],
                 "viewCount":    r["view_count"],
             }
             for r in rows
