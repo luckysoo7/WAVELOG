@@ -111,16 +111,8 @@ export default function PlaylistView({
   const handleMouseLeave = () => {
     if (!isTouchDevice()) setExpandedId(null);
   };
-  const handleClick = (order: number, hasVideo: boolean) => {
-    if (hasVideo) {
-      // 매핑된 곡: 기존 동작 — 터치 기기에서만 클릭으로 토글 (데스크톱은 hover)
-      if (isTouchDevice()) {
-        setExpandedId((prev) => (prev === order ? null : order));
-      }
-    } else {
-      // 미매핑 곡: 모든 기기에서 클릭으로 안내 패널 토글
-      setExpandedId((prev) => (prev === order ? null : order));
-    }
+  const handleClick = (order: number) => {
+    setExpandedId((prev) => (prev === order ? null : order));
   };
 
   const mappingPct = total > 0 ? Math.round((matchedCount / total) * 100) : 0;
@@ -348,7 +340,7 @@ export default function PlaylistView({
                 }}
                 onMouseEnter={() => song.videoId && handleMouseEnter(song.order)}
                 onMouseLeave={handleMouseLeave}
-                onClick={() => handleClick(song.order, !!song.videoId)}
+                onClick={() => handleClick(song.order)}
               >
                 <div className="flex items-center gap-4 py-3.5 group">
                   <div className="shrink-0 flex items-center justify-end gap-1.5 w-8">
