@@ -125,13 +125,13 @@ export default function PlaylistView({
 
   const mappingPct = total > 0 ? Math.round((matchedCount / total) * 100) : 0;
 
-  // 조회수 상위 5곡 order 번호 집합 (viewCount 있는 곡만)
-  const top5Orders = new Set(
+  // 조회수 상위 5곡: order → rank(1~5) 매핑 (1=최고)
+  const viewRankMap = new Map<number, number>(
     [...data.songs]
       .filter((s) => s.viewCount != null)
       .sort((a, b) => (b.viewCount ?? 0) - (a.viewCount ?? 0))
       .slice(0, 5)
-      .map((s) => s.order)
+      .map((s, i) => [s.order, i + 1])
   );
 
   return (
@@ -376,24 +376,29 @@ export default function PlaylistView({
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-1.5 min-w-0">
                       <p className="font-medium text-sm leading-snug truncate" style={{ opacity: song.videoId ? 1 : 0.75 }}>{song.title}</p>
-                      {top5Orders.has(song.order) && song.viewCount != null && (
-                        <span
-                          className="shrink-0 tabular-nums"
-                          style={{
-                            fontSize: "9px",
-                            fontWeight: 700,
-                            letterSpacing: "0.03em",
-                            color: "#f5a623",
-                            background: "rgba(245,166,35,0.12)",
-                            border: "1px solid rgba(245,166,35,0.35)",
-                            borderRadius: "3px",
-                            padding: "1px 4px",
-                            lineHeight: 1.5,
-                          }}
-                        >
-                          {formatViewCount(song.viewCount)}
-                        </span>
-                      )}
+                      {viewRankMap.has(song.order) && song.viewCount != null && (() => {
+                        const rank = viewRankMap.get(song.order)!;
+                        const isGold = rank <= 3;
+                        const badgeColor = isGold ? "#f5a623" : "#a8b4c0";
+                        return (
+                          <span
+                            className="shrink-0 tabular-nums"
+                            style={{
+                              fontSize: "9px",
+                              fontWeight: 700,
+                              letterSpacing: "0.03em",
+                              color: badgeColor,
+                              background: isGold ? "rgba(245,166,35,0.12)" : "rgba(168,180,192,0.10)",
+                              border: `1px solid ${isGold ? "rgba(245,166,35,0.35)" : "rgba(168,180,192,0.28)"}`,
+                              borderRadius: "3px",
+                              padding: "1px 4px",
+                              lineHeight: 1.5,
+                            }}
+                          >
+                            {formatViewCount(song.viewCount)}
+                          </span>
+                        );
+                      })()}
                     </div>
                     <p className="text-xs mt-0.5 truncate" style={{ color: "var(--text-muted)", opacity: song.videoId ? 1 : 0.7 }}>
                       {song.artist}
