@@ -1,9 +1,7 @@
 name: 배캠 크롤 + 당일 매핑
 
 on:
-  schedule:
-    - cron: '20 13 * * *'   # 22:20 KST — 방송 종료 후
-    - cron: '50 14 * * *'   # 23:50 KST — MBC 업로드 지연 대비 재시도
+  # schedule 일시 중지 — YouTube 매핑 백필 완료 후 재개 예정
   workflow_dispatch:
     inputs:
       date:
