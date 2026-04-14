@@ -16,6 +16,7 @@ const THEMES = {
     accent: "#c4a84e",
     heroImage: "/byulbam-hero.png",
     label: "MBC FM4U 91.9",
+    broadcastTime: "FM 4U 91.9MHz · 매일 밤 10시",
     ambientClass: "ambient-byulbam",
     heroBg: "linear-gradient(to bottom, rgba(5,14,10,0.6) 0%, transparent 100%)",
     spectrumLine: "linear-gradient(to right, transparent, #4a7a5a 8%, #c4a84e 35%, #e8d878 52%, #c4a84e 68%, #4a7a5a 88%, transparent)",
@@ -28,6 +29,7 @@ const THEMES = {
     accent: "#e8704a",
     heroImage: "/bcamp-hero.png",
     label: "MBC FM4U 91.9",
+    broadcastTime: "FM 4U 91.9MHz · 매일 저녁 6시",
     ambientClass: "ambient-bcamp",
     heroBg: "linear-gradient(to bottom, rgba(18,10,3,0.6) 0%, transparent 100%)",
     spectrumLine: "linear-gradient(to right, transparent, #ff4444 8%, #ff8800 22%, #ffee00 38%, #44cc00 52%, #00aaff 66%, #6644ff 82%, transparent)",
@@ -188,6 +190,9 @@ export default function PlaylistView({
           <div className="mt-4">
             <p className="text-sm font-medium" style={{ color: "var(--text-muted)" }}>
               {programName} · {data.dayOfWeek} · {total}곡
+            </p>
+            <p className="text-xs mt-0.5" style={{ color: "var(--text-muted)", opacity: 0.5 }}>
+              {theme.broadcastTime}
             </p>
             {total > 0 && (
               <div className="mt-2 flex items-center gap-2">
