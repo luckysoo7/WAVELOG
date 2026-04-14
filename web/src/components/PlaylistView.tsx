@@ -177,7 +177,7 @@ export default function PlaylistView({
             className="font-black leading-none"
             data-testid="date-heading"
             style={{
-              fontSize: isbyulbam ? "clamp(1.5rem, 7.5vw, 3.68rem)" : "clamp(2.3rem, 9.2vw, 3.68rem)",
+              fontSize: "clamp(1.5rem, 9.2vw, 3.68rem)",
               letterSpacing: "-0.03em",
               color: "#f0ebe3",
               lineHeight: 1.1,
@@ -188,7 +188,7 @@ export default function PlaylistView({
           </h1>
 
           {/* 날짜 + 요일 — 60% 크기, 흰색 */}
-          <div style={{ marginTop: "0.32rem" }}>
+          <div style={{ marginTop: "0.22rem" }}>
             <p
               className="font-semibold tabular-nums"
               style={{
