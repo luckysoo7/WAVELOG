@@ -194,11 +194,11 @@ body::before {
 }
 .date-chip:hover { opacity: 0.8; }
 
-/* ── 하단 고정 날짜 바 (B안) ───────────────────────────────────── */
+/* ── 하단 고정 날짜 바 ─────────────────────────────────────────── */
 .date-nav-bar {
   position: fixed;
   bottom: 0;
-  left: 0;
+  left: 0;       /* 모바일: 풀 너비 */
   right: 0;
   z-index: 20;
   display: flex;
@@ -209,6 +209,13 @@ body::before {
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
   border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+/* 데스크톱: 사이드바(w-72 = 18rem) 오른쪽부터 시작 */
+@media (min-width: 768px) {
+  .date-nav-bar {
+    left: 18rem;
+  }
 }
 
 .date-nav-side {

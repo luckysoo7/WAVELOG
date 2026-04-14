@@ -377,9 +377,9 @@ export default function PlaylistView({
         </ol>
       </main>
 
-      {/* ── 하단 고정 날짜 바 (B안) — 모바일 전용 ──────────── */}
+      {/* ── 하단 고정 날짜 바 — 모바일 + 데스크톱 공통 ──────── */}
       {allDates.length > 0 && (
-        <nav className="date-nav-bar md:hidden" aria-label="날짜 탐색">
+        <nav className="date-nav-bar" aria-label="날짜 탐색">
           {/* 이전 (더 최신) */}
           <div className="date-nav-side">
             {prevEntry ? (
@@ -395,14 +395,15 @@ export default function PlaylistView({
             )}
           </div>
 
-          {/* 중앙 — 날짜 목록 열기 (사이드바 드로어 트리거는 MobileDrawer에 있으므로 홈 링크 대체) */}
+          {/* 중앙 — 프로그램 허브 홈 */}
           <Link
             href={theme.basePath}
             className="date-nav-center"
             style={{ color: accent }}
           >
-            <span style={{ fontSize: "10px", opacity: 0.6, letterSpacing: "0.1em", textTransform: "uppercase" }}>
-              전체 목록
+            <span style={{ fontSize: "16px", lineHeight: 1 }}>⌂</span>
+            <span style={{ fontSize: "9px", opacity: 0.55, letterSpacing: "0.08em", textTransform: "uppercase", display: "block", marginTop: "2px" }}>
+              {isbyulbam ? "별밤" : "배캠"}
             </span>
           </Link>
 
