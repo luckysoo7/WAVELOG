@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { loadLatest, loadAllDates } from "@/lib/data";
+import DisclaimerButton from "@/components/DisclaimerButton";
 
 function formatDate(dateStr: string): string {
   const [, m, d] = dateStr.split("-");
@@ -374,6 +375,7 @@ export default function HomePage() {
           ⓒ MBC — 방송 콘텐츠 저작권은 MBC에 있습니다
           <br />
           unofficial fan site · not affiliated with MBC
+          <DisclaimerButton />
         </p>
       </div>
     </main>
