@@ -72,8 +72,23 @@ export default function MobileDrawer({ bcampDates, byulbamDates }: MobileDrawerP
           </span>
         </Link>
 
-        {/* 우측 균형용 공백 */}
-        <div className="w-8" />
+        {/* 우측: 다른 프로그램으로 빠른 전환 */}
+        <Link
+          href={isByulbam ? "/bcamp" : "/byulbam"}
+          className="flex flex-col items-center justify-center w-10 h-10 rounded-lg transition-opacity hover:opacity-100"
+          style={{
+            color: isByulbam ? "#e8704a" : "#c4a84e",
+            opacity: 0.65,
+            fontSize: "9px",
+            gap: "2px",
+            letterSpacing: "0.05em",
+            fontWeight: 700,
+          }}
+          aria-label={isByulbam ? "배철수의 음악캠프로 이동" : "별이 빛나는 밤에로 이동"}
+        >
+          <span style={{ fontSize: "13px", lineHeight: 1 }}>⇄</span>
+          <span>{isByulbam ? "배캠" : "별밤"}</span>
+        </Link>
       </header>
 
       {/* 배경 오버레이 */}

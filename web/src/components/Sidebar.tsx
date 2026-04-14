@@ -15,9 +15,12 @@ interface ProgramConfig {
   name: string;
   nameShort: string;
   freq: string;
-  schedule: string;
   basePath: string;
   dates: DateEntry[];
+  accent: string;
+  accentBg: string;
+  newBadgeBg: string;
+  newBadgeColor: string;
 }
 
 function formatSidebarDate(dateStr: string, dayOfWeek: string): string {
@@ -25,31 +28,44 @@ function formatSidebarDate(dateStr: string, dayOfWeek: string): string {
   return `${+m}/${+d} ${dayOfWeek.charAt(0)}`;
 }
 
+const PROGRAMS: Record<string, ProgramConfig> = {
+  byulbam: {
+    id: "byulbam",
+    name: "별이 빛나는 밤에",
+    nameShort: "별이 빛나는\n밤에",
+    freq: "매일 밤 10시 · since 1969",
+    basePath: "/byulbam",
+    accent: "#c4a84e",
+    accentBg: "rgba(196,168,78,0.15)",
+    newBadgeBg: "#c4a84e",
+    newBadgeColor: "#1a1408",
+    dates: [],
+  },
+  bcamp: {
+    id: "bcamp",
+    name: "배철수의 음악캠프",
+    nameShort: "배철수의\n음악캠프",
+    freq: "매일 저녁 6시 · since 1990",
+    basePath: "/bcamp",
+    accent: "#e8704a",
+    accentBg: "rgba(232,112,74,0.15)",
+    newBadgeBg: "#e8704a",
+    newBadgeColor: "#fff",
+    dates: [],
+  },
+};
+
 export default function Sidebar({ bcampDates, byulbamDates }: SidebarProps) {
   const pathname = usePathname();
   const activeRef = useRef<HTMLLIElement>(null);
 
   const isByulbam = pathname.startsWith("/byulbam");
-
-  const program: ProgramConfig = isByulbam
-    ? {
-        id: "byulbam",
-        name: "별이 빛나는 밤에",
-        nameShort: "별이 빛나는\n밤에",
-        freq: "MBC FM4U 91.9 · 매일 밤 10시",
-        schedule: "1969년~ · 매일 밤 10시",
-        basePath: "/byulbam",
-        dates: byulbamDates,
-      }
-    : {
-        id: "bcamp",
-        name: "배철수의 음악캠프",
-        nameShort: "배철수의\n음악캠프",
-        freq: "MBC FM4U 91.9 · 매일 저녁 6시",
-        schedule: "1990년~ · 매일 저녁 6시",
-        basePath: "/bcamp",
-        dates: bcampDates,
-      };
+  const programId = isByulbam ? "byulbam" : "bcamp";
+  const program = {
+    ...PROGRAMS[programId],
+    dates: isByulbam ? byulbamDates : bcampDates,
+  };
+  const { accent, accentBg, newBadgeBg, newBadgeColor } = program;
 
   useEffect(() => {
     activeRef.current?.scrollIntoView({ block: "nearest" });
@@ -57,55 +73,68 @@ export default function Sidebar({ bcampDates, byulbamDates }: SidebarProps) {
 
   return (
     <nav className="flex flex-col h-full px-4 py-8">
-      {/* 대문 — 서비스 정체성 */}
-      <div className="mb-6 px-2">
-        {/* 홈 링크 */}
+      {/* 홈 링크 */}
+      <div className="mb-5 px-2">
         <Link
           href="/"
-          className="flex items-center gap-1.5 mb-5 group"
-          style={{
-            color: pathname === "/" ? "var(--sunset-orange)" : "var(--text-muted)",
-            opacity: pathname === "/" ? 1 : 0.5,
-          }}
+          className="flex items-center gap-1.5 group"
+          style={{ color: "var(--text-muted)", opacity: 0.5 }}
         >
           <span className="text-xs">←</span>
           <span className="text-xs tracking-[0.18em] uppercase font-semibold transition-opacity group-hover:opacity-100">
             Korean Radio Archive
           </span>
         </Link>
+      </div>
 
-        {/* 라디오 레이블 */}
-        <p
-          className="text-xs tracking-[0.22em] uppercase font-semibold mb-4"
-          style={{ color: "var(--sunset-orange)" }}
-        >
-          Radio Station
-        </p>
+      {/* 프로그램 스위처 탭 */}
+      <div
+        className="mb-5 p-1 flex gap-1 rounded-lg"
+        style={{ background: "rgba(255,255,255,0.04)" }}
+      >
+        {(["bcamp", "byulbam"] as const).map((id) => {
+          const p = PROGRAMS[id];
+          const isActive = programId === id;
+          return (
+            <Link
+              key={id}
+              href={p.basePath}
+              className="flex-1 text-center rounded-md py-1.5 text-xs font-semibold transition-all"
+              style={
+                isActive
+                  ? { background: `${p.accent}22`, color: p.accent }
+                  : { color: "var(--text-muted)", opacity: 0.45 }
+              }
+            >
+              {id === "bcamp" ? "배캠" : "별밤"}
+            </Link>
+          );
+        })}
+      </div>
 
-        {/* 프로그램 타이틀 */}
+      {/* 프로그램 정보 */}
+      <div className="mb-4 px-2">
         <h2
           className="font-black leading-none mb-1 whitespace-pre-line"
-          style={{ fontSize: "1.45rem", letterSpacing: "-0.02em", color: "var(--text-primary)" }}
+          style={{ fontSize: "1.25rem", letterSpacing: "-0.02em", color: "var(--text-primary)" }}
         >
           {program.nameShort}
         </h2>
         <p
-          className="text-xs mt-1 mb-5 tracking-widest"
-          style={{ color: "var(--text-muted)", opacity: 0.55 }}
+          className="text-xs mt-1 mb-4"
+          style={{ color: "var(--text-muted)", opacity: 0.45 }}
         >
           {program.freq}
         </p>
 
-        {/* 구분선 */}
-        <div style={{ borderTop: "1px solid rgba(255,255,255,0.07)", marginBottom: "1.25rem" }} />
+        <div style={{ borderTop: "1px solid rgba(255,255,255,0.07)", marginBottom: "1rem" }} />
 
-        {/* unofficial 배지 */}
         <span
           className="inline-block text-xs px-2 py-0.5"
           style={{
             border: "1px solid rgba(138,155,176,0.2)",
             color: "var(--text-muted)",
-            opacity: 0.55,
+            opacity: 0.45,
             borderRadius: "2px",
             fontSize: "0.65rem",
             letterSpacing: "0.08em",
@@ -131,13 +160,8 @@ export default function Sidebar({ bcampDates, byulbamDates }: SidebarProps) {
                 className="flex items-center justify-between px-3 py-2.5 rounded-lg text-sm transition-all"
                 style={
                   isActive
-                    ? {
-                        background: "rgba(232, 112, 74, 0.15)",
-                        color: "var(--sunset-orange)",
-                      }
-                    : {
-                        color: "var(--text-muted)",
-                      }
+                    ? { background: accentBg, color: accent }
+                    : { color: "var(--text-muted)" }
                 }
               >
                 <div className="flex items-center gap-2 min-w-0">
@@ -145,8 +169,8 @@ export default function Sidebar({ bcampDates, byulbamDates }: SidebarProps) {
                     <span
                       className="shrink-0 font-semibold rounded-full"
                       style={{
-                        background: "var(--sunset-orange)",
-                        color: "#fff",
+                        background: newBadgeBg,
+                        color: newBadgeColor,
                         fontSize: "9px",
                         padding: "1px 6px",
                       }}
@@ -163,7 +187,7 @@ export default function Sidebar({ bcampDates, byulbamDates }: SidebarProps) {
                     {entry.songCount}
                   </span>
                   {entry.hasPlaylist && (
-                    <span style={{ color: "var(--sunset-orange)", fontSize: "9px" }}>▶</span>
+                    <span style={{ color: accent, fontSize: "9px" }}>▶</span>
                   )}
                 </div>
               </Link>
@@ -180,14 +204,14 @@ export default function Sidebar({ bcampDates, byulbamDates }: SidebarProps) {
         )}
       </ul>
 
-      {/* 저작권 고지 */}
+      {/* 저작권 */}
       <div className="mt-6 px-2 space-y-1">
-        <p className="text-xs leading-relaxed" style={{ color: "var(--text-muted)", opacity: 0.55 }}>
+        <p className="text-xs leading-relaxed" style={{ color: "var(--text-muted)", opacity: 0.45 }}>
           ⓒ MBC · {program.name}
           <br />
           방송 콘텐츠 저작권은 MBC에 있습니다
         </p>
-        <p className="text-xs" style={{ color: "var(--text-muted)", opacity: 0.35 }}>
+        <p className="text-xs" style={{ color: "var(--text-muted)", opacity: 0.3 }}>
           unofficial fan site — not affiliated with MBC
         </p>
       </div>

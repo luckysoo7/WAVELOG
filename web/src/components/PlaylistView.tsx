@@ -395,15 +395,15 @@ export default function PlaylistView({
             )}
           </div>
 
-          {/* 중앙 — 프로그램 허브 홈 */}
+          {/* 중앙 — 다른 프로그램으로 전환 */}
           <Link
-            href={theme.basePath}
+            href={isbyulbam ? "/bcamp" : "/byulbam"}
             className="date-nav-center"
-            style={{ color: accent }}
+            style={{ color: isbyulbam ? "#e8704a" : "#c4a84e" }}
           >
-            <span style={{ fontSize: "16px", lineHeight: 1 }}>⌂</span>
-            <span style={{ fontSize: "9px", opacity: 0.55, letterSpacing: "0.08em", textTransform: "uppercase", display: "block", marginTop: "2px" }}>
-              {isbyulbam ? "별밤" : "배캠"}
+            <span style={{ fontSize: "14px", lineHeight: 1 }}>⇄</span>
+            <span style={{ fontSize: "9px", opacity: 0.6, letterSpacing: "0.08em", textTransform: "uppercase", display: "block", marginTop: "2px" }}>
+              {isbyulbam ? "배캠" : "별밤"}
             </span>
           </Link>
 
