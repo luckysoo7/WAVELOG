@@ -199,17 +199,17 @@ export default function PlaylistView({
             >
               {formatDate(data.date)} ({data.dayOfWeek.charAt(0)})
             </p>
-            {/* 방송 정보 — 작게 */}
-            <p className="text-xs mt-1.5" style={{ color: "var(--text-muted)", opacity: 0.7 }}>
-              {theme.broadcastTime}
-            </p>
+            {/* 방송 정보 + 진행 바 — 한 줄, bar가 남은 공간 채움 */}
             {total > 0 && (
-              <div className="mt-2 flex items-center gap-2">
-                {/* 진행 바 */}
+              <div className="flex items-center gap-2 mt-1.5" style={{ minWidth: 0 }}>
+                <span className="text-xs shrink-0" style={{ color: "var(--text-muted)", opacity: 0.7 }}>
+                  {theme.broadcastTime}
+                </span>
                 <div
                   style={{
-                    flex: "0 0 120px",
-                    height: "3px",
+                    flex: 1,
+                    minWidth: "20px",
+                    height: "2px",
                     borderRadius: "2px",
                     background: "rgba(138,155,176,0.15)",
                     overflow: "hidden",
@@ -226,7 +226,7 @@ export default function PlaylistView({
                     }}
                   />
                 </div>
-                <span className="text-xs tabular-nums" style={{ color: "var(--text-muted)", opacity: 0.55 }}>
+                <span className="text-xs tabular-nums shrink-0" style={{ color: "var(--text-muted)", opacity: 0.55 }}>
                   {matchedCount}/{total} YouTube
                 </span>
               </div>
