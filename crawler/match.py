@@ -159,7 +159,12 @@ def process_episode(
         playlist_id = create_playlist(
             youtube,
             title=f"{prog_title} {date_str}",
-            description=f"출처: MBC {prog_title}\n{_PROGRAM_SOURCE.get(program_id, '')}",
+            description=(
+                "K-Radio Archive가 자동으로 수집한 선곡표입니다.\n"
+                "매일 방송되는 라디오 선곡을 YouTube 플레이리스트로 기록하는 서비스입니다.\n"
+                "계정을 팔로우하시거나, https://bcamp-daily.vercel.app 에서 확인하세요.\n"
+                f"\n{prog_title} {date_str} 방송분"
+            ),
         )
         units_used += UNITS_CREATE
         print(f"  플레이리스트 생성: {playlist_id}")
