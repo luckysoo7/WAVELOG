@@ -84,7 +84,7 @@ export default function DisclaimerButton() {
             <ul
               style={{
                 fontSize: "10.5px",
-                color: "var(--text-muted)",
+                color: "var(--text-primary)",
                 lineHeight: 1.7,
                 listStyle: "none",
                 padding: 0,
@@ -103,7 +103,6 @@ export default function DisclaimerButton() {
               style={{
                 fontSize: "9.5px",
                 color: "var(--text-muted)",
-                opacity: 0.65,
                 marginTop: "10px",
               }}
             >
