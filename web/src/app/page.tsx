@@ -371,7 +371,7 @@ export default function HomePage() {
         className="pb-10"
         style={{ borderTop: "1px solid rgba(255,255,255,0.05)", paddingTop: "1.5rem" }}
       >
-        <p className="text-xs leading-relaxed" style={{ color: "var(--text-muted)", opacity: 0.65 }}>
+        <p className="text-xs leading-relaxed" style={{ color: "var(--text-muted)" }}>
           ⓒ MBC — 방송 콘텐츠 저작권은 MBC에 있습니다
           <br />
           unofficial fan site · not affiliated with MBC

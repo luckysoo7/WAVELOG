@@ -62,6 +62,15 @@
 
 ## 🟡 Later
 
+### Android 앱 (Play Store)
+
+- [ ] **TWA (Trusted Web Activity)** — 기존 Vercel 웹앱 래핑
+  - 1단계: PWA 설정 (manifest.json + service worker)
+  - 2단계: Bubblewrap CLI로 .aab 빌드
+  - 3단계: Play Store 등록 + assetlinks.json 도메인 인증
+  - 심사 통과용 차별화: Firebase 푸시 알림 (새 에피소드 알림) 1개 권장
+  - 예상 공수: 2~3일
+
 ### 라디오 프로그램 확장
 
 - [ ] **가요광장 (KBS Cool FM 89.1MHz)** — 이수지 DJ, 1981년~, 가요 중심. 배캠 직후 슬롯(저녁 8~10시). KBS 선곡표 URL 구조 확인 필요. 기존 크롤러 재사용 가능성 높음.
