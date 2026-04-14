@@ -217,7 +217,7 @@ export default async function PreviewPage({
                     <div className="flex-1 min-w-0">
                       <h2 className="font-bold leading-tight mb-1.5" style={{ fontSize: "1.2rem", letterSpacing: "-0.02em" }}>별이 빛나는 밤에</h2>
                       <p className="text-xs tabular-nums" style={{ color: "var(--text-muted)", opacity: 0.65 }}>
-                        매일 밤 10시{byulbamDates.length > 0 && ` · ${byulbamDates.length}개 에피소드`}
+                        매일 밤 8시{byulbamDates.length > 0 && ` · ${byulbamDates.length}개 에피소드`}
                       </p>
                     </div>
                     <span className="text-lg shrink-0 mt-0.5 transition-transform duration-300 group-hover:translate-x-1" style={{ color: "#c4a84e", opacity: 0.7 }}>→</span>

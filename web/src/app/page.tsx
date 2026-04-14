@@ -261,7 +261,7 @@ export default function HomePage() {
                       className="text-xs tabular-nums"
                       style={{ color: "var(--text-muted)", opacity: 0.65 }}
                     >
-                      매일 밤 10시
+                      매일 밤 8시
                       {byulbamDates.length > 0 && ` · ${byulbamDates.length}개 에피소드`}
                     </p>
                     <p className="text-xs mt-1" style={{ color: "var(--text-muted)", opacity: 0.6 }}>
@@ -346,7 +346,7 @@ export default function HomePage() {
                   별이 빛나는 밤에
                 </h2>
                 <p className="text-xs mb-3" style={{ color: "var(--text-muted)", opacity: 0.6 }}>
-                  매일 밤 10시 · since 1969
+                  매일 밤 8시 · since 1969
                 </p>
                 <span
                   className="inline-block text-xs px-2 py-0.5"

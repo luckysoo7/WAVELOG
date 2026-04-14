@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 
 interface Props {
-  broadcastHour: number;  // KST 시작 시각 (18 or 22)
+  broadcastHour: number;  // KST 시작 시각 (18 or 20)
   durationHours: number;  // 방송 길이 (2)
   accent: string;
 }
@@ -50,7 +50,7 @@ export default function LiveCountdown({ broadcastHour, durationHours, accent }: 
   const mm = Math.floor((remaining % 3600) / 60);
   const ss = remaining % 60;
 
-  const nextLabel = broadcastHour === 18 ? "오늘 저녁 6시" : "오늘 밤 10시";
+  const nextLabel = broadcastHour === 18 ? "오늘 저녁 6시" : "오늘 밤 8시";
   const progressPct = isLive
     ? ((tick.total - start) / (durationHours * 3600)) * 100
     : ((86400 - remaining) / 86400) * 100;
