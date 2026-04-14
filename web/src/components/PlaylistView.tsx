@@ -439,7 +439,7 @@ export default function PlaylistView({
           {/* 이전 (더 최신) */}
           <div className="date-nav-side">
             {prevEntry ? (
-              <Link href={dateHref(prevEntry)} className="date-nav-btn">
+              <Link href={dateHref(prevEntry)} scroll={false} className="date-nav-btn">
                 <span className="date-nav-arrow">←</span>
                 <span className="date-nav-label">{formatChipDate(prevEntry.date, prevEntry.dayOfWeek)}</span>
               </Link>
@@ -466,7 +466,7 @@ export default function PlaylistView({
           {/* 다음 (더 오래된) */}
           <div className="date-nav-side" style={{ justifyContent: "flex-end" }}>
             {nextEntry ? (
-              <Link href={dateHref(nextEntry)} className="date-nav-btn">
+              <Link href={dateHref(nextEntry)} scroll={false} className="date-nav-btn">
                 <span className="date-nav-label">{formatChipDate(nextEntry.date, nextEntry.dayOfWeek)}</span>
                 <span className="date-nav-arrow">→</span>
               </Link>

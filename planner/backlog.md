@@ -47,6 +47,8 @@
 
 ## 🟡 Later
 
+- [ ] Apple Music MusicKit 연동 — "내 Apple Music에 추가" 버튼. $99/년 Developer Program 필요, API 호출은 무료. 사용자 수요 확인 후 진행.
+
 - [ ] `/discover` TOP 30 선곡 (3개월 데이터 후)
 - [ ] `/discover/artist/[name]` 아티스트 이력
 - [ ] 검색 기능 (빌드 타임 static index)
