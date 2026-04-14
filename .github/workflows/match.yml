@@ -1,11 +1,12 @@
 name: YouTube 백필 매핑 (배캠 + 별밤)
 
-# YouTube 쿼터 리셋: 태평양 자정 = UTC 07:00 (PDT 기준, 4~10월)
-# 07:10 UTC = 16:10 KST — 리셋 직후, 당일 크롤(13:20/15:20 UTC) 이전
-# → 전날까지 누락된 에피소드를 처리하기 가장 좋은 타이밍
+# YouTube 쿼터 리셋: 태평양 자정
+#   PDT(4~10월): UTC-7 → 07:00 UTC 리셋
+#   PST(11~3월): UTC-8 → 08:00 UTC 리셋
+# 08:15 UTC = 17:15 KST — PDT/PST 양쪽 다 리셋 이후, 당일 크롤(13:20 UTC) 이전
 on:
   schedule:
-    - cron: '10 7 * * *'   # 16:10 KST (07:10 UTC)
+    - cron: '15 8 * * *'   # 17:15 KST (08:15 UTC) — PST/PDT 모두 안전
   workflow_dispatch:
     inputs:
       budget:

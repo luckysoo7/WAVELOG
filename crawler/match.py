@@ -188,28 +188,36 @@ def process_episode(
         key = _cache_key(song["title"], song["artist"])
         cached_id = cache.get(key)
 
-        if cached_id:
-            video_id, video_title, channel = cached_id, None, None
-            print(f"    ✓ {song['order']:2d}. {song['title']} → [캐시]")
-        else:
-            results = search_videos(youtube, f"{song['title']} {song['artist']}", max_results=1)
-            units_used += UNITS_SEARCH
-            if not results:
-                print(f"    ✗ {song['order']:2d}. {song['title']} — 검색 결과 없음")
-                continue
-            v = results[0]
-            video_id, video_title, channel = v["video_id"], v["title"], v["channel"]
-            cache[key] = video_id
-            print(f"    ✓ {song['order']:2d}. {song['title']} → {v['title'][:50]}")
+        try:
+            if cached_id:
+                video_id, video_title, channel = cached_id, None, None
+                print(f"    ✓ {song['order']:2d}. {song['title']} → [캐시]")
+            else:
+                results = search_videos(youtube, f"{song['title']} {song['artist']}", max_results=1)
+                units_used += UNITS_SEARCH
+                if not results:
+                    print(f"    ✗ {song['order']:2d}. {song['title']} — 검색 결과 없음")
+                    continue
+                v = results[0]
+                video_id, video_title, channel = v["video_id"], v["title"], v["channel"]
+                cache[key] = video_id
+                print(f"    ✓ {song['order']:2d}. {song['title']} → {v['title'][:50]}")
 
-        add_to_playlist(youtube, playlist_id, video_id)
-        units_used += UNITS_ADD
+            add_to_playlist(youtube, playlist_id, video_id)
+            units_used += UNITS_ADD
 
-        conn = connect(DB_PATH)
-        update_song_match(conn, episode_id, song["order"], video_id, video_title, channel)
-        conn.close()
+            conn = connect(DB_PATH)
+            update_song_match(conn, episode_id, song["order"], video_id, video_title, channel)
+            conn.close()
 
-        newly_matched += 1
+            newly_matched += 1
+
+        except QuotaExceededError:
+            raise  # 쿼터 초과는 상위로 전파 (루프 중단)
+        except Exception as e:
+            # DB 오류 등 개별 곡 실패 — 로그 후 계속 진행
+            # (YouTube에 이미 추가됐을 수 있지만 다음 실행에서 video_id IS NULL 체크로 감지 불가)
+            print(f"    [경고] {song['order']:2d}. {song['title']} — 처리 실패, 스킵: {e}")
 
     if newly_matched > 0:
         conn = connect(DB_PATH)
