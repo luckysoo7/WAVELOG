@@ -17,11 +17,11 @@ const THEMES = {
     heroImage: "/byulbam-hero.png",
     label: "MBC FM4U 91.9",
     ambientClass: "ambient-byulbam",
-    heroBg: "linear-gradient(to bottom, #050e0a 0%, #050c0a 100%)",
+    heroBg: "linear-gradient(to bottom, rgba(5,14,10,0.6) 0%, transparent 100%)",
     spectrumLine: "linear-gradient(to right, transparent, #4a7a5a 8%, #c4a84e 35%, #e8d878 52%, #c4a84e 68%, #4a7a5a 88%, transparent)",
     trackRowClass: "track-row-byulbam",
-    heroFade: "linear-gradient(to bottom, transparent 50%, rgba(5,10,8,0.7) 80%, #050c0a 100%)",
-    pageBg: "#050c0a",
+    heroFade: "linear-gradient(to bottom, transparent 25%, rgba(0,0,0,0.5) 55%, rgba(5,16,10,0.92) 70%, transparent 100%)",
+    pageBg: "radial-gradient(ellipse 100% 60% at 50% 0%, rgba(40,120,80,0.16) 0%, transparent 55%), radial-gradient(ellipse 60% 80% at 70% 50%, rgba(196,168,78,0.07) 0%, transparent 70%), #05100a",
     basePath: "/byulbam",
   },
   bcamp: {
@@ -29,11 +29,11 @@ const THEMES = {
     heroImage: "/bcamp-hero.png",
     label: "MBC FM4U 91.9",
     ambientClass: "ambient-bcamp",
-    heroBg: "linear-gradient(to bottom, #120a03 0%, #0d1720 100%)",
+    heroBg: "linear-gradient(to bottom, rgba(18,10,3,0.6) 0%, transparent 100%)",
     spectrumLine: "linear-gradient(to right, transparent, #ff4444 8%, #ff8800 22%, #ffee00 38%, #44cc00 52%, #00aaff 66%, #6644ff 82%, transparent)",
     trackRowClass: "track-row-bcamp",
-    heroFade: "linear-gradient(to bottom, transparent 50%, rgba(18,10,3,0.7) 80%, #0d1720 100%)",
-    pageBg: "#0d1720",
+    heroFade: "linear-gradient(to bottom, rgba(0,0,0,0.35) 0%, transparent 18%, transparent 30%, rgba(0,0,0,0.75) 58%, rgba(13,11,6,0.97) 72%, transparent 100%), linear-gradient(to right, rgba(13,11,6,0.7) 0%, transparent 25%, transparent 75%, rgba(13,11,6,0.7) 100%)",
+    pageBg: "radial-gradient(ellipse 100% 60% at 50% 0%, rgba(220,170,60,0.14) 0%, transparent 55%), radial-gradient(ellipse 60% 80% at 30% 50%, rgba(180,140,30,0.09) 0%, transparent 70%), #0d0b06",
     basePath: "/bcamp",
   },
 } as const;
@@ -111,14 +111,18 @@ export default function PlaylistView({
     >
       <section className="hero-date-stack" aria-label={`${programName} 날짜 헤더`}>
         {/* ── HERO ─────────────────────────────────────────────── */}
-        <div className="hero-fixed" style={{ background: theme.heroBg }}>
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src={theme.heroImage} alt={programName} className="hero-fixed-img" />
+        <div className="hero-fixed">
+          {/* 이미지만 hero 높이로 clip — fade는 아래로 자유롭게 흘러내림 */}
+          <div className="hero-fixed-img-clip">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src={theme.heroImage} alt={programName} className="hero-fixed-img" />
+          </div>
           <div className="hero-fixed-fade" style={{ background: theme.heroFade }} />
         </div>
 
         {/* ── 날짜 오버랩 ────────────────────────────────────── */}
-        <div className="date-overlap" style={{ maxWidth: "760px", marginLeft: "auto", marginRight: "auto", paddingLeft: "2rem", paddingRight: "2rem" }}>
+        <div className="date-overlap">
+        <div style={{ maxWidth: "760px", marginLeft: "auto", marginRight: "auto", paddingLeft: "2rem", paddingRight: "2rem" }}>
 
           {/* 프로그램 라벨 + 상태 칩 */}
           <div className="flex items-center gap-3 mb-4 flex-wrap">
@@ -204,7 +208,8 @@ export default function PlaylistView({
               </div>
             )}
           </div>
-        </div>
+        </div>{/* maxWidth inner */}
+        </div>{/* date-overlap */}
       </section>
 
       {/* ── 날짜 칩 스트립 (A안) ─────────────────────────── */}

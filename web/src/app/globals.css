@@ -11,7 +11,11 @@
 }
 
 body {
-  background-color: var(--deep-navy);
+  background:
+    radial-gradient(ellipse 100% 60% at 50% 0%, rgba(200,100,40,0.12) 0%, transparent 55%),
+    radial-gradient(ellipse 60% 80% at 50% 50%, rgba(120,60,20,0.08) 0%, transparent 70%),
+    #0c0906;
+  background-attachment: fixed;
   color: var(--text-primary);
   font-family: "Pretendard Variable", "Pretendard", -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
 }
@@ -57,12 +61,19 @@ body::before {
   margin-bottom: var(--date-pullout);
 }
 
-/* hero 컨테이너 — 고정 높이, 이미지가 안에서 절대 위치 */
+/* hero 컨테이너 — overflow visible: fade가 하단으로 흘러내릴 수 있게 */
 .hero-fixed {
   grid-area: stack;
   position: relative;
   width: 100%;
   height: var(--hero-height);
+  overflow: visible;
+}
+
+/* 이미지 전용 clip wrapper — 이미지만 hero 높이로 잘림 */
+.hero-fixed-img-clip {
+  position: absolute;
+  inset: 0;
   overflow: hidden;
 }
 
@@ -74,13 +85,16 @@ body::before {
   height: 100%;
   object-fit: cover;
   object-position: right top;
-  filter: brightness(0.62) saturate(1.2);
+  filter: brightness(0.48) saturate(1.1);
 }
 
-/* hero 하단 fade — 이미지를 페이지 배경으로 자연스럽게 디졸브 */
+/* hero 하단 fade — 이미지 높이의 150%까지 연장해서 pageBg로 자연스럽게 디졸브 */
 .hero-fixed-fade {
   position: absolute;
-  inset: 0;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 150%;
   pointer-events: none;
 }
 
