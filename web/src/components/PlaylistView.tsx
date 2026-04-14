@@ -172,26 +172,35 @@ export default function PlaylistView({
             )}
           </div>
 
-          {/* 날짜 타이포 */}
+          {/* 프로그램명 — 제일 크게, 흰색 */}
           <h1
-            className="font-black leading-none date-title"
+            className="font-black leading-none"
             data-testid="date-heading"
             style={{
-              letterSpacing: "-0.045em",
+              fontSize: "clamp(2rem, 8vw, 3.2rem)",
+              letterSpacing: "-0.03em",
               color: "#f0ebe3",
-              lineHeight: 0.86,
-              textShadow: `0 4px 80px rgba(0,0,0,0.9), 0 0 120px ${accent}22`,
+              lineHeight: 1.05,
+              textShadow: `0 4px 80px rgba(0,0,0,0.9)`,
             }}
           >
-            {formatDate(data.date)}
+            {programName}
           </h1>
 
-          {/* 메타 + 매핑 진행 바 */}
-          <div className="mt-4">
-            <p className="text-sm font-medium" style={{ color: "var(--text-muted)" }}>
-              {programName} · {data.dayOfWeek} · {total}곡
+          {/* 날짜 + 요일 — 60% 크기, 흰색 */}
+          <div className="mt-2">
+            <p
+              className="font-semibold tabular-nums"
+              style={{
+                fontSize: "clamp(1.2rem, 4.8vw, 1.9rem)",
+                letterSpacing: "-0.02em",
+                color: "#f0ebe3",
+              }}
+            >
+              {formatDate(data.date)} ({data.dayOfWeek.charAt(0)})
             </p>
-            <p className="text-xs mt-0.5" style={{ color: "var(--text-muted)", opacity: 0.5 }}>
+            {/* 방송 정보 — 흐리고 작게 */}
+            <p className="text-xs mt-1.5" style={{ color: "var(--text-muted)", opacity: 0.45 }}>
               {theme.broadcastTime}
             </p>
             {total > 0 && (

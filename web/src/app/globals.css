@@ -149,18 +149,7 @@ body::before {
   opacity: 1 !important;
 }
 
-/* ── 날짜 타이포 반응형 — md 이상에서 사이드바(288px) 고려 ────── */
-.date-title {
-  font-size: clamp(5rem, 18vw, 11rem);
-}
-@media (min-width: 768px) {
-  /* 사이드바 288px 차감 후 콘텐츠 영역 기준으로 재계산
-     Z Fold4 내부 디스플레이 CSS 뷰포트 실측 884px 기준: 10vw=88.4px 에서 깨짐 확인
-     → 8vw=70.7px 로 여유 확보 */
-  .date-title {
-    font-size: clamp(3rem, 8vw, 7rem);
-  }
-}
+/* .date-title — 삭제됨 (2026-04-15). 프로그램명이 메인 헤딩으로 변경, 인라인 clamp 사용 */
 
 /* ── 날짜 칩 스트립 (A안) ──────────────────────────────────────── */
 .date-chip-strip {
