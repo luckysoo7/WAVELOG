@@ -119,7 +119,7 @@ export default function PlaylistView({
   return (
     <article
       className={`relative min-h-screen ${theme.ambientClass}`}
-      style={{ background: theme.pageBg, paddingBottom: "80px" }}
+      style={{ background: theme.pageBg, paddingBottom: "90px" }}
     >
       <section className="hero-date-stack" aria-label={`${programName} 날짜 헤더`}>
         {/* ── HERO ─────────────────────────────────────────────── */}
@@ -477,7 +477,7 @@ export default function PlaylistView({
               <span style={{ fontSize: "9px", opacity: 0.55, letterSpacing: "0.06em", marginTop: "2px" }}>홈</span>
             </Link>
             <a
-              href={isbyulbam ? "https://www.imbc.com/broad/radio/fm4u/byulnight/" : "https://www.imbc.com/broad/radio/fm4u/camp/"}
+              href={isbyulbam ? "https://www.imbc.com/broad/radio/fm4u/starnight/" : "https://www.imbc.com/broad/radio/fm4u/musiccamp/"}
               target="_blank"
               rel="noopener noreferrer"
               style={{

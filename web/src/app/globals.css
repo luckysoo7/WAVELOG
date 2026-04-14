@@ -203,7 +203,7 @@ body::before {
   z-index: 20;
   display: flex;
   align-items: center;
-  height: 52px;
+  height: 62px;
   padding-bottom: env(safe-area-inset-bottom, 0px);
   /* bg + border는 PlaylistView inline style로 프로그램별 오버라이드 */
   background: rgba(10, 9, 6, 0.88);

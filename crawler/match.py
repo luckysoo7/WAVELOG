@@ -54,8 +54,8 @@ _PROGRAM_TITLE = {
 }
 
 _PROGRAM_SOURCE = {
-    "bcamp":   "https://www.imbc.com/broad/radio/fm4u/camp/",
-    "byulbam": "https://www.imbc.com/broad/radio/fm4u/byulnight/",
+    "bcamp":   "https://www.imbc.com/broad/radio/fm4u/musiccamp/",
+    "byulbam": "https://www.imbc.com/broad/radio/fm4u/starnight/",
 }
 
 
