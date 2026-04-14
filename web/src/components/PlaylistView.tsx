@@ -80,9 +80,13 @@ export default function PlaylistView({
   const prevEntry = currentIdx > 0 ? allDates[currentIdx - 1] : null;
   const nextEntry = currentIdx >= 0 && currentIdx < allDates.length - 1 ? allDates[currentIdx + 1] : null;
 
-  // 날짜 칩: 현재 ±3일 (최대 7개)
-  const chipStart = Math.max(0, currentIdx - 3);
-  const chipEnd = Math.min(allDates.length - 1, currentIdx + 3);
+  // 날짜 칩: 항상 7개 고정 — 현재 날짜를 중심으로 슬라이딩 윈도우
+  // 경계(최신/최오래된)에서는 윈도우를 반대 방향으로 밀어서 개수 유지
+  const CHIP_COUNT = 7;
+  let chipStart = currentIdx - Math.floor(CHIP_COUNT / 2);
+  let chipEnd = chipStart + CHIP_COUNT - 1;
+  if (chipStart < 0) { chipEnd -= chipStart; chipStart = 0; }
+  if (chipEnd > allDates.length - 1) { chipStart = Math.max(0, chipStart - (chipEnd - (allDates.length - 1))); chipEnd = allDates.length - 1; }
   const nearbyDates = allDates.slice(chipStart, chipEnd + 1);
 
   function dateHref(entry: DateEntry): string {
