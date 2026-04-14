@@ -162,11 +162,9 @@ def process_episode(
             description=(
                 "알고리즘이 아닌, DJ가 직접 고른 음악들입니다.\n"
                 "\n"
-                "K-Radio Archive는 배철수의 음악캠프·별이 빛나는 밤에 선곡표를 매일 기록하는 아카이브예요.\n"
-                "오늘 방송부터 오래된 에피소드까지 날짜별로 찾아볼 수 있습니다.\n"
-                "라디오를 좋아하는 학생이 만든 무료 서비스입니다.\n"
-                "\n"
-                "https://bcamp-daily.vercel.app\n"
+                "K-Radio Archive는 DJ들의 멋진 선곡표를 매일 기록하는 아카이브예요.\n"
+                "채널을 구독하고 매일 올라오는 재생목록을 확인해보세요.\n"
+                "https://bcamp-daily.vercel.app에서도 확인 가능합니다.\n"
                 f"\n{prog_title} {date_str} 방송분"
             ),
         )
