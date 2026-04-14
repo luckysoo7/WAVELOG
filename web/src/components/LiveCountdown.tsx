@@ -170,15 +170,15 @@ export default function LiveCountdown({ broadcastHour, durationHours, accent }: 
         <>
           <p
             style={{
-              fontSize: "0.58rem",
-              letterSpacing: "0.28em",
-              color: "var(--text-muted)",
-              opacity: 0.45,
-              textTransform: "uppercase",
+              fontSize: "0.75rem",
+              letterSpacing: "0.1em",
+              color: "var(--text-primary)",
+              opacity: 0.85,
+              fontWeight: 600,
               marginBottom: "1rem",
             }}
           >
-            Next Broadcast
+            다음 방송까지
           </p>
 
           <div
