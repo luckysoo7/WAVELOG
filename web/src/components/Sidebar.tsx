@@ -16,6 +16,7 @@ interface ProgramConfig {
   nameShort: string;
   freq: string;
   basePath: string;
+  officialUrl: string;
   dates: DateEntry[];
   accent: string;
   accentBg: string;
@@ -35,6 +36,7 @@ const PROGRAMS: Record<string, ProgramConfig> = {
     nameShort: "별이 빛나는\n밤에",
     freq: "매일 밤 10시 · since 1969",
     basePath: "/byulbam",
+    officialUrl: "https://www.imbc.com/broad/radio/fm4u/byulnight/",
     accent: "#c4a84e",
     accentBg: "rgba(196,168,78,0.15)",
     newBadgeBg: "#c4a84e",
@@ -47,6 +49,7 @@ const PROGRAMS: Record<string, ProgramConfig> = {
     nameShort: "배철수의\n음악캠프",
     freq: "매일 저녁 6시 · since 1990",
     basePath: "/bcamp",
+    officialUrl: "https://www.imbc.com/broad/radio/fm4u/camp/",
     accent: "#e8704a",
     accentBg: "rgba(232,112,74,0.15)",
     newBadgeBg: "#e8704a",
@@ -214,6 +217,17 @@ export default function Sidebar({ bcampDates, byulbamDates }: SidebarProps) {
         <p className="text-xs" style={{ color: "var(--text-muted)", opacity: 0.3 }}>
           unofficial fan site — not affiliated with MBC
         </p>
+        <a
+          href={program.officialUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="text-xs block"
+          style={{ color: "var(--text-muted)", opacity: 0.4, textDecoration: "none" }}
+          onMouseEnter={e => (e.currentTarget.style.opacity = "0.7")}
+          onMouseLeave={e => (e.currentTarget.style.opacity = "0.4")}
+        >
+          공식 홈페이지 ↗
+        </a>
       </div>
     </nav>
   );
