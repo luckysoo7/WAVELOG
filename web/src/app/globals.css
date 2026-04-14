@@ -123,6 +123,12 @@ body::before {
   z-index: 2;
 }
 
+/* 라이브 배지 펄스 */
+@keyframes live-pulse {
+  0%, 100% { opacity: 1; box-shadow: 0 0 8px currentColor; }
+  50%       { opacity: 0.4; box-shadow: 0 0 3px currentColor; }
+}
+
 /* 트랙 row */
 @keyframes track-reveal {
   from { opacity: 0.15; }

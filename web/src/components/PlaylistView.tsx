@@ -3,6 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import type { PlaylistData, DateEntry } from "@/lib/data";
+import LiveCountdown from "@/components/LiveCountdown";
 
 interface Props {
   data: PlaylistData;
@@ -17,6 +18,7 @@ const THEMES = {
     heroImage: "/byulbam-hero.png",
     label: "MBC FM4U 91.9",
     broadcastTime: "FM 4U 91.9MHz · 매일 밤 10시",
+    broadcastHour: 22,
     ambientClass: "ambient-byulbam",
     heroBg: "linear-gradient(to bottom, rgba(5,14,10,0.6) 0%, transparent 100%)",
     spectrumLine: "linear-gradient(to right, transparent, #4a7a5a 8%, #c4a84e 35%, #e8d878 52%, #c4a84e 68%, #4a7a5a 88%, transparent)",
@@ -30,6 +32,7 @@ const THEMES = {
     heroImage: "/bcamp-hero.png",
     label: "MBC FM4U 91.9",
     broadcastTime: "FM 4U 91.9MHz · 매일 저녁 6시",
+    broadcastHour: 18,
     ambientClass: "ambient-bcamp",
     heroBg: "linear-gradient(to bottom, rgba(18,10,3,0.6) 0%, transparent 100%)",
     spectrumLine: "linear-gradient(to right, transparent, #ff4444 8%, #ff8800 22%, #ffee00 38%, #44cc00 52%, #00aaff 66%, #6644ff 82%, transparent)",
@@ -440,6 +443,12 @@ export default function PlaylistView({
             );
           })}
         </ol>
+
+        <LiveCountdown
+          broadcastHour={theme.broadcastHour}
+          durationHours={2}
+          accent={accent}
+        />
       </main>
 
       {/* ── 하단 고정 날짜 바 — 모바일 + 데스크톱 공통 ──────── */}
