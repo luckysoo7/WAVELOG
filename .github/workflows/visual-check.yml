@@ -1,0 +1,55 @@
+name: 시각 회귀 테스트
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "web/src/**"
+      - "web/public/**"
+      - "web/tests/visual.spec.ts"
+
+jobs:
+  visual:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: web
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+          cache-dependency-path: web/package-lock.json
+
+      - name: 의존성 설치
+        run: npm ci
+
+      - name: Playwright 브라우저 설치
+        run: npx playwright install chromium --with-deps
+
+      - name: Next.js 빌드
+        run: npm run build
+
+      - name: 시각 테스트 실행
+        run: npx playwright test tests/visual.spec.ts --reporter=line
+        env:
+          BASE_URL: http://localhost:3000
+
+      - name: 스크린샷 artifact 업로드
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: visual-screenshots-${{ github.sha }}
+          path: web/test-results/screenshots/
+          retention-days: 14
+
+      - name: Playwright 리포트 업로드 (실패 시)
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report-${{ github.sha }}
+          path: web/playwright-report/
+          retention-days: 7
