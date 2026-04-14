@@ -515,14 +515,12 @@ export default function PlaylistView({
             >
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
-                src="https://www.imbc.com/favicon.ico"
+                src="/mbc-logo.svg"
                 alt="MBC"
-                width={16}
-                height={16}
-                style={{ borderRadius: "3px", opacity: 0.75 }}
-                onError={e => { (e.currentTarget as HTMLImageElement).style.display = "none"; (e.currentTarget.nextSibling as HTMLElement).style.display = "block"; }}
+                width={22}
+                height={14}
+                style={{ opacity: 0.85 }}
               />
-              <span style={{ fontSize: "13px", lineHeight: 1, display: "none" }}>📻</span>
               <span style={{ fontSize: "9px", opacity: 0.55, letterSpacing: "0.06em", marginTop: "2px" }}>MBC</span>
             </a>
           </div>
