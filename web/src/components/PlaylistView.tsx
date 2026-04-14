@@ -255,7 +255,7 @@ export default function PlaylistView({
       )}
 
       {/* ── 트랙 리스트 ────────────────────────────────────── */}
-      <main className="tracklist-glass px-8 max-w-[760px] mx-auto" style={{ paddingTop: "2rem" }}>
+      <main className="tracklist-glass px-8 max-w-[760px] mx-auto" style={{ paddingTop: "1rem" }}>
         <header className="pb-8">
           <div
             style={{
