@@ -265,11 +265,11 @@ export default function PlaylistView({
 
       {/* ── 트랙 리스트 ────────────────────────────────────── */}
       <main className="tracklist-glass px-8 max-w-[760px] mx-auto" style={{ paddingTop: "1rem" }}>
-        <header className="pb-8">
+        <header className={data.youtube ? "pb-8" : "pb-2"}>
           <div
             style={{
               height: "1px",
-              marginBottom: "1.5rem",
+              marginBottom: data.youtube ? "1.5rem" : "0",
               background: theme.spectrumLine,
               opacity: 0.5,
             }}
