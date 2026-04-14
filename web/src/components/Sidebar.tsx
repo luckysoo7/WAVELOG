@@ -80,12 +80,20 @@ export default function Sidebar({ bcampDates, byulbamDates }: SidebarProps) {
       <div className="mb-5 px-2">
         <Link
           href="/"
-          className="flex items-center gap-1.5 group"
-          style={{ color: "var(--text-muted)", opacity: 0.5 }}
+          className="flex items-center gap-2 group"
+          style={{ textDecoration: "none" }}
         >
-          <span className="text-xs">←</span>
-          <span className="text-xs tracking-[0.18em] uppercase font-semibold transition-opacity group-hover:opacity-100">
-            Korean Radio Archive
+          <span
+            className="text-base transition-opacity group-hover:opacity-70"
+            style={{ color: "var(--text-muted)", opacity: 0.6, lineHeight: 1 }}
+          >
+            ⌂
+          </span>
+          <span
+            className="font-bold tracking-tight transition-opacity group-hover:opacity-100"
+            style={{ color: "var(--text-primary)", opacity: 0.85, fontSize: "0.82rem", letterSpacing: "-0.01em" }}
+          >
+            K-Radio Archive
           </span>
         </Link>
       </div>
