@@ -21,7 +21,7 @@ const THEMES = {
     spectrumLine: "linear-gradient(to right, transparent, #4a7a5a 8%, #c4a84e 35%, #e8d878 52%, #c4a84e 68%, #4a7a5a 88%, transparent)",
     trackRowClass: "track-row-byulbam",
     heroFade: "linear-gradient(to bottom, transparent 25%, rgba(0,0,0,0.5) 55%, rgba(5,16,10,0.92) 70%, transparent 100%)",
-    pageBg: "radial-gradient(ellipse 100% 60% at 50% 0%, rgba(40,120,80,0.16) 0%, transparent 55%), radial-gradient(ellipse 60% 80% at 70% 50%, rgba(196,168,78,0.07) 0%, transparent 70%), #05100a",
+    pageBg: "radial-gradient(ellipse 100% 60% at 50% 0%, rgba(40,120,80,0.16) 0%, transparent 55%), radial-gradient(ellipse 60% 80% at 70% 50%, rgba(196,168,78,0.07) 0%, transparent 70%), #0a1a12",
     basePath: "/byulbam",
   },
   bcamp: {
@@ -33,7 +33,7 @@ const THEMES = {
     spectrumLine: "linear-gradient(to right, transparent, #ff4444 8%, #ff8800 22%, #ffee00 38%, #44cc00 52%, #00aaff 66%, #6644ff 82%, transparent)",
     trackRowClass: "track-row-bcamp",
     heroFade: "linear-gradient(to bottom, rgba(0,0,0,0.35) 0%, transparent 18%, transparent 30%, rgba(0,0,0,0.75) 58%, rgba(13,11,6,0.97) 72%, transparent 100%), linear-gradient(to right, rgba(13,11,6,0.7) 0%, transparent 25%, transparent 75%, rgba(13,11,6,0.7) 100%)",
-    pageBg: "radial-gradient(ellipse 100% 60% at 50% 0%, rgba(220,170,60,0.14) 0%, transparent 55%), radial-gradient(ellipse 60% 80% at 30% 50%, rgba(180,140,30,0.09) 0%, transparent 70%), #0d0b06",
+    pageBg: "radial-gradient(ellipse 100% 60% at 50% 0%, rgba(220,170,60,0.14) 0%, transparent 55%), radial-gradient(ellipse 60% 80% at 30% 50%, rgba(180,140,30,0.09) 0%, transparent 70%), #181410",
     basePath: "/bcamp",
   },
 } as const;
