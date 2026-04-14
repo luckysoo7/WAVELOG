@@ -68,9 +68,6 @@ function formatViewCount(n: number): string {
   return String(n);
 }
 
-function isTouchDevice(): boolean {
-  return typeof window !== "undefined" && window.matchMedia("(hover: none)").matches;
-}
 
 export default function PlaylistView({
   data,
@@ -105,12 +102,6 @@ export default function PlaylistView({
     return entry.date === allDates[0]?.date ? theme.basePath : `${theme.basePath}/${entry.date}`;
   }
 
-  const handleMouseEnter = (order: number) => {
-    if (!isTouchDevice()) setExpandedId(order);
-  };
-  const handleMouseLeave = () => {
-    if (!isTouchDevice()) setExpandedId(null);
-  };
   const handleClick = (order: number) => {
     setExpandedId((prev) => (prev === order ? null : order));
   };
@@ -338,8 +329,6 @@ export default function PlaylistView({
                   borderBottom: isExpanded ? "none" : "1px solid var(--track-border)",
                   cursor: "pointer",
                 }}
-                onMouseEnter={() => song.videoId && handleMouseEnter(song.order)}
-                onMouseLeave={handleMouseLeave}
                 onClick={() => handleClick(song.order)}
               >
                 <div className="flex items-center gap-4 py-3.5 group">
