@@ -44,6 +44,9 @@ jobs:
       - name: 의존성 설치
         run: pip install -r crawler/requirements.txt
 
+      - name: 신규 에피소드 크롤 (YouTube 없음)
+        run: python -m crawler.crawl --program all
+
       - name: 미매핑 에피소드 사전 확인
         id: check
         run: |
