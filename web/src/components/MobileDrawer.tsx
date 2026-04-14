@@ -15,6 +15,8 @@ export default function MobileDrawer({ bcampDates, byulbamDates }: MobileDrawerP
   const [isOpen, setIsOpen] = useState(false);
   const pathname = usePathname();
 
+  // 홈페이지에서는 모바일 헤더/드로어 불필요
+  const isHome = pathname === "/";
   const isByulbam = pathname.startsWith("/byulbam");
   const programName = isByulbam ? "별이 빛나는 밤에" : "배철수의 음악캠프";
 
@@ -30,6 +32,8 @@ export default function MobileDrawer({ bcampDates, byulbamDates }: MobileDrawerP
       document.body.style.overflow = "";
     };
   }, [isOpen]);
+
+  if (isHome) return null;
 
   return (
     <>

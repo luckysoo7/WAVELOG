@@ -35,11 +35,19 @@ export default function HomePage() {
         </h1>
         <p
           className="text-sm leading-relaxed"
-          style={{ color: "var(--text-muted)", maxWidth: "30rem" }}
+          style={{ color: "var(--text-muted)", maxWidth: "32rem", lineHeight: "1.85" }}
         >
-          배철수, DJ들이 직접 고른 곡들을 매일 기록합니다.
+          오늘 배캠에서 나온 그 곡, 제목이 뭐였더라?
           <br />
-          선곡표 + YouTube 링크 — 오늘 방송부터 1990년 아카이브까지.
+          <br />
+          배철수의 음악캠프, 별이 빛나는 밤에 — DJ가 방송에서 직접 고른 곡들을 날짜별로 기록합니다.
+          곡마다 YouTube 링크가 달려 있어서, 오늘 라디오에서 흘러나온 노래를 바로 찾아 들을 수 있어요.
+          오늘 방송부터 오래된 아카이브까지.
+          <br />
+          <br />
+          <span style={{ opacity: 0.55 }}>
+            라디오 좋아하는 사람이 만들었습니다. 무료, 광고 없음.
+          </span>
         </p>
       </header>
 

@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import Sidebar from "@/components/Sidebar";
+import ConditionalAside from "@/components/ConditionalAside";
 import MobileDrawer from "@/components/MobileDrawer";
 import { loadAllDates } from "@/lib/data";
 
@@ -34,18 +34,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       </head>
       <body>
         <div className="flex min-h-screen">
-          {/* 좌측 사이드바 — glassmorphism, 데스크톱 전용 */}
-          <aside
-            className="hidden md:flex flex-col w-72 shrink-0 sticky top-0 h-screen overflow-y-auto"
-            style={{
-              background: "rgba(255, 255, 255, 0.025)",
-              backdropFilter: "blur(24px)",
-              WebkitBackdropFilter: "blur(24px)",
-              borderRight: "1px solid rgba(255, 255, 255, 0.07)",
-            }}
-          >
-            <Sidebar bcampDates={bcampDates} byulbamDates={byulbamDates} />
-          </aside>
+          {/* 좌측 사이드바 — 프로그램 페이지에서만 표시 (/ 홈에서는 숨김) */}
+          <ConditionalAside bcampDates={bcampDates} byulbamDates={byulbamDates} />
 
           {/* 메인 콘텐츠 */}
           <div className="flex-1 min-w-0 flex flex-col">
