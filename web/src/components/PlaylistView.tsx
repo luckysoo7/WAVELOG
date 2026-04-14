@@ -324,14 +324,14 @@ export default function PlaylistView({
                         }}
                       />
                     )}
-                    <span className="text-right text-xs tabular-nums font-mono" style={{ color, opacity: song.videoId ? 0.85 : 0.35 }}>
+                    <span className="text-right text-xs tabular-nums font-mono" style={{ color, opacity: song.videoId ? 0.85 : 0.55 }}>
                       {song.order}
                     </span>
                   </div>
 
                   <div className="flex-1 min-w-0">
-                    <p className="font-medium text-sm leading-snug truncate" style={{ opacity: song.videoId ? 1 : 0.5 }}>{song.title}</p>
-                    <p className="text-xs mt-0.5 truncate" style={{ color: "var(--text-muted)", opacity: song.videoId ? 1 : 0.5 }}>
+                    <p className="font-medium text-sm leading-snug truncate" style={{ opacity: song.videoId ? 1 : 0.75 }}>{song.title}</p>
+                    <p className="text-xs mt-0.5 truncate" style={{ color: "var(--text-muted)", opacity: song.videoId ? 1 : 0.7 }}>
                       {song.artist}
                     </p>
                   </div>
@@ -352,7 +352,7 @@ export default function PlaylistView({
                     <span
                       className="shrink-0 text-xs"
                       aria-hidden
-                      style={{ color: "var(--text-muted)", opacity: isExpanded ? 0.4 : 0.2, letterSpacing: "0.05em" }}
+                      style={{ color: "var(--text-muted)", opacity: isExpanded ? 0.55 : 0.35, letterSpacing: "0.05em" }}
                     >
                       ···
                     </span>
