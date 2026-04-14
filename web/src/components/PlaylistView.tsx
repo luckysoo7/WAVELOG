@@ -247,7 +247,7 @@ export default function PlaylistView({
             <button
               onClick={() => window.dispatchEvent(new CustomEvent("open-drawer"))}
               className="date-chip"
-              style={{ color: "var(--text-muted)", background: "rgba(255,255,255,0.07)", border: "1px solid rgba(255,255,255,0.22)" }}
+              style={{ color: "#0d0d0d", background: "rgba(240,235,227,0.88)", border: "1px solid rgba(240,235,227,0.5)", fontWeight: 700 }}
               aria-label="전체 날짜 목록 열기"
             >
               전체 ›
