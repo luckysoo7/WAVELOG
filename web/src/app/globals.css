@@ -86,7 +86,7 @@ body::before {
 .date-overlap {
   position: relative;
   z-index: 3;
-  margin-top: clamp(-160px, -20vw, -100px);  /* hero 하단으로 파고듦 (MIN < MAX 순서 중요) */
+  margin-top: clamp(-200px, -38vw, -120px);  /* hero 하단으로 파고듦 — 38vw: 390px→-148px, 884px→-336px(cap -200) */
   padding-bottom: clamp(16px, 2.5vh, 32px);
 }
 
