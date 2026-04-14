@@ -316,6 +316,60 @@ def get_latest_date(conn: sqlite3.Connection, program_id: str) -> str | None:
     return row["date"] if row else None
 
 
+def get_incomplete_episodes(
+    conn: sqlite3.Connection,
+    program_id: str,
+    max_days: int = 30,
+) -> list[dict]:
+    """플레이리스트는 있으나 match_count = 0인 에피소드 목록.
+
+    youtube_playlist_id가 있어도 곡 매핑이 실패한 경우(쿼터 초과 등)를
+    감지해 재시도 대상으로 반환한다. max_days 이내 에피소드만 대상.
+    """
+    rows = conn.execute(
+        """
+        SELECT id, date, youtube_playlist_id
+          FROM episodes
+         WHERE program_id = ?
+           AND youtube_playlist_id IS NOT NULL
+           AND match_count = 0
+           AND date >= date('now', :window)
+         ORDER BY date DESC
+        """,
+        (program_id, f"-{max_days} days"),
+    ).fetchall()
+    return [{"id": r["id"], "date": r["date"], "playlist_id": r["youtube_playlist_id"]} for r in rows]
+
+
+def update_song_match(
+    conn: sqlite3.Connection,
+    episode_id: int,
+    order_no: int,
+    video_id: str,
+    video_title: str | None,
+    channel: str | None,
+) -> None:
+    """단일 곡의 YouTube 매칭 결과 업데이트 (기존 MB 데이터 유지)."""
+    with conn:
+        conn.execute(
+            """
+            UPDATE songs
+               SET video_id = ?, video_title = ?, channel = ?, matched = 1
+             WHERE episode_id = ? AND order_no = ?
+            """,
+            (video_id, video_title, channel, episode_id, order_no),
+        )
+
+
+def increment_match_count(conn: sqlite3.Connection, episode_id: int, delta: int) -> None:
+    """episodes.match_count를 delta만큼 증가."""
+    with conn:
+        conn.execute(
+            "UPDATE episodes SET match_count = match_count + ? WHERE id = ?",
+            (delta, episode_id),
+        )
+
+
 def get_playlist_ids(
     conn: sqlite3.Connection,
     program_id: str,

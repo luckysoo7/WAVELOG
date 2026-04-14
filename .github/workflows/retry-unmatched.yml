@@ -1,0 +1,87 @@
+name: 미매핑 플레이리스트 자동 보충
+
+on:
+  schedule:
+    # UTC 00:10 = KST 09:10 — YouTube 쿼터 리셋(UTC 00:00) 직후
+    # daily.yml(22:00 KST = 13:00 UTC)과 13시간 분리 → 쿼터 독립
+    - cron: '10 0 * * *'
+  workflow_dispatch:
+    inputs:
+      date:
+        description: '특정 날짜만 재시도 (YYYY-MM-DD). 비워두면 최근 30일 전체'
+        required: false
+        default: ''
+
+# daily.yml과 같은 concurrency group — archive.db 동시 쓰기 방지
+concurrency:
+  group: bcamp-daily
+  cancel-in-progress: false
+
+jobs:
+  retry-match:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: 레포 체크아웃
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Python 설정
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: 'pip'
+          cache-dependency-path: crawler/requirements.txt
+
+      - name: 의존성 설치
+        run: pip install -r crawler/requirements.txt
+
+      - name: 미매핑 여부 사전 확인
+        id: check
+        run: |
+          COUNT=$(python3 -c "
+          from crawler.db import connect, get_incomplete_episodes, DB_PATH
+          conn = connect(DB_PATH)
+          rows = get_incomplete_episodes(conn, 'bcamp', 30)
+          conn.close()
+          print(len(rows))
+          ")
+          echo "incomplete=$COUNT" >> "$GITHUB_OUTPUT"
+          echo "재시도 대상: $COUNT 개 에피소드"
+
+      - name: 미매핑 곡 재시도
+        if: steps.check.outputs.incomplete != '0' || github.event.inputs.date != ''
+        env:
+          GOOGLE_CLIENT_SECRET: ${{ secrets.GOOGLE_CLIENT_SECRET }}
+          GOOGLE_REFRESH_TOKEN: ${{ secrets.GOOGLE_REFRESH_TOKEN }}
+        run: |
+          if [ -n "${{ github.event.inputs.date }}" ]; then
+            python -m crawler.main --match-only --date "${{ github.event.inputs.date }}"
+          else
+            python -m crawler.main --match-only
+          fi
+
+      - name: 결과 DB 커밋 + 푸시
+        if: steps.check.outputs.incomplete != '0' || github.event.inputs.date != ''
+        run: |
+          git config user.name "bcamp-daily[bot]"
+          git config user.email "bcamp-daily[bot]@users.noreply.github.com"
+          git add data/
+          git diff --staged --quiet || git commit -m "chore: 미매핑 플레이리스트 보충 ($(date +'%Y-%m-%d'))"
+          git push || (git pull --rebase && git push)
+
+      - name: Discord 실패 알림
+        if: failure()
+        run: |
+          curl -s -X POST "${{ secrets.DISCORD_WEBHOOK_URL }}" \
+            -H "Content-Type: application/json" \
+            -d '{
+              "embeds": [{
+                "title": "❌ 미매핑 재시도 실패",
+                "description": "retry-unmatched 워크플로우가 실패했습니다.\n[확인](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }})",
+                "color": 15158332
+              }]
+            }'
