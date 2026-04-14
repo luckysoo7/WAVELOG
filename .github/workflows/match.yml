@@ -6,7 +6,8 @@ name: YouTube 백필 매핑 (배캠 + 별밤)
 # 14:30 UTC = 23:30 KST — 별밤 종료(22:00) 후 1.5h, MBC 업로드 여유
 on:
   schedule:
-    - cron: '30 14 * * *'   # 23:30 KST (14:30 UTC)
+    - cron: '30 14 * * *'   # 23:30 KST (14:30 UTC) — 메인 실행
+    - cron: '30 0 * * *'    # 09:30 KST (00:30 UTC) — 안전망 (늦은 업로드 캐치)
   workflow_dispatch:
     inputs:
       budget:
