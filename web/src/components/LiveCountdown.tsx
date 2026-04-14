@@ -194,10 +194,10 @@ export default function LiveCountdown({ broadcastHour, durationHours, accent }: 
             }}
           >
             {pad(hh)}
-            <span style={{ opacity: colonVisible ? 0.3 : 0.08, margin: "0 1px" }}>:</span>
+            <span style={{ opacity: colonVisible ? 0.6 : 0.2, margin: "0 1px" }}>:</span>
             {pad(mm)}
-            <span style={{ opacity: colonVisible ? 0.3 : 0.08, margin: "0 1px" }}>:</span>
-            <span style={{ opacity: 0.55 }}>{pad(ss)}</span>
+            <span style={{ opacity: colonVisible ? 0.6 : 0.2, margin: "0 1px" }}>:</span>
+            <span style={{ opacity: 0.85 }}>{pad(ss)}</span>
           </div>
 
           <div
@@ -207,7 +207,7 @@ export default function LiveCountdown({ broadcastHour, durationHours, accent }: 
               gap: "8px",
               padding: "5px 14px",
               borderRadius: "4px",
-              border: "1px solid rgba(138,155,176,0.15)",
+              border: "1px solid rgba(138,155,176,0.35)",
               marginBottom: "0.75rem",
             }}
           >
@@ -216,7 +216,7 @@ export default function LiveCountdown({ broadcastHour, durationHours, accent }: 
                 width: "5px",
                 height: "5px",
                 borderRadius: "50%",
-                background: "rgba(138,155,176,0.35)",
+                background: "rgba(138,155,176,0.7)",
                 display: "inline-block",
               }}
             />
@@ -225,7 +225,7 @@ export default function LiveCountdown({ broadcastHour, durationHours, accent }: 
                 fontSize: "0.65rem",
                 letterSpacing: "0.08em",
                 color: "var(--text-muted)",
-                opacity: 0.55,
+                opacity: 0.85,
               }}
             >
               {nextLabel} · MBC FM4U 91.9
