@@ -177,7 +177,7 @@ export default function PlaylistView({
             className="font-black leading-none"
             data-testid="date-heading"
             style={{
-              fontSize: "clamp(2rem, 8vw, 3.2rem)",
+              fontSize: "clamp(2.3rem, 9.2vw, 3.68rem)",
               letterSpacing: "-0.03em",
               color: "#f0ebe3",
               lineHeight: 1.05,
@@ -188,19 +188,19 @@ export default function PlaylistView({
           </h1>
 
           {/* 날짜 + 요일 — 60% 크기, 흰색 */}
-          <div className="mt-2">
+          <div style={{ marginTop: "0.4rem" }}>
             <p
               className="font-semibold tabular-nums"
               style={{
-                fontSize: "clamp(1.2rem, 4.8vw, 1.9rem)",
+                fontSize: "clamp(1.32rem, 5.3vw, 2.1rem)",
                 letterSpacing: "-0.02em",
                 color: "#f0ebe3",
               }}
             >
               {formatDate(data.date)} ({data.dayOfWeek.charAt(0)})
             </p>
-            {/* 방송 정보 — 흐리고 작게 */}
-            <p className="text-xs mt-1.5" style={{ color: "var(--text-muted)", opacity: 0.45 }}>
+            {/* 방송 정보 — 작게 */}
+            <p className="text-xs mt-1.5" style={{ color: "var(--text-muted)", opacity: 0.7 }}>
               {theme.broadcastTime}
             </p>
             {total > 0 && (
