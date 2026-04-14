@@ -456,17 +456,47 @@ export default function PlaylistView({
             )}
           </div>
 
-          {/* 중앙 — 다른 프로그램으로 전환 */}
-          <Link
-            href={isbyulbam ? "/bcamp" : "/byulbam"}
-            className="date-nav-center"
-            style={{ color: isbyulbam ? "#e8704a" : "#c4a84e" }}
-          >
-            <span style={{ fontSize: "14px", lineHeight: 1 }}>⇄</span>
-            <span style={{ fontSize: "9px", opacity: 0.6, letterSpacing: "0.08em", textTransform: "uppercase", display: "block", marginTop: "2px" }}>
-              {isbyulbam ? "배캠" : "별밤"}
-            </span>
-          </Link>
+          {/* 중앙 — 홈 + MBC 공홈 */}
+          <div className="date-nav-center" style={{ display: "flex", gap: "4px" }}>
+            <Link
+              href="/"
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                padding: "6px 14px",
+                textDecoration: "none",
+                color: "var(--text-muted)",
+                borderRadius: "6px",
+                transition: "background 0.12s",
+              }}
+              onMouseEnter={e => (e.currentTarget.style.background = "rgba(255,255,255,0.06)")}
+              onMouseLeave={e => (e.currentTarget.style.background = "transparent")}
+            >
+              <span style={{ fontSize: "13px", lineHeight: 1 }}>⌂</span>
+              <span style={{ fontSize: "9px", opacity: 0.55, letterSpacing: "0.06em", marginTop: "2px" }}>홈</span>
+            </Link>
+            <a
+              href={isbyulbam ? "https://www.imbc.com/broad/radio/fm4u/byulnight/" : "https://www.imbc.com/broad/radio/fm4u/camp/"}
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                padding: "6px 14px",
+                textDecoration: "none",
+                color: "var(--text-muted)",
+                borderRadius: "6px",
+                transition: "background 0.12s",
+              }}
+              onMouseEnter={e => (e.currentTarget.style.background = "rgba(255,255,255,0.06)")}
+              onMouseLeave={e => (e.currentTarget.style.background = "transparent")}
+            >
+              <span style={{ fontSize: "13px", lineHeight: 1 }}>📻</span>
+              <span style={{ fontSize: "9px", opacity: 0.55, letterSpacing: "0.06em", marginTop: "2px" }}>MBC</span>
+            </a>
+          </div>
 
           {/* 다음 (더 오래된) */}
           <div className="date-nav-side" style={{ justifyContent: "flex-end" }}>
