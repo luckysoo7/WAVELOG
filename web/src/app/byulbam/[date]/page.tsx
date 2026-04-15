@@ -13,7 +13,7 @@ export async function generateMetadata({ params }: { params: Promise<{ date: str
   if (!data) return {};
 
   const [, m, d] = date.split("-");
-  const title = `별이 빛나는 밤에 ${+m}월 ${+d}일 — ${data.songs.length}곡`;
+  const title = `김이나의 별이 빛나는 밤에 ${+m}월 ${+d}일 — ${data.songs.length}곡`;
   const description = data.songs
     .slice(0, 5)
     .map((s) => `${s.title} — ${s.artist}`)

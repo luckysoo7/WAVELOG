@@ -17,6 +17,12 @@ export default function HomePage() {
     <main className="px-8 max-w-[760px] mx-auto">
       {/* 에디토리얼 히어로 */}
       <header className="pt-16 pb-10">
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src="/wavelog-logo.svg"
+          alt="Wavelog"
+          style={{ width: "200px", height: "auto", opacity: 0.92, marginBottom: "1.5rem" }}
+        />
         <p
           className="text-xs tracking-[0.3em] uppercase font-semibold mb-8"
           style={{ color: "var(--sunset-orange)" }}
@@ -43,7 +49,7 @@ export default function HomePage() {
           대한민국에서 음악 가장 잘 아는 DJ들의 선곡표가 여기 있습니다.
           <br />
           <br />
-          배철수의 음악캠프, 별이 빛나는 밤에 — 매일 방송된 선곡을 날짜별로 기록합니다.
+          배철수의 음악캠프, 김이나의 별이 빛나는 밤에 — 매일 방송된 선곡을 날짜별로 기록합니다.
           곡마다 YouTube 링크가 달려 있어서 바로 들을 수 있어요.
           오늘 방송부터 오래된 아카이브까지.
           <br />
@@ -209,7 +215,7 @@ export default function HomePage() {
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
                   src="/byulbam-hero.png"
-                  alt="별이 빛나는 밤에"
+                  alt="김이나의 별이 빛나는 밤에"
                   style={{
                     width: "100%",
                     height: "100%",
@@ -318,7 +324,7 @@ export default function HomePage() {
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
                   src="/byulbam-hero.png"
-                  alt="별이 빛나는 밤에"
+                  alt="김이나의 별이 빛나는 밤에"
                   style={{
                     width: "100%",
                     height: "100%",
@@ -343,7 +349,7 @@ export default function HomePage() {
                   className="font-bold leading-tight mb-1.5"
                   style={{ fontSize: "1.2rem", letterSpacing: "-0.02em" }}
                 >
-                  별이 빛나는 밤에
+                  김이나의 별이 빛나는 밤에
                 </h2>
                 <p className="text-xs mb-3" style={{ color: "var(--text-muted)", opacity: 0.6 }}>
                   매일 밤 8시 · since 1969

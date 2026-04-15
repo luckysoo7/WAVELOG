@@ -1,10 +1,14 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import "./globals.css";
 import ConditionalAside from "@/components/ConditionalAside";
 import MobileDrawer from "@/components/MobileDrawer";
 import ConditionalFooter from "@/components/ConditionalFooter";
 import { loadAllDates } from "@/lib/data";
 import { Analytics } from "@vercel/analytics/next";
+
+export const viewport: Viewport = {
+  themeColor: "#0f1923",
+};
 
 export const metadata: Metadata = {
   title: {

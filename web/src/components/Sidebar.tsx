@@ -80,21 +80,15 @@ export default function Sidebar({ bcampDates, byulbamDates }: SidebarProps) {
       <div className="mb-5 px-2">
         <Link
           href="/"
-          className="flex items-center gap-2 group"
+          className="block transition-opacity hover:opacity-70"
           style={{ textDecoration: "none" }}
         >
-          <span
-            className="text-base transition-opacity group-hover:opacity-70"
-            style={{ color: "var(--text-muted)", opacity: 0.6, lineHeight: 1 }}
-          >
-            ⌂
-          </span>
-          <span
-            className="font-bold tracking-tight transition-opacity group-hover:opacity-100"
-            style={{ color: "var(--text-primary)", opacity: 0.85, fontSize: "0.82rem", letterSpacing: "-0.01em" }}
-          >
-            Wavelog
-          </span>
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src="/wavelog-logo.svg"
+            alt="Wavelog"
+            style={{ width: "120px", height: "auto", opacity: 0.9 }}
+          />
         </Link>
       </div>
 
@@ -114,7 +108,7 @@ export default function Sidebar({ bcampDates, byulbamDates }: SidebarProps) {
               style={
                 isActive
                   ? { background: `${p.accent}22`, color: p.accent }
-                  : { color: "var(--text-muted)", opacity: 0.45 }
+                  : { color: "rgba(240,235,227,0.35)" }
               }
             >
               {id === "bcamp" ? "배캠" : "별밤"}
@@ -138,21 +132,15 @@ export default function Sidebar({ bcampDates, byulbamDates }: SidebarProps) {
           {program.freq}
         </p>
 
-        <div style={{ borderTop: "1px solid rgba(255,255,255,0.07)", marginBottom: "1rem" }} />
+        <div style={{ borderTop: "1px solid rgba(255,255,255,0.07)", marginBottom: "0.75rem" }} />
 
-        <span
-          className="inline-block text-xs px-2 py-0.5"
-          style={{
-            border: "1px solid rgba(138,155,176,0.2)",
-            color: "var(--text-muted)",
-            opacity: 0.45,
-            borderRadius: "2px",
-            fontSize: "0.65rem",
-            letterSpacing: "0.08em",
-          }}
-        >
-          unofficial fan site
-        </span>
+        <p className="text-xs leading-relaxed" style={{ color: "rgba(240,235,227,0.3)", marginBottom: "0.75rem" }}>
+          매일 밤 10시 이후 업데이트
+          <br />
+          YouTube 플레이리스트 자동 매핑
+        </p>
+
+        <div style={{ borderTop: "1px solid rgba(255,255,255,0.07)", marginBottom: "0.5rem" }} />
       </div>
 
       {/* 날짜 목록 */}
@@ -193,7 +181,7 @@ export default function Sidebar({ bcampDates, byulbamDates }: SidebarProps) {
                 style={
                   isActive
                     ? { background: accentBg, color: accent }
-                    : { color: "var(--text-muted)" }
+                    : { color: "rgba(240,235,227,0.5)" }
                 }
               >
                 <div className="flex items-center gap-2 min-w-0">
@@ -215,7 +203,7 @@ export default function Sidebar({ bcampDates, byulbamDates }: SidebarProps) {
                   </span>
                 </div>
                 <div className="flex items-center gap-1.5 shrink-0 ml-2">
-                  <span className="text-xs tabular-nums" style={{ color: "var(--text-muted)" }}>
+                  <span className="text-xs tabular-nums" style={{ color: "rgba(240,235,227,0.35)" }}>
                     {entry.songCount}
                   </span>
                   {entry.hasPlaylist && (
@@ -237,26 +225,10 @@ export default function Sidebar({ bcampDates, byulbamDates }: SidebarProps) {
       </ul>
 
       {/* 저작권 */}
-      <div className="mt-6 px-2 space-y-1">
-        <p className="text-xs leading-relaxed" style={{ color: "var(--text-muted)", opacity: 0.45 }}>
-          ⓒ MBC · {program.name}
-          <br />
+      <div className="mt-6 px-2 space-y-2">
+        <p className="text-xs leading-relaxed" style={{ color: "var(--text-muted)", opacity: 0.35 }}>
           방송 콘텐츠 저작권은 MBC에 있습니다
         </p>
-        <p className="text-xs" style={{ color: "var(--text-muted)", opacity: 0.3 }}>
-          unofficial fan site — not affiliated with MBC
-        </p>
-        <a
-          href={program.officialUrl}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="text-xs block"
-          style={{ color: "var(--text-muted)", opacity: 0.4, textDecoration: "none" }}
-          onMouseEnter={e => (e.currentTarget.style.opacity = "0.7")}
-          onMouseLeave={e => (e.currentTarget.style.opacity = "0.4")}
-        >
-          공식 홈페이지 ↗
-        </a>
       </div>
     </nav>
   );

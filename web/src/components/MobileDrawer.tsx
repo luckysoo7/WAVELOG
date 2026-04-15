@@ -18,7 +18,6 @@ export default function MobileDrawer({ bcampDates, byulbamDates }: MobileDrawerP
   // 홈페이지에서는 모바일 헤더/드로어 불필요
   const isHome = pathname === "/";
   const isByulbam = pathname.startsWith("/byulbam");
-  const programName = isByulbam ? "김이나의 별이 빛나는 밤에" : "배철수의 음악캠프";
 
   // 페이지 이동 시 드로어 자동 닫기
   useEffect(() => {
@@ -64,19 +63,13 @@ export default function MobileDrawer({ bcampDates, byulbamDates }: MobileDrawerP
           <span className="block h-px w-3" style={{ background: "var(--text-primary)" }} />
         </button>
 
-        <Link href="/" className="flex flex-col items-center gap-0.5">
-          <span
-            className="text-xs tracking-[0.18em] uppercase font-semibold"
-            style={{ color: "var(--sunset-orange)", opacity: 0.85 }}
-          >
-            Wavelog
-          </span>
-          <span
-            className="text-xs font-semibold tracking-tight"
-            style={{ color: "var(--text-muted)" }}
-          >
-            {programName}
-          </span>
+        <Link href="/" className="flex items-center">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src="/wavelog-logo.svg"
+            alt="Wavelog"
+            style={{ height: "56px", width: "auto", opacity: 0.9 }}
+          />
         </Link>
 
         {/* 우측: 다른 프로그램으로 빠른 전환 */}
@@ -91,7 +84,7 @@ export default function MobileDrawer({ bcampDates, byulbamDates }: MobileDrawerP
             letterSpacing: "0.05em",
             fontWeight: 700,
           }}
-          aria-label={isByulbam ? "배철수의 음악캠프로 이동" : "별이 빛나는 밤에로 이동"}
+          aria-label={isByulbam ? "배철수의 음악캠프로 이동" : "김이나의 별이 빛나는 밤에로 이동"}
         >
           <span style={{ fontSize: "13px", lineHeight: 1 }}>⇄</span>
           <span>{isByulbam ? "배캠" : "별밤"}</span>
@@ -114,7 +107,7 @@ export default function MobileDrawer({ bcampDates, byulbamDates }: MobileDrawerP
       <div
         className="fixed inset-y-0 left-0 z-50 w-72 md:hidden flex flex-col transition-transform duration-300 ease-out overflow-y-auto"
         style={{
-          background: "rgba(15, 25, 35, 0.98)",
+          background: "rgba(14, 11, 7, 0.98)",
           backdropFilter: "blur(24px)",
           WebkitBackdropFilter: "blur(24px)",
           borderRight: "1px solid rgba(255,255,255,0.07)",

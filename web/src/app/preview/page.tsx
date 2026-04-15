@@ -203,7 +203,7 @@ export default async function PreviewPage({
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img
                     src="/byulbam-hero.png"
-                    alt="별이 빛나는 밤에"
+                    alt="김이나의 별이 빛나는 밤에"
                     style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "center top", filter: "brightness(0.65) saturate(1.05)" }}
                     className="group-hover:scale-[1.03] transition-all duration-300"
                   />
@@ -215,7 +215,7 @@ export default async function PreviewPage({
                 <div className="p-5">
                   <div className="flex items-start justify-between gap-4">
                     <div className="flex-1 min-w-0">
-                      <h2 className="font-bold leading-tight mb-1.5" style={{ fontSize: "1.2rem", letterSpacing: "-0.02em" }}>별이 빛나는 밤에</h2>
+                      <h2 className="font-bold leading-tight mb-1.5" style={{ fontSize: "1.2rem", letterSpacing: "-0.02em" }}>김이나의 별이 빛나는 밤에</h2>
                       <p className="text-xs tabular-nums" style={{ color: "var(--text-muted)", opacity: 0.65 }}>
                         매일 밤 8시{byulbamDates.length > 0 && ` · ${byulbamDates.length}개 에피소드`}
                       </p>
