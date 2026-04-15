@@ -8,12 +8,12 @@ import { Analytics } from "@vercel/analytics/next";
 
 export const metadata: Metadata = {
   title: {
-    default: "K-Radio Archive — 한국 라디오 음악 아카이브",
-    template: "%s | K-Radio Archive",
+    default: "Wavelog — Korean Radio Archive",
+    template: "%s | Wavelog",
   },
   description: "배철수의 음악캠프 등 한국 라디오 선곡표를 매일 YouTube 플레이리스트로 기록합니다. 1990년부터 이어진 라디오 음악 아카이브.",
   openGraph: {
-    siteName: "K-Radio Archive",
+    siteName: "Wavelog",
     locale: "ko_KR",
     type: "website",
   },

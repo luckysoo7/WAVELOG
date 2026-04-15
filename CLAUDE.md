@@ -1,6 +1,6 @@
-# bcamp-daily
+# Wavelog — Korean Radio Archive
 
-MBC 배철수의 음악캠프 선곡표를 매일 자동 크롤링해 YouTube 플레이리스트로 만들고 Next.js 웹으로 표시하는 서비스.
+한국 라디오 DJ 선곡표를 매일 자동 크롤링해 YouTube 플레이리스트로 만들고 Next.js 웹으로 표시하는 서비스.
 
 ## 기술 스택
 - Python 크롤러 (YouTube Data API v3, OAuth 2.0)

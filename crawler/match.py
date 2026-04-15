@@ -121,9 +121,9 @@ def process_episode(
             description=(
                 "알고리즘이 아닌, DJ가 직접 고른 음악들입니다.\n"
                 "\n"
-                "K-Radio Archive는 DJ들의 멋진 선곡표를 매일 기록하는 아카이브예요.\n"
+                "Wavelog는 한국 라디오 DJ들의 선곡을 매일 기록하는 아카이브예요.\n"
                 "채널을 구독하고 매일 올라오는 재생목록을 확인해보세요.\n"
-                "https://bcamp-daily.vercel.app에서도 확인 가능합니다.\n"
+                "https://wavelog.vercel.app에서도 확인 가능합니다.\n"
                 f"\n{prog_title} {date_str} 방송분"
             ),
         )

@@ -1,4 +1,4 @@
-# DESIGN.md — bcamp-daily
+# DESIGN.md — Wavelog
 
 레퍼런스: Apple Music 방송국(Radio Station) × 레트로 라디오 아카이브
 무드: "밤 라디오. 오래된 선곡표를 꺼내보는 느낌. 따뜻하고 깊은 다크."
@@ -82,7 +82,7 @@ Apple Music 방송국 UI에서 가져올 것:
 
 ## Paper MCP 루프 기준
 
-스크린샷 체크 시 bcamp-daily 전용 추가 항목:
+스크린샷 체크 시 Wavelog 전용 추가 항목:
 - 라디오/음악 감성이 느껴지는가? (기술 대시보드처럼 보이면 실패)
 - 사이드바 날짜 목록이 읽기 편한가?
 - 배너 → 콘텐츠 전환이 자연스러운가?

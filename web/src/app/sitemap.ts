@@ -1,7 +1,7 @@
 import type { MetadataRoute } from "next";
 import { getAllDateParams } from "@/lib/data";
 
-const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://bcamp-daily.vercel.app";
+const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://wavelog.vercel.app";
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const dates = getAllDateParams();

@@ -93,7 +93,7 @@ export default function Sidebar({ bcampDates, byulbamDates }: SidebarProps) {
             className="font-bold tracking-tight transition-opacity group-hover:opacity-100"
             style={{ color: "var(--text-primary)", opacity: 0.85, fontSize: "0.82rem", letterSpacing: "-0.01em" }}
           >
-            K-Radio Archive
+            Wavelog
           </span>
         </Link>
       </div>

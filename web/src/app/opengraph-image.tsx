@@ -1,7 +1,7 @@
 import { ImageResponse } from "next/og";
 
 export const runtime = "edge";
-export const alt = "K-Radio Archive — 한국 라디오 음악 아카이브";
+export const alt = "Wavelog — Korean Radio Archive";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
@@ -96,7 +96,7 @@ export default function OgImage() {
             display: "flex",
           }}
         >
-          K-Radio Archive
+          Wavelog
         </div>
       </div>
     ),

@@ -69,7 +69,7 @@ export default function MobileDrawer({ bcampDates, byulbamDates }: MobileDrawerP
             className="text-xs tracking-[0.18em] uppercase font-semibold"
             style={{ color: "var(--sunset-orange)", opacity: 0.85 }}
           >
-            K-Radio Archive
+            Wavelog
           </span>
           <span
             className="text-xs font-semibold tracking-tight"
