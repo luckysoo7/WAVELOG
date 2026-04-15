@@ -4,6 +4,7 @@ import ConditionalAside from "@/components/ConditionalAside";
 import MobileDrawer from "@/components/MobileDrawer";
 import ConditionalFooter from "@/components/ConditionalFooter";
 import { loadAllDates } from "@/lib/data";
+import { Analytics } from "@vercel/analytics/next";
 
 export const metadata: Metadata = {
   title: {
@@ -46,6 +47,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             <ConditionalFooter />
           </div>
         </div>
+        <Analytics />
       </body>
     </html>
   );
