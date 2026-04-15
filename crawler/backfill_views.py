@@ -9,7 +9,7 @@ Usage:
 
 from crawler.db import DB_PATH, connect, init_db
 from crawler.utils import get_youtube_client as _get_youtube_client
-from crawler.youtube_client import get_video_stats
+from crawler.youtube_client import get_video_stats, QuotaExceededError
 
 
 def main() -> None:
@@ -30,7 +30,11 @@ def main() -> None:
     print(f"[backfill_views] {len(video_ids)}개 video_id 조회수 fetch 시작...")
     youtube = _get_youtube_client()
 
-    stats = get_video_stats(youtube, video_ids)
+    try:
+        stats = get_video_stats(youtube, video_ids)
+    except QuotaExceededError:
+        print("[backfill_views] 쿼터 초과 — 조회수 갱신 스킵 (내일 재시도).")
+        return
     print(f"[backfill_views] {len(stats)}개 응답 수신.")
 
     if not stats:
