@@ -4,6 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import type { PlaylistData, DateEntry } from "@/lib/data";
 import LiveCountdown from "@/components/LiveCountdown";
+import ShareButton from "@/components/ShareButton";
 
 interface Props {
   data: PlaylistData;
@@ -190,18 +191,21 @@ export default function PlaylistView({
             {programName}
           </h1>
 
-          {/* 날짜 + 요일 — 60% 크기, 흰색 */}
+          {/* 날짜 + 요일 + 공유 버튼 — 60% 크기, 흰색 */}
           <div style={{ marginTop: "0.22rem" }}>
-            <p
-              className="font-semibold tabular-nums"
-              style={{
-                fontSize: "clamp(1.32rem, 5.3vw, 2.1rem)",
-                letterSpacing: "-0.02em",
-                color: "#f0ebe3",
-              }}
-            >
-              {formatDate(data.date)} ({data.dayOfWeek.charAt(0)})
-            </p>
+            <div className="flex items-center gap-2">
+              <p
+                className="font-semibold tabular-nums"
+                style={{
+                  fontSize: "clamp(1.32rem, 5.3vw, 2.1rem)",
+                  letterSpacing: "-0.02em",
+                  color: "#f0ebe3",
+                }}
+              >
+                {formatDate(data.date)} ({data.dayOfWeek.charAt(0)})
+              </p>
+              <ShareButton title={`${programName} ${formatDate(data.date)}`} />
+            </div>
             {/* 방송 정보 + 진행 바 — 한 줄, bar가 남은 공간 채움 */}
             {total > 0 && (
               <div className="flex items-center gap-2 mt-1.5" style={{ minWidth: 0 }}>
