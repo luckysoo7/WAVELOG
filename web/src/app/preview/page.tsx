@@ -1,5 +1,10 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import { loadLatest, loadAllDates } from "@/lib/data";
+
+export const metadata: Metadata = {
+  robots: { index: false, follow: false },
+};
 
 const GRADIENTS: Record<string, string> = {
   // A — Twilight Violet: 보라/인디고 오로라 × 오렌지 사이드킥. 낮과 밤 경계의 드라마틱한 대비.

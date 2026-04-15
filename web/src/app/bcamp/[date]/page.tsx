@@ -12,8 +12,8 @@ export async function generateMetadata({ params }: { params: Promise<{ date: str
   const data = loadPlaylist(date);
   if (!data) return {};
 
-  const [, m, d] = date.split("-");
-  const title = `배철수의 음악캠프 ${+m}월 ${+d}일 — ${data.songs.length}곡`;
+  const [y, m, d] = date.split("-");
+  const title = `배철수의 음악캠프 ${y}년 ${+m}월 ${+d}일 선곡표 — ${data.songs.length}곡`;
   const description = data.songs
     .slice(0, 5)
     .map((s) => `${s.title} — ${s.artist}`)

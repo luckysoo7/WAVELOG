@@ -1,6 +1,12 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import { loadLatest, loadAllDates } from "@/lib/data";
 import DisclaimerButton from "@/components/DisclaimerButton";
+
+export const metadata: Metadata = {
+  title: "Wavelog — 한국 라디오 선곡표 아카이브",
+  description: "배철수의 음악캠프, 김이나의 별이 빛나는 밤에 선곡표를 매일 YouTube 플레이리스트로 기록합니다.",
+};
 
 function formatDate(dateStr: string): string {
   const [, m, d] = dateStr.split("-");
