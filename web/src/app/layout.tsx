@@ -15,7 +15,7 @@ export const metadata: Metadata = {
     default: "Wavelog — Korean Radio Archive",
     template: "%s | Wavelog",
   },
-  description: "배철수의 음악캠프 등 한국 라디오 선곡표를 매일 YouTube 플레이리스트로 기록합니다. 1990년부터 이어진 라디오 음악 아카이브.",
+  description: "배철수의 음악캠프, 김이나의 별이 빛나는 밤에 선곡표를 매일 YouTube 플레이리스트로 기록하는 한국 라디오 아카이브.",
   openGraph: {
     siteName: "Wavelog",
     locale: "ko_KR",
