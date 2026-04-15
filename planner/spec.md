@@ -1,6 +1,6 @@
 # Wavelog — 스펙 (MASTER)
 
-최종 업데이트: 2026-04-15 (세션 3)
+최종 업데이트: 2026-04-16 (세션 4)
 
 > 이 파일이 단일 진실 공급원(SSOT).
 > 구조적 결정은 `decisions/`에 ADR로 기록.
@@ -46,17 +46,16 @@
 
 ### 🟢 Now
 
-**YouTube 주간 영상 — Sprint 1 (로컬 생성)**
-- `crawler/weekly_video.py` 작성
-- DB에서 프로그램별 지난 7일 상위 곡 추출 + 다양성 필터
-- yt-dlp 오디오 다운로드 → FFmpeg MP4 합성 (정적 배경 + 곡명 자막 + 챕터 메타)
-- 업로드는 Sprint 1에서 수동, 파일 생성까지만 자동화
-- 전제: `crawler/weekly_video_sprint1.md` 완료
+**YouTube 주간 영상 — Sprint 2 (자동 업로드)**
+- `crawler/upload_video.py` 완성 (videos.insert + thumbnails.set + playlistItems + Discord)
+- GitHub Actions 주간 스케줄 워크플로우 작성 (일요일 오후)
+- 쿼터 계산: 업로드 2회(3200) + match.yml(4500) = 7700/일 → 10,000 이내 OK
+- 전제: YouTube 쿼터 증가 신청 제출 완료, 채널 인증(썸네일 권한) 대기 중
 
 ### 🔵 Next
 
-- **YouTube 주간 영상 — Sprint 2 (자동 업로드)**: YouTube Data API `videos.insert` + GitHub Actions 주간 스케줄. 쿼터 계산: 업로드 2회(3200) + match.yml(4500) = 7700/일 → 한도 10,000 이내 OK. 업로드일 = 별도 스케줄 (일요일 오후).
-- 레포 이름 변경 (`bcamp-daily` → `k-radio-archive`)
+- **byulbam 히스토리 백필**: 쿼터 증가 승인 후 진행
+- **YouTube 플레이리스트 ID 등록**: `YOUTUBE_PLAYLIST_BCAMP` env var 추가
 
 ### 🟡 Later
 
@@ -89,7 +88,7 @@
 
 ---
 
-## 현재 상태 (2026-04-15 세션 3)
+## 현재 상태 (2026-04-16 세션 4)
 
 | 컴포넌트 | 상태 | 비고 |
 |---------|------|------|
@@ -112,4 +111,7 @@
 | 크롤러 유틸 통합 | ✅ 완료 | crawler/utils.py 추출, 5개 파일 중복 제거 |
 | validate.py 개선 | ✅ 완료 | byulbam 커버리지 추가, 실패 시 sys.exit(1) |
 | /discover 통계 | ❌ 미착수 | Later |
-| YouTube 주간 영상 생성 | 🔄 Sprint 1 진행 중 | `sprints/weekly_video_sprint1.md` |
+| YouTube 주간 영상 생성 | ✅ 완료 | weekly_video.py, 첫 영상 수동 업로드 완료 |
+| YouTube 자동 업로드 스크립트 | ✅ 완료 | upload_video.py (로컬 실행 가능) |
+| Wavelog 로고 + 모바일 UI | ✅ 배포 중 | SVG 로고, MBC 브랜드, 드로어 테마 |
+| YouTube Actions 자동화 | ❌ 미착수 | Sprint 2 — Now |
