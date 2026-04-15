@@ -314,7 +314,7 @@ export default function PlaylistView({
                 className="px-4 py-1.5 text-xs font-semibold transition-opacity hover:opacity-80"
                 style={{ color: accent, border: `1px solid ${accent}55`, borderRadius: "3px" }}
               >
-                ♪ Music으로 전체 듣기
+                ♪ YT Music으로 전체 듣기
               </a>
             </div>
           )}
