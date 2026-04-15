@@ -11,7 +11,7 @@ import { test, expect } from "@playwright/test";
 // 항상 존재하는 날짜를 직접 지정 (latest redirect가 dev에서 불안정한 경우 대비)
 const ROUTES = [
   { path: "/bcamp/2026-04-12", label: "bcamp" },
-  { path: "/byulbam",          label: "byulbam" },
+  { path: "/byulbam/2026-04-12", label: "byulbam" },
 ];
 
 const VIEWPORTS = [

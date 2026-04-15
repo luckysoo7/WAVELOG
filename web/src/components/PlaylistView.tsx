@@ -38,7 +38,7 @@ const THEMES = {
     heroBg: "linear-gradient(to bottom, rgba(18,10,3,0.6) 0%, transparent 100%)",
     spectrumLine: "linear-gradient(to right, transparent, #ff4444 8%, #ff8800 22%, #ffee00 38%, #44cc00 52%, #00aaff 66%, #6644ff 82%, transparent)",
     trackRowClass: "track-row-bcamp",
-    heroFade: "linear-gradient(to bottom, rgba(0,0,0,0.35) 0%, transparent 18%, transparent 30%, rgba(0,0,0,0.75) 58%, rgba(13,11,6,0.97) 72%, transparent 100%), linear-gradient(to right, rgba(13,11,6,0.7) 0%, transparent 25%, transparent 75%, rgba(13,11,6,0.7) 100%)",
+    heroFade: "linear-gradient(to bottom, rgba(24,20,16,0) 0%, rgba(24,20,16,0) 28%, rgba(24,20,16,0.62) 55%, rgba(24,20,16,0.95) 70%, rgba(24,20,16,0) 100%)",
     pageBg: "radial-gradient(ellipse 100% 60% at 50% 0%, rgba(220,170,60,0.14) 0%, transparent 55%), radial-gradient(ellipse 60% 80% at 30% 50%, rgba(180,140,30,0.09) 0%, transparent 70%), #181410",
     basePath: "/bcamp",
   },
@@ -180,8 +180,8 @@ export default function PlaylistView({
             data-testid="date-heading"
             style={{
               fontSize: isbyulbam
-                ? "clamp(1.5rem, 7.8vw, 4.23rem)"   /* 14유닛 × 1.15 */
-                : "clamp(1.5rem, 9.2vw, 3.68rem)",   /* 9유닛 */
+                ? "clamp(1.5rem, 5.0vw, 4.23rem)"   /* 사이드바(288px) 고려: 768px 기준 ~38px → 1줄 유지 */
+                : "clamp(1.5rem, 7.5vw, 4.5rem)",    /* 사이드바(288px) 고려: 768px~960px 구간 동적 스케일 */
               letterSpacing: "-0.03em",
               color: "#f0ebe3",
               lineHeight: 1.1,
