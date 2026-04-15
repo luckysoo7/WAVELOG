@@ -118,7 +118,7 @@ export default function Sidebar({ bcampDates, byulbamDates }: SidebarProps) {
       </div>
 
       {/* 프로그램 정보 */}
-      <div className="mb-4 px-2">
+      <div className="mb-1 px-2">
         <h2
           className="font-black leading-none mb-1 whitespace-pre-line"
           style={{ fontSize: "1.25rem", letterSpacing: "-0.02em", color: "var(--text-primary)" }}
@@ -134,13 +134,11 @@ export default function Sidebar({ bcampDates, byulbamDates }: SidebarProps) {
 
         <div style={{ borderTop: "1px solid rgba(255,255,255,0.07)", marginBottom: "0.75rem" }} />
 
-        <p className="text-xs leading-relaxed" style={{ color: "rgba(240,235,227,0.3)", marginBottom: "0.75rem" }}>
+        <p className="text-xs leading-relaxed" style={{ color: "rgba(240,235,227,0.3)", marginBottom: "0.25rem" }}>
           매일 밤 10시 이후 업데이트
           <br />
           YouTube 플레이리스트 자동 매핑
         </p>
-
-        <div style={{ borderTop: "1px solid rgba(255,255,255,0.07)", marginBottom: "0.5rem" }} />
       </div>
 
       {/* 날짜 목록 */}
