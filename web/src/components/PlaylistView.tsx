@@ -438,22 +438,26 @@ export default function PlaylistView({
                 {!song.videoId && (
                   <div
                     style={{
-                      maxHeight: isExpanded ? "56px" : "0px",
+                      maxHeight: isExpanded ? "72px" : "0px",
                       overflow: "hidden",
                       transition: "max-height 0.25s ease",
                       borderBottom: isExpanded ? "1px solid var(--track-border)" : "none",
                     }}
                   >
-                    <div
-                      className="pl-10 pr-2 pb-3"
-                      style={{ opacity: isExpanded ? 1 : 0, transition: "opacity 0.2s ease 0.05s" }}
-                    >
-                      <p className="text-xs" style={{ color: "var(--text-muted)", opacity: 0.7 }}>
-                        아직 YouTube 링크가 연결되지 않은 곡이에요.
+                    <div className="pl-10 pr-2 pb-3 flex items-center gap-3">
+                      <p className="text-xs" style={{ color: "var(--text-muted)", opacity: 0.55 }}>
+                        아직 자동 연결 전이에요
                       </p>
-                      <p className="text-xs mt-0.5" style={{ color: "var(--text-muted)", opacity: 0.4 }}>
-                        매일 자동으로 업데이트됩니다.
-                      </p>
+                      <a
+                        href={`https://www.youtube.com/results?search_query=${encodeURIComponent(`${song.title} ${song.artist}`)}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        onClick={(e) => e.stopPropagation()}
+                        className="inline-block px-3 py-1 text-xs font-semibold transition-opacity hover:opacity-85 shrink-0"
+                        style={{ background: "rgba(255,255,255,0.08)", color: "var(--text-muted)", borderRadius: "3px" }}
+                      >
+                        YouTube 검색 →
+                      </a>
                     </div>
                   </div>
                 )}
