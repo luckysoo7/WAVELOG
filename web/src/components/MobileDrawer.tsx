@@ -13,6 +13,7 @@ interface MobileDrawerProps {
 
 export default function MobileDrawer({ bcampDates, byulbamDates }: MobileDrawerProps) {
   const [isOpen, setIsOpen] = useState(false);
+  const [headerVisible, setHeaderVisible] = useState(true);
   const pathname = usePathname();
 
   // 홈페이지에서는 모바일 헤더/드로어 불필요
@@ -39,6 +40,23 @@ export default function MobileDrawer({ bcampDates, byulbamDates }: MobileDrawerP
     };
   }, [isOpen]);
 
+  // 스크롤 방향에 따라 헤더 자동 숨김/복귀
+  useEffect(() => {
+    let lastY = window.scrollY;
+    const onScroll = () => {
+      const currentY = window.scrollY;
+      // 최상단 근처이거나 위로 스크롤하면 복귀
+      if (currentY < 60 || currentY < lastY) {
+        setHeaderVisible(true);
+      } else {
+        setHeaderVisible(false);
+      }
+      lastY = currentY;
+    };
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
   if (isHome) return null;
 
   return (
@@ -51,6 +69,8 @@ export default function MobileDrawer({ bcampDates, byulbamDates }: MobileDrawerP
           backdropFilter: "blur(28px)",
           WebkitBackdropFilter: "blur(28px)",
           borderBottom: `1px solid ${isByulbam ? "rgba(196,168,78,0.18)" : "rgba(232,112,74,0.18)"}`,
+          transform: (headerVisible || isOpen) ? "translateY(0)" : "translateY(-100%)",
+          transition: "transform 0.28s cubic-bezier(0.4, 0, 0.2, 1)",
         }}
       >
         <button
