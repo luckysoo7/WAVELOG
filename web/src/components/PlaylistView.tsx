@@ -121,7 +121,7 @@ export default function PlaylistView({
   return (
     <article
       className={`relative min-h-screen ${theme.ambientClass}`}
-      style={{ background: theme.pageBg, paddingBottom: "90px" }}
+      style={{ background: theme.pageBg, paddingBottom: "76px" }}
     >
       <section className="hero-date-stack" aria-label={`${programName} 날짜 헤더`}>
         {/* ── HERO ─────────────────────────────────────────────── */}
@@ -483,7 +483,7 @@ export default function PlaylistView({
           className="date-nav-bar"
           aria-label="날짜 탐색"
           style={{
-            background: isbyulbam ? "rgba(4,12,8,0.90)" : "rgba(12,10,5,0.90)",
+            background: isbyulbam ? "rgba(4,12,8,0.96)" : "rgba(12,10,5,0.96)",
             borderTop: `1px solid ${accent}22`,
           }}
         >

@@ -53,8 +53,8 @@ body::before {
 /* ── 히어로 — 이미지와 날짜를 같은 stacking context에 배치 ───────── */
 
 .hero-date-stack {
-  --hero-height: clamp(220px, 55vw, 420px);
-  --date-pullout: clamp(48px, 9vw, 96px);
+  --hero-height: clamp(175px, 45vw, 400px);
+  --date-pullout: clamp(40px, 7vw, 88px);
   display: grid;
   grid-template-areas: "stack";
   min-height: var(--hero-height);
@@ -200,12 +200,17 @@ body::before {
   z-index: 20;
   display: flex;
   align-items: center;
-  height: 62px;
+  height: 52px;
+  /* Safe Area: padding 대신 height 확장으로 처리 — Safari iOS backdrop-filter 버그 회피 */
   padding-bottom: env(safe-area-inset-bottom, 0px);
+  height: calc(52px + env(safe-area-inset-bottom, 0px));
   /* bg + border는 PlaylistView inline style로 프로그램별 오버라이드 */
-  background: rgba(10, 9, 6, 0.88);
-  backdrop-filter: blur(28px);
-  -webkit-backdrop-filter: blur(28px);
+  background: rgba(10, 9, 6, 0.96);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  /* Safari iOS: fixed + backdrop-filter 합성 버그 방지용 레이어 강제 생성 */
+  -webkit-transform: translateZ(0);
+  transform: translateZ(0);
   border-top: 1px solid rgba(255, 255, 255, 0.06);
 }
 
