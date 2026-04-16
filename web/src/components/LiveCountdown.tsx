@@ -58,8 +58,8 @@ export default function LiveCountdown({ broadcastHour, durationHours, accent }: 
   return (
     <div
       style={{
-        marginTop: "4rem",
-        paddingTop: "2.5rem",
+        marginTop: "1.5rem",
+        paddingTop: "1.5rem",
         paddingBottom: "1rem",
         borderTop: `1px solid ${accent}18`,
         textAlign: "center",
