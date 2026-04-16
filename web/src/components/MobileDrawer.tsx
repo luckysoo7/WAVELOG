@@ -61,9 +61,9 @@ export default function MobileDrawer({ bcampDates, byulbamDates }: MobileDrawerP
 
   return (
     <>
-      {/* 모바일 상단 헤더바 */}
+      {/* 모바일 상단 헤더바 — fixed: sticky+transform iOS Safari 버그 회피 */}
       <header
-        className="md:hidden flex items-center justify-between px-4 h-14 sticky top-0 z-10 shrink-0"
+        className="md:hidden flex items-center justify-between px-4 h-14 fixed top-0 left-0 right-0 z-10"
         style={{
           background: isByulbam ? "rgba(4,12,8,0.92)" : "rgba(12,10,5,0.92)",
           backdropFilter: "blur(28px)",
@@ -110,6 +110,9 @@ export default function MobileDrawer({ bcampDates, byulbamDates }: MobileDrawerP
           <span>{isByulbam ? "배캠" : "별밤"}</span>
         </Link>
       </header>
+
+      {/* fixed 헤더 높이 보상 스페이서 — 모바일 전용 */}
+      <div className="h-14 md:hidden shrink-0" />
 
       {/* 배경 오버레이 */}
       <div
