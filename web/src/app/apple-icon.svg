@@ -1,0 +1,10 @@
+<svg width="180" height="180" viewBox="0 0 180 180" xmlns="http://www.w3.org/2000/svg">
+  <!-- 배경 -->
+  <rect width="180" height="180" rx="40" fill="#142030"/>
+  <!-- 주파수 바 5개 — 중앙 정렬, sunset-orange -->
+  <rect x="28"  y="82"  width="18" height="56" rx="9" fill="#e8704a" opacity="0.65"/>
+  <rect x="57"  y="58"  width="18" height="80" rx="9" fill="#e8704a" opacity="0.80"/>
+  <rect x="86"  y="34"  width="18" height="104" rx="9" fill="#e8704a"/>
+  <rect x="115" y="58"  width="18" height="80" rx="9" fill="#e8704a" opacity="0.80"/>
+  <rect x="144" y="82"  width="18" height="56" rx="9" fill="#e8704a" opacity="0.65"/>
+</svg>
