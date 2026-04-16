@@ -4,6 +4,10 @@ name: YouTube 백필 매핑 (배캠 + 별밤)
 #   PDT(4~10월): UTC-7 → 07:00 UTC 리셋
 #   PST(11~3월): UTC-8 → 08:00 UTC 리셋
 # 14:30 UTC = 23:30 KST — 별밤 종료(22:00) 후 1.5h, MBC 업로드 여유
+#
+# 쿼터 배분 (Sprint 2 업로드 미실행 기준):
+#   match 기본: 8000 units + backfill_views ~6 = 8006/일 → 10,000 이내
+#   ⚠️ Sprint 2 YouTube 업로드 활성화 시: upload 3200 + match 4500 = 7700 — match 기본값 4500으로 낮출 것
 on:
   schedule:
     - cron: '30 14 * * *'   # 23:30 KST (14:30 UTC) — 메인 실행
@@ -11,9 +15,9 @@ on:
   workflow_dispatch:
     inputs:
       budget:
-        description: '쿼터 예산 (units, 기본: 4500)'
+        description: '쿼터 예산 (units, 기본: 8000)'
         required: false
-        default: '4500'
+        default: '8000'
       days:
         description: '처리 범위 (일수, 기본: 90)'
         required: false
@@ -68,7 +72,7 @@ jobs:
           GOOGLE_REFRESH_TOKEN: ${{ secrets.GOOGLE_REFRESH_TOKEN }}
         run: |
           python -m crawler.match \
-            --budget "${{ github.event.inputs.budget || 4500 }}" \
+            --budget "${{ github.event.inputs.budget || 8000 }}" \
             --days "${{ github.event.inputs.days || 90 }}"
 
       - name: 조회수 갱신 (매핑 여부 무관, ~6 units)
